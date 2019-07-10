@@ -1,6 +1,7 @@
 import convertPastedContentFromExcel from './excelConverter/convertPastedContentFromExcel';
 import convertPastedContentFromWord from './wordConverter/convertPastedContentFromWord';
-import convertPastedContentFromWac, { isWAC } from './wacConverter/convertPastedContentFromWac';
+import convertPastedContentFromWac from './wacConverter/convertPastedContentFromWac';
+import { isWAC } from './wacConverter/wacConverterUtils';
 import { getTagOfNode } from 'roosterjs-editor-dom';
 import { splitWithFragment } from 'roosterjs-html-sanitizer';
 
