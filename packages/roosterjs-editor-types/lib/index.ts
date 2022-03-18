@@ -118,7 +118,7 @@ export {
     GenericContentEditFeature,
     BuildInEditFeature,
 } from './interface/IEditor';
-export { default as EditorPlugin } from './interface/EditorPlugin';
+export { default as EditorPlugin, EditorPluginClass } from './interface/EditorPlugin';
 export { default as PluginWithState } from './interface/PluginWithState';
 export {
     default as CorePlugins,

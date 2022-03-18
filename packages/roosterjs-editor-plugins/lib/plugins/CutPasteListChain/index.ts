@@ -1,1 +1,1 @@
-export { default as CutPasteListChain } from './CutPasteListChain';
+export { CutPasteListChain } from './CutPasteListChain';

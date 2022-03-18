@@ -43,3 +43,8 @@ export default interface EditorPlugin {
      */
     onPluginEvent?: (event: PluginEvent) => void;
 }
+
+/**
+ * Editor plugin class
+ */
+export type EditorPluginClass = new () => EditorPlugin;
