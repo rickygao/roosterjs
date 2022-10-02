@@ -8,6 +8,11 @@ export type ContentModelSegmentType =
     | 'Text'
 
     /**
+     * Represents an image
+     */
+    | 'Image'
+
+    /**
      * Represents a BR element
      */
     | 'Br'
@@ -20,4 +25,9 @@ export type ContentModelSegmentType =
     /**
      * Represents a general segment that doesn't have a special type
      */
-    | 'General';
+    | 'General'
+
+    /**
+     * Represents an entity segment
+     */
+    | 'Entity';

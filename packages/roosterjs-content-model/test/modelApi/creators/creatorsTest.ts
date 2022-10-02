@@ -86,6 +86,7 @@ describe('Creators', () => {
         expect(result).toEqual({
             blockType: 'Paragraph',
             segments: [],
+            format: {},
         });
     });
 
@@ -95,6 +96,7 @@ describe('Creators', () => {
         expect(result).toEqual({
             blockType: 'Paragraph',
             segments: [],
+            format: {},
             isImplicit: true,
         });
     });

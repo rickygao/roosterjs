@@ -159,6 +159,7 @@ describe('listItemProcessor', () => {
                                     format: {},
                                 },
                             ],
+                            format: {},
                         },
                     ],
                     levels: [
@@ -337,6 +338,7 @@ describe('listItemProcessor without format handlers', () => {
                                     format: {},
                                 },
                             ],
+                            format: {},
                         },
                     ],
                     levels: [

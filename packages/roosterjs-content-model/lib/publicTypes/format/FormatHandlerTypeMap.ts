@@ -1,10 +1,14 @@
 import { BackgroundColorFormat } from './formatParts/BackgroundColorFormat';
 import { BoldFormat } from './formatParts/BoldFormat';
 import { BorderFormat } from './formatParts/BorderFormat';
+import { DirectionFormat } from './formatParts/DirectionFormat';
 import { FontFamilyFormat } from './formatParts/FontFamilyFormat';
 import { FontSizeFormat } from './formatParts/FontSizeFormat';
+import { HyperLinkFormat } from './formatParts/HyperLinkFormat';
 import { IdFormat } from './formatParts/IdFormat';
+import { IndentationFormat } from './formatParts/IndentationFormat';
 import { ItalicFormat } from './formatParts/ItalicFormat';
+import { LineHeightFormat } from './formatParts/LineHeightFormat';
 import { ListMetadataFormat } from './formatParts/ListMetadataFormat';
 import { ListThreadFormat } from './formatParts/ListThreadFormat';
 import { ListTypeFormat } from './formatParts/ListTypeFormat';
@@ -18,6 +22,7 @@ import { TextAlignFormat } from './formatParts/TextAlignFormat';
 import { TextColorFormat } from './formatParts/TextColorFormat';
 import { UnderlineFormat } from './formatParts/UnderlineFormat';
 import { VerticalAlignFormat } from './formatParts/VerticalAlignFormat';
+import { WhiteSpaceFormat } from './formatParts/WhiteSpaceFormat';
 
 /**
  * Represents a record of all format handlers
@@ -39,6 +44,11 @@ export interface FormatHandlerTypeMap {
     border: BorderFormat;
 
     /**
+     * Format for DirectionFormat
+     */
+    direction: DirectionFormat;
+
+    /**
      * Format for FontFamilyFormat
      */
     fontFamily: FontFamilyFormat;
@@ -49,14 +59,29 @@ export interface FormatHandlerTypeMap {
     fontSize: FontSizeFormat;
 
     /**
+     * Format for HyperLinkFormat
+     */
+    hyperLink: HyperLinkFormat;
+
+    /**
      * Format for IdFormat
      */
     id: IdFormat;
 
     /**
+     * Format for IndentationFormat
+     */
+    indent: IndentationFormat;
+
+    /**
      * Format for ItalicFormat
      */
     italic: ItalicFormat;
+
+    /**
+     * Format for LineHeightFormat
+     */
+    lineHeight: LineHeightFormat;
 
     /**
      * Format for ListMetadataFormat (used by list item)
@@ -132,6 +157,11 @@ export interface FormatHandlerTypeMap {
      * Format for VerticalAlignFormat
      */
     verticalAlign: VerticalAlignFormat;
+
+    /**
+     * Format for WhiteSpaceFormat
+     */
+    whiteSpace: WhiteSpaceFormat;
 }
 
 /**

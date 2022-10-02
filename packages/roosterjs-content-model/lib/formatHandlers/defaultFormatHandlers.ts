@@ -1,6 +1,7 @@
 import { backgroundColorFormatHandler } from './common/backgroundColorFormatHandler';
 import { boldFormatHandler } from './segment/boldFormatHandler';
 import { borderFormatHandler } from './common/borderFormatHandler';
+import { directionFormatHandler } from './block/directionFormatHandler';
 import { fontFamilyFormatHandler } from './segment/fontFamilyFormatHandler';
 import { fontSizeFormatHandler } from './segment/fontSizeFormatHandler';
 import { FormatAppliers } from '../publicTypes/context/ModelToDomSettings';
@@ -8,8 +9,11 @@ import { FormatHandler } from './FormatHandler';
 import { FormatHandlerTypeMap, FormatKey } from '../publicTypes/format/FormatHandlerTypeMap';
 import { FormatParsers } from '../publicTypes/context/DomToModelSettings';
 import { getObjectKeys } from 'roosterjs-editor-dom';
+import { hyperLinkFormatHandler } from './segment/hyperLinkFormatHandler';
 import { idFormatHandler } from './common/idFormatHandler';
+import { indentFormatHandler } from './block/indentFormatHandler';
 import { italicFormatHandler } from './segment/italicFormatHandler';
+import { lineHeightFormatHandler } from './block/lineHeightFormatHandler';
 import { listItemMetadataFormatHandler } from './list/listItemMetadataFormatHandler';
 import { listItemThreadFormatHandler } from './list/listItemThreadFormatHandler';
 import { listLevelMetadataFormatHandler } from './list/listLevelMetadataFormatHandler';
@@ -25,6 +29,7 @@ import { textAlignFormatHandler } from './common/textAlignFormatHandler';
 import { textColorFormatHandler } from './segment/textColorFormatHandler';
 import { underlineFormatHandler } from './segment/underlineFormatHandler';
 import { verticalAlignFormatHandler } from './common/verticalAlignFormatHandler';
+import { whiteSpaceFormatHandler } from './block/whiteSpaceFormatHandler';
 
 type FormatHandlers = {
     [Key in FormatKey]: FormatHandler<FormatHandlerTypeMap[Key]>;
@@ -34,10 +39,14 @@ const defaultFormatHandlerMap: FormatHandlers = {
     backgroundColor: backgroundColorFormatHandler,
     bold: boldFormatHandler,
     border: borderFormatHandler,
+    direction: directionFormatHandler,
     fontFamily: fontFamilyFormatHandler,
     fontSize: fontSizeFormatHandler,
+    hyperLink: hyperLinkFormatHandler,
     id: idFormatHandler,
+    indent: indentFormatHandler,
     italic: italicFormatHandler,
+    lineHeight: lineHeightFormatHandler,
     listItemMetadata: listItemMetadataFormatHandler,
     listItemThread: listItemThreadFormatHandler,
     listLevelMetadata: listLevelMetadataFormatHandler,
@@ -53,6 +62,7 @@ const defaultFormatHandlerMap: FormatHandlers = {
     textColor: textColorFormatHandler,
     underline: underlineFormatHandler,
     verticalAlign: verticalAlignFormatHandler,
+    whiteSpace: whiteSpaceFormatHandler,
 };
 
 /**

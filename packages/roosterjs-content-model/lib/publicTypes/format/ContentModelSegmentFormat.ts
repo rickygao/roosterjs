@@ -2,6 +2,7 @@ import { BackgroundColorFormat } from './formatParts/BackgroundColorFormat';
 import { BoldFormat } from './formatParts/BoldFormat';
 import { FontFamilyFormat } from './formatParts/FontFamilyFormat';
 import { FontSizeFormat } from './formatParts/FontSizeFormat';
+import { HyperLinkFormat } from './formatParts/HyperLinkFormat';
 import { ItalicFormat } from './formatParts/ItalicFormat';
 import { StrikeFormat } from './formatParts/StrikeFormat';
 import { SuperOrSubScriptFormat } from './formatParts/SuperOrSubScriptFormat';
@@ -19,4 +20,5 @@ export type ContentModelSegmentFormat = TextColorFormat &
     ItalicFormat &
     UnderlineFormat &
     StrikeFormat &
-    SuperOrSubScriptFormat;
+    SuperOrSubScriptFormat &
+    HyperLinkFormat;

@@ -28,6 +28,7 @@ describe('handleBlock', () => {
         const paragraph: ContentModelBlock = {
             blockType: 'Paragraph',
             segments: [],
+            format: {},
         };
 
         runTest(paragraph, '');
@@ -60,6 +61,7 @@ describe('handleBlock', () => {
         const paragraph: ContentModelBlock = {
             blockType: 'Paragraph',
             segments: [],
+            format: {},
         };
         const block: ContentModelBlock = {
             blockType: 'BlockGroup',

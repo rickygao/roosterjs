@@ -11,6 +11,9 @@ export function ContentModelBlockView(props: { block: ContentModelBlock }) {
         case 'BlockGroup':
             return <ContentModelBlockGroupView group={block} />;
 
+        case 'Entity':
+            return null;
+
         case 'Paragraph':
             return <ContentModelParagraphView paragraph={block} />;
 

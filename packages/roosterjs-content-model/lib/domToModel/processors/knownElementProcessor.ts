@@ -3,6 +3,7 @@ import { containerProcessor } from './containerProcessor';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
 import { isBlockElement } from 'roosterjs-editor-dom';
+import { ParagraphFormatHandlers } from '../../formatHandlers/ParagraphFormatHandlers';
 import { parseFormat } from '../utils/parseFormat';
 import { SegmentFormatHandlers } from '../../formatHandlers/SegmentFormatHandlers';
 import { stackFormat } from '../utils/stackFormat';
@@ -16,17 +17,19 @@ export const knownElementProcessor: ElementProcessor = (group, element, context)
             context,
             {
                 segment: 'shallowClone',
+                paragraph: 'shallowClone',
             },
             () => {
+                parseFormat(element, ParagraphFormatHandlers, context.blockFormat, context);
                 parseFormat(element, SegmentFormatHandlers, context.segmentFormat, context);
 
-                addBlock(group, createParagraph(false /*isImplicit*/));
+                addBlock(group, createParagraph(false /*isImplicit*/, context.blockFormat));
 
                 containerProcessor(group, element, context);
             }
         );
 
-        addBlock(group, createParagraph(false /*isImplicit*/));
+        addBlock(group, createParagraph(false /*isImplicit*/, context.blockFormat));
     } else {
         stackFormat(context, { segment: 'shallowClone' }, () => {
             parseFormat(element, SegmentFormatHandlers, context.segmentFormat, context);

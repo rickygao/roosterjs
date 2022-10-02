@@ -1,10 +1,14 @@
 import { ContentModelBlockBase } from './ContentModelBlockBase';
+import { ContentModelParagraphFormat } from '../format/ContentModelParagraphFormat';
 import { ContentModelSegment } from '../segment/ContentModelSegment';
+import { ContentModelWithFormat } from '../format/ContentModelWithFormat';
 
 /**
  * Content Model of Paragraph
  */
-export interface ContentModelParagraph extends ContentModelBlockBase<'Paragraph'> {
+export interface ContentModelParagraph
+    extends ContentModelBlockBase<'Paragraph'>,
+        ContentModelWithFormat<ContentModelParagraphFormat> {
     /**
      * Segments within this paragraph
      */

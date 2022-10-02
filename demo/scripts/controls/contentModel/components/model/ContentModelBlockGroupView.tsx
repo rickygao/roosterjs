@@ -10,11 +10,17 @@ export function ContentModelBlockGroupView(props: { group: ContentModelBlockGrou
     const { group } = props;
 
     switch (group.blockGroupType) {
+        case 'Code':
+            return null;
+
         case 'Document':
             return <ContentModelDocumentView doc={group} />;
 
         case 'General':
             return <ContentModelGeneralView model={group} />;
+
+        case 'Header':
+            return null;
 
         case 'ListItem':
             return <ContentModelListItemView listItem={group} />;

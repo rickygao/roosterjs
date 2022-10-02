@@ -25,10 +25,25 @@ export function handleSegment(
     let element: HTMLElement | null = null;
 
     switch (segment.segmentType) {
+        case 'Image':
+            element = doc.createElement('img');
+            element.setAttribute('src', segment.src);
+            regularSelection.current.segment = element;
+
+            applyFormat(element, SegmentFormatHandlers, segment.format, context);
+            break;
         case 'Text':
             const txt = doc.createTextNode(segment.text);
 
-            element = doc.createElement('span');
+            if (segment.format.linkHref) {
+                element = doc.createElement('a');
+                element.setAttribute('href', segment.format.linkHref);
+                if (segment.format.linkTarget) {
+                    element.setAttribute('target', segment.format.linkTarget);
+                }
+            } else {
+                element = doc.createElement('span');
+            }
             element.appendChild(txt);
             regularSelection.current.segment = txt;
 

@@ -15,4 +15,9 @@ export type ContentModelBlockType =
     /**
      * Represent a general paragraph (DIV, P, ...)
      */
-    | 'Paragraph';
+    | 'Paragraph'
+
+    /**
+     * Represents a roosterjs entity in a block
+     */
+    | 'Entity';

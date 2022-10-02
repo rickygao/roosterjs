@@ -421,7 +421,7 @@ function createQueue(rootPath, baseDir, root, additionalFiles, externalHandler) 
 
 function dts(isAmd, isUi) {
     const targetPath = isUi ? roosterJsUiDistPath : roosterJsDistPath;
-    const targetPackages = isUi ? packagesUI : ['roosterjs'];
+    const targetPackages = isUi ? packagesUI : ['roosterjs', 'roosterjs-content-model'];
     const startFileName = isUi ? 'roosterjs-react/lib/index.d.ts' : 'roosterjs/lib/index.d.ts';
     const libraryName = isUi ? 'roosterjsReact' : 'roosterjs';
     const targetFileName = isUi ? 'rooster-react' : 'rooster';
