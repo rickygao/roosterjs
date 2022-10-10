@@ -29,6 +29,7 @@ describe('listItemProcessor', () => {
                     blockGroupType: 'General',
                     element: li,
                     blocks: [],
+                    format: {},
                 },
             ],
         });
@@ -55,6 +56,7 @@ describe('listItemProcessor', () => {
                     blockGroupType: 'General',
                     element: li,
                     blocks: [],
+                    format: {},
                 },
             ],
         });
@@ -88,6 +90,7 @@ describe('listItemProcessor', () => {
                         isSelected: true,
                         format: {},
                     },
+                    format: {},
                 },
             ],
         });
@@ -125,6 +128,7 @@ describe('listItemProcessor', () => {
                             fontSize: '10px',
                         },
                     },
+                    format: {},
                 },
             ],
         });
@@ -172,6 +176,7 @@ describe('listItemProcessor', () => {
                         isSelected: true,
                         format: {},
                     },
+                    format: {},
                 },
             ],
         });
@@ -208,6 +213,7 @@ describe('listItemProcessor without format handlers', () => {
                     blockGroupType: 'General',
                     element: li,
                     blocks: [],
+                    format: {},
                 },
             ],
         });
@@ -234,6 +240,7 @@ describe('listItemProcessor without format handlers', () => {
                     blockGroupType: 'General',
                     element: li,
                     blocks: [],
+                    format: {},
                 },
             ],
         });
@@ -267,6 +274,7 @@ describe('listItemProcessor without format handlers', () => {
                         isSelected: true,
                         format: {},
                     },
+                    format: {},
                 },
             ],
         });
@@ -304,6 +312,7 @@ describe('listItemProcessor without format handlers', () => {
                             fontSize: '10px',
                         },
                     },
+                    format: {},
                 },
             ],
         });
@@ -351,6 +360,7 @@ describe('listItemProcessor without format handlers', () => {
                         isSelected: true,
                         format: {},
                     },
+                    format: {},
                 },
             ],
         });

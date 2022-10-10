@@ -24,6 +24,7 @@ describe('generalProcessor', () => {
             blockGroupType: 'General',
             element: div,
             blocks: [],
+            format: {},
         };
 
         spyOn(createGeneralBlock, 'createGeneralBlock').and.returnValue(block);

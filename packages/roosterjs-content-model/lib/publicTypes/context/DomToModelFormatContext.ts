@@ -1,6 +1,6 @@
+import { ContentModelBlockFormat } from '../format/ContentModelBlockFormat';
 import { ContentModelBlockGroup } from '../block/group/ContentModelBlockGroup';
 import { ContentModelListItemLevelFormat } from '../format/ContentModelListItemLevelFormat';
-import { ContentModelParagraphFormat } from '../format/ContentModelParagraphFormat';
 import { ContentModelSegmentFormat } from '../format/ContentModelSegmentFormat';
 
 /**
@@ -30,7 +30,7 @@ export interface DomToModelFormatContext {
     /**
      * Format of current block
      */
-    blockFormat: ContentModelParagraphFormat;
+    blockFormat: ContentModelBlockFormat;
 
     /**
      * Format of current segment

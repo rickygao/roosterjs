@@ -1,7 +1,7 @@
 import { addBlock } from './addBlock';
+import { ContentModelBlockFormat } from '../../publicTypes/format/ContentModelBlockFormat';
 import { ContentModelBlockGroup } from '../../publicTypes/block/group/ContentModelBlockGroup';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
-import { ContentModelParagraphFormat } from '../../publicTypes/format/ContentModelParagraphFormat';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 import { createParagraph } from '../creators/createParagraph';
 
@@ -11,7 +11,7 @@ import { createParagraph } from '../creators/createParagraph';
 export function addSegment(
     group: ContentModelBlockGroup,
     newSegment: ContentModelSegment,
-    blockFormat?: ContentModelParagraphFormat
+    blockFormat?: ContentModelBlockFormat
 ) {
     const lastBlock = group.blocks[group.blocks.length - 1];
     let paragraph: ContentModelParagraph;

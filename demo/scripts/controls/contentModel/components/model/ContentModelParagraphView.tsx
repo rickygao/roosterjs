@@ -13,13 +13,13 @@ import { useProperty } from '../../hooks/useProperty';
 import { WhiteSpaceFormatRenderer } from '../format/formatPart/WhiteSpaceFormatRenderer';
 import {
     ContentModelParagraph,
-    ContentModelParagraphFormat,
+    ContentModelBlockFormat,
     hasSelectionInBlock,
 } from 'roosterjs-content-model';
 
 const styles = require('./ContentModelParagraphView.scss');
 
-const ParagraphFormatRenders: FormatRenderer<ContentModelParagraphFormat>[] = [
+const ParagraphFormatRenders: FormatRenderer<ContentModelBlockFormat>[] = [
     BackgroundColorFormatRenderer,
     DirectionFormatRenderer,
     TextAlignFormatRenderer,

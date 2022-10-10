@@ -49,6 +49,7 @@ describe('handleBlock', () => {
             blockGroupType: 'General',
             blocks: [],
             element: element,
+            format: {},
         };
 
         runTest(block, '<span></span>');
@@ -68,6 +69,7 @@ describe('handleBlock', () => {
             blockGroupType: 'General',
             blocks: [paragraph],
             element: element,
+            format: {},
         };
 
         runTest(block, '<span></span>');

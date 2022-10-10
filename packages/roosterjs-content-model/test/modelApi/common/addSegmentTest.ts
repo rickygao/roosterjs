@@ -111,6 +111,7 @@ describe('addSegment', () => {
             blockGroupType: 'General',
             blocks: [],
             element: div,
+            format: {},
         };
         addBlock(doc, block);
 

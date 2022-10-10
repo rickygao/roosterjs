@@ -1,5 +1,5 @@
 import { ContentModelBlockBase } from './ContentModelBlockBase';
-import { ContentModelParagraphFormat } from '../format/ContentModelParagraphFormat';
+import { ContentModelBlockFormat } from '../format/ContentModelBlockFormat';
 import { ContentModelSegment } from '../segment/ContentModelSegment';
 import { ContentModelWithFormat } from '../format/ContentModelWithFormat';
 
@@ -8,7 +8,7 @@ import { ContentModelWithFormat } from '../format/ContentModelWithFormat';
  */
 export interface ContentModelParagraph
     extends ContentModelBlockBase<'Paragraph'>,
-        ContentModelWithFormat<ContentModelParagraphFormat> {
+        ContentModelWithFormat<ContentModelBlockFormat> {
     /**
      * Segments within this paragraph
      */

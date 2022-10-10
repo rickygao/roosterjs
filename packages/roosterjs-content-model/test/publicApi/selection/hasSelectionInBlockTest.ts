@@ -176,6 +176,7 @@ describe('hasSelectionInBlock', () => {
             blockGroupType: 'General',
             element: null!,
             blocks: [],
+            format: {},
         };
 
         const result = hasSelectionInBlock(block);
@@ -201,6 +202,7 @@ describe('hasSelectionInBlock', () => {
                     format: {},
                 },
             ],
+            format: {},
         };
 
         const result = hasSelectionInBlock(block);

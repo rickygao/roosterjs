@@ -1,12 +1,12 @@
+import { ContentModelBlockFormat } from '../../publicTypes/format/ContentModelBlockFormat';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
-import { ContentModelParagraphFormat } from '../../publicTypes/format/ContentModelParagraphFormat';
 
 /**
  * @internal
  */
 export function createParagraph(
     isImplicit?: boolean,
-    format?: ContentModelParagraphFormat
+    format?: ContentModelBlockFormat
 ): ContentModelParagraph {
     const result: ContentModelParagraph = {
         blockType: 'Paragraph',

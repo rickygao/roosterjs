@@ -9,7 +9,7 @@ import { WhiteSpaceFormat } from './formatParts/WhiteSpaceFormat';
 /**
  * The format object for a paragraph in Content Model
  */
-export type ContentModelParagraphFormat = BackgroundColorFormat &
+export type ContentModelBlockFormat = BackgroundColorFormat &
     DirectionFormat &
     TextAlignFormat &
     MarginFormat &

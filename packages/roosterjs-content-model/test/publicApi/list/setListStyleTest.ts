@@ -74,6 +74,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -110,6 +111,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -141,6 +143,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -167,6 +170,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -201,6 +205,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -230,6 +235,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -260,6 +266,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
                 {
                     blockType: 'BlockGroup',
@@ -280,6 +287,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
                 {
                     blockType: 'BlockGroup',
@@ -299,6 +307,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -324,6 +333,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
                 {
                     blockType: 'BlockGroup',
@@ -344,6 +354,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
                 {
                     blockType: 'BlockGroup',
@@ -363,6 +374,7 @@ describe('setListStyle', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };

@@ -55,7 +55,7 @@ export { ContentModelEntity } from './publicTypes/entity/ContentModelEntity';
 export { FormatHandlerTypeMap, FormatKey } from './publicTypes/format/FormatHandlerTypeMap';
 export { ContentModelTableFormat } from './publicTypes/format/ContentModelTableFormat';
 export { ContentModelTableCellFormat } from './publicTypes/format/ContentModelTableCellFormat';
-export { ContentModelParagraphFormat } from './publicTypes/format/ContentModelParagraphFormat';
+export { ContentModelBlockFormat } from './publicTypes/format/ContentModelBlockFormat';
 export { ContentModelSegmentFormat } from './publicTypes/format/ContentModelSegmentFormat';
 export { ContentModelListItemLevelFormat } from './publicTypes/format/ContentModelListItemLevelFormat';
 export { ContentModelWithFormat } from './publicTypes/format/ContentModelWithFormat';

@@ -44,6 +44,7 @@ describe('Creators', () => {
             blockGroupType: 'General',
             element: element,
             blocks: [],
+            format: {},
         });
     });
 
@@ -277,6 +278,7 @@ describe('Creators', () => {
                 isSelected: true,
                 format: {},
             },
+            format: {},
         });
     });
 
@@ -295,6 +297,7 @@ describe('Creators', () => {
                 isSelected: true,
                 format: { fontSize: 'a' },
             },
+            format: {},
         });
 
         format.fontSize = 'b';
@@ -312,6 +315,7 @@ describe('Creators', () => {
                 isSelected: true,
                 format: { fontSize: 'a' },
             },
+            format: {},
         });
     });
 
@@ -322,6 +326,7 @@ describe('Creators', () => {
             blockType: 'BlockGroup',
             blockGroupType: 'Quote',
             blocks: [],
+            format: {},
         });
     });
 });

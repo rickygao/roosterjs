@@ -72,6 +72,7 @@ describe('setListStartNumber', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -108,6 +109,7 @@ describe('setListStartNumber', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -139,6 +141,7 @@ describe('setListStartNumber', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -165,6 +168,7 @@ describe('setListStartNumber', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -196,6 +200,7 @@ describe('setListStartNumber', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
@@ -225,6 +230,7 @@ describe('setListStartNumber', () => {
                             format: {},
                         },
                     ],
+                    format: {},
                 },
             ],
         };
