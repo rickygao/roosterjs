@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ContentModelBrView } from './ContentModelBrView';
+import { ContentModelEntityView } from './ContentModelEntityView';
 import { ContentModelGeneralView } from './ContentModelGeneralView';
 import { ContentModelImageView } from './ContentModelImageView';
 import { ContentModelSegment } from 'roosterjs-content-model';
@@ -13,9 +14,6 @@ export function ContentModelSegmentView(props: { segment: ContentModelSegment })
         case 'Br':
             return <ContentModelBrView br={segment} />;
 
-        case 'Entity':
-            return null;
-
         case 'General':
             return <ContentModelGeneralView model={segment} />;
 
@@ -27,5 +25,8 @@ export function ContentModelSegmentView(props: { segment: ContentModelSegment })
 
         case 'Text':
             return <ContentModelTextView text={segment} />;
+
+        case 'Entity':
+            return <ContentModelEntityView entity={segment} />;
     }
 }

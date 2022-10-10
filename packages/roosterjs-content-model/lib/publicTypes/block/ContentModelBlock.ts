@@ -1,5 +1,5 @@
 import { ContentModelCode } from './group/ContentModelCode';
-import { ContentModelEntityBlock } from './ContentModelEntityBlock';
+import { ContentModelEntity } from '../entity/ContentModelEntity';
 import { ContentModelGeneralBlock } from './group/ContentModelGeneralBlock';
 import { ContentModelHeader } from './group/ContentModelHeader';
 import { ContentModelListItem } from './group/ContentModelListItem';
@@ -18,4 +18,4 @@ export type ContentModelBlock =
     | ContentModelGeneralBlock
     | ContentModelTable
     | ContentModelParagraph
-    | ContentModelEntityBlock;
+    | ContentModelEntity;

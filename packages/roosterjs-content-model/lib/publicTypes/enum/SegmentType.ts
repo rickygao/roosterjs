@@ -28,6 +28,6 @@ export type ContentModelSegmentType =
     | 'General'
 
     /**
-     * Represents an entity segment
+     * Represents an inline entity
      */
     | 'Entity';

@@ -18,6 +18,6 @@ export type ContentModelBlockType =
     | 'Paragraph'
 
     /**
-     * Represents a roosterjs entity in a block
+     * Represent a block entity
      */
     | 'Entity';

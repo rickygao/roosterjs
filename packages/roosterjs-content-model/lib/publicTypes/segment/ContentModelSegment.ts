@@ -1,5 +1,5 @@
 import { ContentModelBr } from './ContentModelBr';
-import { ContentModelEntitySegment } from './ContentModelEntitySegment';
+import { ContentModelEntity } from '../entity/ContentModelEntity';
 import { ContentModelGeneralSegment } from './ContentModelGeneralSegment';
 import { ContentModelImage } from './ContentModelImage';
 import { ContentModelSelectionMarker } from './ContentModelSelectionMarker';
@@ -12,6 +12,6 @@ export type ContentModelSegment =
     | ContentModelSelectionMarker
     | ContentModelText
     | ContentModelImage
-    | ContentModelEntitySegment
     | ContentModelBr
-    | ContentModelGeneralSegment;
+    | ContentModelGeneralSegment
+    | ContentModelEntity;

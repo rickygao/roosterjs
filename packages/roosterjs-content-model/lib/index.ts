@@ -32,7 +32,6 @@ export { ContentModelSegmentType } from './publicTypes/enum/SegmentType';
 
 export { ContentModelBlockBase } from './publicTypes/block/ContentModelBlockBase';
 export { ContentModelTable } from './publicTypes/block/ContentModelTable';
-export { ContentModelEntityBlock } from './publicTypes/block/ContentModelEntityBlock';
 export { ContentModelBlockGroupBase } from './publicTypes/block/group/ContentModelBlockGroupBase';
 export { ContentModelDocument } from './publicTypes/block/group/ContentModelDocument';
 export { ContentModelQuote } from './publicTypes/block/group/ContentModelQuote';
@@ -49,9 +48,9 @@ export { ContentModelSelectionMarker } from './publicTypes/segment/ContentModelS
 export { ContentModelText } from './publicTypes/segment/ContentModelText';
 export { ContentModelImage } from './publicTypes/segment/ContentModelImage';
 export { ContentModelBr } from './publicTypes/segment/ContentModelBr';
-export { ContentModelEntitySegment } from './publicTypes/segment/ContentModelEntitySegment';
 export { ContentModelGeneralSegment } from './publicTypes/segment/ContentModelGeneralSegment';
 export { ContentModelSegment } from './publicTypes/segment/ContentModelSegment';
+export { ContentModelEntity } from './publicTypes/entity/ContentModelEntity';
 
 export { FormatHandlerTypeMap, FormatKey } from './publicTypes/format/FormatHandlerTypeMap';
 export { ContentModelTableFormat } from './publicTypes/format/ContentModelTableFormat';
@@ -125,6 +124,10 @@ export {
     FormatApplier,
     FormatAppliers,
 } from './publicTypes/context/ModelToDomSettings';
+export {
+    ModelToDomEntityContext,
+    EntityPlaceholderPair,
+} from './publicTypes/context/ModelToDomEntityContext';
 export { ElementProcessor } from './publicTypes/context/ElementProcessor';
 
 export {
