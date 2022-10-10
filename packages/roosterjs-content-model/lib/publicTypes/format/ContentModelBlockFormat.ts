@@ -3,7 +3,6 @@ import { DirectionFormat } from './formatParts/DirectionFormat';
 import { IndentationFormat } from './formatParts/IndentationFormat';
 import { LineHeightFormat } from './formatParts/LineHeightFormat';
 import { MarginFormat } from './formatParts/MarginFormat';
-import { TextAlignFormat } from './formatParts/TextAlignFormat';
 import { WhiteSpaceFormat } from './formatParts/WhiteSpaceFormat';
 
 /**
@@ -11,7 +10,6 @@ import { WhiteSpaceFormat } from './formatParts/WhiteSpaceFormat';
  */
 export type ContentModelBlockFormat = BackgroundColorFormat &
     DirectionFormat &
-    TextAlignFormat &
     MarginFormat &
     IndentationFormat &
     LineHeightFormat &

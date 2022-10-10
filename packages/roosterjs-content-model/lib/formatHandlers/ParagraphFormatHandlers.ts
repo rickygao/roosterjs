@@ -6,7 +6,6 @@ import { FormatKey } from '../publicTypes/format/FormatHandlerTypeMap';
 export const ParagraphFormatHandlers: FormatKey[] = [
     'backgroundColor',
     'direction',
-    'textAlign',
     'margin',
     'indent',
     'lineHeight',

@@ -60,7 +60,6 @@ export { ContentModelSegmentFormat } from './publicTypes/format/ContentModelSegm
 export { ContentModelListItemLevelFormat } from './publicTypes/format/ContentModelListItemLevelFormat';
 export { ContentModelWithFormat } from './publicTypes/format/ContentModelWithFormat';
 
-export { TextAlignFormat } from './publicTypes/format/formatParts/TextAlignFormat';
 export { VerticalAlignFormat } from './publicTypes/format/formatParts/VerticalAlignFormat';
 export { BackgroundColorFormat } from './publicTypes/format/formatParts/BackgroundColorFormat';
 export { BorderFormat } from './publicTypes/format/formatParts/BorderFormat';

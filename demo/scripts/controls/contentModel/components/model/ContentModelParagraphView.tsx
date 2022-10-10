@@ -2,13 +2,12 @@ import * as React from 'react';
 import { BackgroundColorFormatRenderer } from '../format/formatPart/BackgroundColorFormatRenderer';
 import { ContentModelSegmentView } from './ContentModelSegmentView';
 import { ContentModelView } from '../ContentModelView';
-import { DirectionFormatRenderer } from '../format/formatPart/DirectionFormat';
+import { DirectionFormatRenderers } from '../format/formatPart/DirectionFormatRenderers';
 import { FormatRenderer } from '../format/utils/FormatRenderer';
 import { FormatView } from '../format/FormatView';
 import { IndentationFormatRenderer } from '../format/formatPart/IndentationFormatRenderer';
 import { LineHeightFormatRenderer } from '../format/formatPart/LineHeightFormatRenderer';
 import { MarginFormatRenderer } from '../format/formatPart/MarginFormatRenderer';
-import { TextAlignFormatRenderer } from '../format/formatPart/TextAlignFormatRenderer';
 import { useProperty } from '../../hooks/useProperty';
 import { WhiteSpaceFormatRenderer } from '../format/formatPart/WhiteSpaceFormatRenderer';
 import {
@@ -21,8 +20,7 @@ const styles = require('./ContentModelParagraphView.scss');
 
 const ParagraphFormatRenders: FormatRenderer<ContentModelBlockFormat>[] = [
     BackgroundColorFormatRenderer,
-    DirectionFormatRenderer,
-    TextAlignFormatRenderer,
+    ...DirectionFormatRenderers,
     MarginFormatRenderer,
     IndentationFormatRenderer,
     LineHeightFormatRenderer,

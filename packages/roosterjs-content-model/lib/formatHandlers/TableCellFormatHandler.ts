@@ -8,7 +8,6 @@ export const TableCellFormatHandlers: FormatKey[] = [
     'borderBox',
     'backgroundColor',
     'padding',
-    'textAlign',
     'verticalAlign',
     'tableCellMetadata',
 ];

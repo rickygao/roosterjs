@@ -20,7 +20,6 @@ import { StrikeFormat } from './formatParts/StrikeFormat';
 import { SuperOrSubScriptFormat } from './formatParts/SuperOrSubScriptFormat';
 import { TableCellMetadataFormat } from 'roosterjs-editor-types';
 import { TableMetadataFormat } from './formatParts/TableMetadataFormat';
-import { TextAlignFormat } from './formatParts/TextAlignFormat';
 import { TextColorFormat } from './formatParts/TextColorFormat';
 import { UnderlineFormat } from './formatParts/UnderlineFormat';
 import { VerticalAlignFormat } from './formatParts/VerticalAlignFormat';
@@ -149,11 +148,6 @@ export interface FormatHandlerTypeMap {
      * Format for SpacingFormat
      */
     tableSpacing: SpacingFormat;
-
-    /**
-     * Format for TextAlignFormat
-     */
-    textAlign: TextAlignFormat;
 
     /**
      * Format for TextColorFormat

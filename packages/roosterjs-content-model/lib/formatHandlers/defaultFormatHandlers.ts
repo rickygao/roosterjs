@@ -27,7 +27,6 @@ import { superOrSubScriptFormatHandler } from './segment/superOrSubScriptFormatH
 import { tableCellMetadataFormatHandler } from './table/tableCellMetadataFormatHandler';
 import { tableMetadataFormatHandler } from './table/tableMetadataFormatHandler';
 import { tableSpacingFormatHandler } from './table/tableSpacingFormatHandler';
-import { textAlignFormatHandler } from './common/textAlignFormatHandler';
 import { textColorFormatHandler } from './segment/textColorFormatHandler';
 import { underlineFormatHandler } from './segment/underlineFormatHandler';
 import { verticalAlignFormatHandler } from './common/verticalAlignFormatHandler';
@@ -62,7 +61,6 @@ const defaultFormatHandlerMap: FormatHandlers = {
     tableCellMetadata: tableCellMetadataFormatHandler,
     tableMetadata: tableMetadataFormatHandler,
     tableSpacing: tableSpacingFormatHandler,
-    textAlign: textAlignFormatHandler,
     textColor: textColorFormatHandler,
     underline: underlineFormatHandler,
     verticalAlign: verticalAlignFormatHandler,
