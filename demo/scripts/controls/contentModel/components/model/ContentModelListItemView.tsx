@@ -13,8 +13,8 @@ import { useProperty } from '../../hooks/useProperty';
 import {
     ContentModelListItem,
     ContentModelListItemLevelFormat,
-    hasSelectionInBlockGroup,
     ContentModelSegmentFormat,
+    hasSelectionInBlockGroup,
 } from 'roosterjs-content-model';
 
 const styles = require('./ContentModelListItemView.scss');

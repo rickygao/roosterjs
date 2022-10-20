@@ -11,7 +11,6 @@ import { ContentModelText } from './ContentModelText';
 export type ContentModelSegment =
     | ContentModelSelectionMarker
     | ContentModelText
-    | ContentModelImage
     | ContentModelBr
     | ContentModelGeneralSegment
     | ContentModelEntity

@@ -8,11 +8,6 @@ export type ContentModelSegmentType =
     | 'Text'
 
     /**
-     * Represents an image
-     */
-    | 'Image'
-
-    /**
      * Represents a BR element
      */
     | 'Br'
