@@ -14,4 +14,5 @@ export type ContentModelSegment =
     | ContentModelImage
     | ContentModelBr
     | ContentModelGeneralSegment
-    | ContentModelEntity;
+    | ContentModelEntity
+    | ContentModelImage;

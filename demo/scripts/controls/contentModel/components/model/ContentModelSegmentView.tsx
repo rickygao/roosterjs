@@ -17,9 +17,6 @@ export function ContentModelSegmentView(props: { segment: ContentModelSegment })
         case 'General':
             return <ContentModelGeneralView model={segment} />;
 
-        case 'Image':
-            return <ContentModelImageView image={segment} />;
-
         case 'SelectionMarker':
             return <ContentModelSelectionMarkerView marker={segment} />;
 
@@ -28,5 +25,8 @@ export function ContentModelSegmentView(props: { segment: ContentModelSegment })
 
         case 'Entity':
             return <ContentModelEntityView entity={segment} />;
+
+        case 'Image':
+            return <ContentModelImageView image={segment} />;
     }
 }

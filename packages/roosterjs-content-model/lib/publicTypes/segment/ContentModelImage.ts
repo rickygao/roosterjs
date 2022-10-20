@@ -1,16 +1,28 @@
+import { ContentModelImageFormat } from '../format/ContentModelImageFormat';
 import { ContentModelSegmentBase } from './ContentModelSegmentBase';
 
 /**
- * Content Model of Image
+ * Content Model of IMG
  */
-export interface ContentModelImage extends ContentModelSegmentBase<'Image'> {
+export interface ContentModelImage
+    extends ContentModelSegmentBase<'Image', ContentModelImageFormat> {
     /**
-     * src of this image
+     * Image source of this IMG element
      */
     src: string;
 
     /**
-     * Alternate text of this image
+     * Alt text of image
      */
-    alterText?: string;
+    alt?: string;
+
+    /**
+     * Title text of image
+     */
+    title?: string;
+
+    /**
+     * Whether this image is selected as image selection (show a border around the image)
+     */
+    isSelectedAsImageSelection?: boolean;
 }

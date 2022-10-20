@@ -50,8 +50,8 @@ export { ContentModelParagraph } from './publicTypes/block/ContentModelParagraph
 export { ContentModelSegmentBase } from './publicTypes/segment/ContentModelSegmentBase';
 export { ContentModelSelectionMarker } from './publicTypes/segment/ContentModelSelectionMarker';
 export { ContentModelText } from './publicTypes/segment/ContentModelText';
-export { ContentModelImage } from './publicTypes/segment/ContentModelImage';
 export { ContentModelBr } from './publicTypes/segment/ContentModelBr';
+export { ContentModelImage } from './publicTypes/segment/ContentModelImage';
 export { ContentModelGeneralSegment } from './publicTypes/segment/ContentModelGeneralSegment';
 export { ContentModelSegment } from './publicTypes/segment/ContentModelSegment';
 export { ContentModelEntity } from './publicTypes/entity/ContentModelEntity';
@@ -62,6 +62,7 @@ export { ContentModelTableCellFormat } from './publicTypes/format/ContentModelTa
 export { ContentModelBlockFormat } from './publicTypes/format/ContentModelBlockFormat';
 export { ContentModelSegmentFormat } from './publicTypes/format/ContentModelSegmentFormat';
 export { ContentModelListItemLevelFormat } from './publicTypes/format/ContentModelListItemLevelFormat';
+export { ContentModelImageFormat } from './publicTypes/format/ContentModelImageFormat';
 export { ContentModelWithFormat } from './publicTypes/format/ContentModelWithFormat';
 
 export { VerticalAlignFormat } from './publicTypes/format/formatParts/VerticalAlignFormat';
@@ -91,6 +92,14 @@ export { PaddingFormat } from './publicTypes/format/formatParts/PaddingFormat';
 export { ListTypeFormat } from './publicTypes/format/formatParts/ListTypeFormat';
 export { ListThreadFormat } from './publicTypes/format/formatParts/ListThreadFormat';
 export { ListMetadataFormat } from './publicTypes/format/formatParts/ListMetadataFormat';
+export {
+    ImageResizeMetadataFormat,
+    ImageCropMetadataFormat,
+    ImageMetadataFormat,
+    ImageRotateMetadataFormat,
+} from './publicTypes/format/formatParts/ImageMetadataFormat';
+
+export { ContentModelFormatMap } from './publicTypes/format/ContentModelFormatMap';
 
 export { EditorContext } from './publicTypes/context/EditorContext';
 export {
@@ -106,8 +115,10 @@ export {
 export {
     DomToModelSettings,
     DefaultStyleMap,
+    ElementProcessorMap,
     FormatParser,
     FormatParsers,
+    FormatParsersPerCategory,
 } from './publicTypes/context/DomToModelSettings';
 export { DomToModelContext } from './publicTypes/context/DomToModelContext';
 export { ModelToDomContext } from './publicTypes/context/ModelToDomContext';
@@ -120,21 +131,28 @@ export {
     ModelToDomBlockAndSegmentNode,
     ModelToDomRegularSelection,
     ModelToDomTableSelection,
+    ModelToDomImageSelection,
     ModelToDomSelectionContext,
 } from './publicTypes/context/ModelToDomSelectionContext';
 export {
     ModelToDomSettings,
     FormatApplier,
     FormatAppliers,
+    FormatAppliersPerCategory,
+    ContentModelHandlerMap,
+    ContentModelHandlerTypeMap,
 } from './publicTypes/context/ModelToDomSettings';
 export {
     ModelToDomEntityContext,
     EntityPlaceholderPair,
 } from './publicTypes/context/ModelToDomEntityContext';
 export { ElementProcessor } from './publicTypes/context/ElementProcessor';
+export { ContentModelHandler } from './publicTypes/context/ContentModelHandler';
 
 export {
     IExperimentalContentModelEditor,
     DomToModelOption,
     ModelToDomOption,
 } from './publicTypes/IExperimentalContentModelEditor';
+
+export { createTempContainerProcessor } from './domToModel/processors/tempContainerProcessor';

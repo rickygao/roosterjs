@@ -1,67 +1,78 @@
 import { brProcessor } from '../processors/brProcessor';
-import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
+import { childProcessor } from '../processors/childProcessor';
+import { createTempContainerProcessor } from '../processors/tempContainerProcessor';
+import { elementProcessor } from '../processors/elementProcessor';
+import { ElementProcessorMap } from '../../publicTypes/context/DomToModelSettings';
+import { entityProcessor } from '../processors/entityProcessor';
 import { fontProcessor } from '../processors/fontProcessor';
+import { generalProcessor } from '../processors/generalProcessor';
 import { imageProcessor } from '../processors/imageProcessor';
 import { knownElementProcessor } from '../processors/knownElementProcessor';
 import { listItemProcessor } from '../processors/listItemProcessor';
 import { listProcessor } from '../processors/listProcessor';
 import { quoteProcessor } from '../processors/quoteProcessor';
 import { tableProcessor } from '../processors/tableProcessor';
+import { textProcessor } from '../processors/textProcessor';
+
+const tempContainerProcessor = createTempContainerProcessor();
 
 /**
  * @internal
  */
-export const defaultProcessorMap: Record<string, ElementProcessor> = {
-    A: knownElementProcessor,
-    ADDRESS: knownElementProcessor,
-    ARTICLE: knownElementProcessor,
-    ASIDE: knownElementProcessor,
-    B: knownElementProcessor,
-    BODY: knownElementProcessor, // TODO
-    BLOCKQUOTE: quoteProcessor,
-    BR: brProcessor,
-    CENTER: knownElementProcessor,
-    CODE: knownElementProcessor, // TODO
-    DIV: knownElementProcessor,
-    DD: knownElementProcessor, // TODO
-    DL: knownElementProcessor, // TODO
-    DT: knownElementProcessor, // TODO
-    EM: knownElementProcessor,
-    FONT: fontProcessor,
-    FIELDSET: knownElementProcessor, // TODO
-    FIGURE: knownElementProcessor, // TODO
-    FIGCAPTION: knownElementProcessor, // TODO
-    FOOTER: knownElementProcessor, // TODO
-    FORM: knownElementProcessor, // TODO
-    I: knownElementProcessor,
-    IMG: imageProcessor,
-    H1: knownElementProcessor, // TODO
-    H2: knownElementProcessor, // TODO
-    H3: knownElementProcessor, // TODO
-    H4: knownElementProcessor, // TODO
-    H5: knownElementProcessor, // TODO
-    H6: knownElementProcessor, // TODO
-    HEADER: knownElementProcessor, // TODO
-    HR: knownElementProcessor, // TODO
-    LI: listItemProcessor, // TODO
-    MAIN: knownElementProcessor, // TODO
-    NAV: knownElementProcessor, // TODO
-    OL: listProcessor,
-    P: knownElementProcessor,
-    PRE: knownElementProcessor,
-    S: knownElementProcessor,
-    SECTION: knownElementProcessor,
-    SPAN: knownElementProcessor,
-    STRIKE: knownElementProcessor,
-    STRONG: knownElementProcessor,
-    SUB: knownElementProcessor,
-    SUP: knownElementProcessor,
-    TABLE: tableProcessor,
-    TD: knownElementProcessor, // TODO
-    TBODY: knownElementProcessor, // TODO
-    TFOOT: knownElementProcessor, // TODO
-    TH: knownElementProcessor, // TODO
-    U: knownElementProcessor,
-    UL: listProcessor, // TODO
-    VIDEO: knownElementProcessor, // TODO
+export const defaultProcessorMap: ElementProcessorMap = {
+    a: knownElementProcessor,
+    address: knownElementProcessor,
+    article: knownElementProcessor,
+    aside: knownElementProcessor,
+    b: knownElementProcessor,
+    blockquote: quoteProcessor,
+    br: brProcessor,
+    code: knownElementProcessor, // TODO
+    div: tempContainerProcessor,
+    dd: knownElementProcessor, // TODO
+    dl: knownElementProcessor, // TODO
+    dt: knownElementProcessor, // TODO
+    em: knownElementProcessor,
+    font: fontProcessor,
+    fieldset: knownElementProcessor, // TODO
+    figure: knownElementProcessor, // TODO
+    figcaption: knownElementProcessor, // TODO
+    footer: knownElementProcessor, // TODO
+    form: knownElementProcessor, // TODO
+    i: knownElementProcessor,
+    img: imageProcessor,
+    h1: knownElementProcessor, // TODO
+    h2: knownElementProcessor, // TODO
+    h3: knownElementProcessor, // TODO
+    h4: knownElementProcessor, // TODO
+    h5: knownElementProcessor, // TODO
+    h6: knownElementProcessor, // TODO
+    header: knownElementProcessor, // TODO
+    hr: knownElementProcessor, // TODO
+    li: listItemProcessor,
+    main: knownElementProcessor, // TODO
+    nav: knownElementProcessor, // TODO
+    ol: listProcessor,
+    p: knownElementProcessor,
+    pre: knownElementProcessor,
+    s: knownElementProcessor,
+    section: knownElementProcessor,
+    span: tempContainerProcessor,
+    strike: knownElementProcessor,
+    strong: knownElementProcessor,
+    sub: knownElementProcessor,
+    sup: knownElementProcessor,
+    table: tableProcessor,
+    tbody: knownElementProcessor, // TODO
+    tfoot: knownElementProcessor, // TODO
+    th: knownElementProcessor, // TODO
+    u: knownElementProcessor,
+    ul: listProcessor,
+    video: knownElementProcessor, // TODO
+
+    '*': generalProcessor,
+    '#text': textProcessor,
+    element: elementProcessor,
+    entity: entityProcessor,
+    child: childProcessor,
 };

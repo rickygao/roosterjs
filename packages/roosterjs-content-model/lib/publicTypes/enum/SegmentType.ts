@@ -18,6 +18,11 @@ export type ContentModelSegmentType =
     | 'Br'
 
     /**
+     * Represents an IMG element
+     */
+    | 'Image'
+
+    /**
      * Represents a selection marker. A selection marker is an empty segment that mark the start/end of selection
      */
     | 'SelectionMarker'

@@ -1,19 +1,17 @@
 import { applyFormat } from '../utils/applyFormat';
+import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
-import { handleBlock } from './handleBlock';
-import { handleEntity } from './handleEntity';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
-import { SegmentFormatHandlers } from '../../formatHandlers/SegmentFormatHandlers';
 
 /**
  * @internal
  */
-export function handleSegment(
+export const handleSegment: ContentModelHandler<ContentModelSegment> = (
     doc: Document,
     parent: Node,
     segment: ContentModelSegment,
     context: ModelToDomContext
-) {
+) => {
     const regularSelection = context.regularSelection;
 
     // If start position is not set yet, and current segment is in selection, set start position
@@ -26,13 +24,6 @@ export function handleSegment(
     let element: HTMLElement | null = null;
 
     switch (segment.segmentType) {
-        case 'Image':
-            element = doc.createElement('img');
-            element.setAttribute('src', segment.src);
-            regularSelection.current.segment = element;
-
-            applyFormat(element, SegmentFormatHandlers, segment.format, context);
-            break;
         case 'Text':
             const txt = doc.createTextNode(segment.text);
 
@@ -48,21 +39,29 @@ export function handleSegment(
             element.appendChild(txt);
             regularSelection.current.segment = txt;
 
-            applyFormat(element, SegmentFormatHandlers, segment.format, context);
+            applyFormat(element, context.formatAppliers.segment, segment.format, context);
 
             break;
 
         case 'Br':
-            element = doc.createElement('br');
-            regularSelection.current.segment = element;
+            const br = doc.createElement('br');
+            element = doc.createElement('span');
+            element.appendChild(br);
+            regularSelection.current.segment = br;
+
+            applyFormat(element, context.formatAppliers.segment, segment.format, context);
+            break;
+
+        case 'Image':
+            context.modelHandlers.image(doc, parent, segment, context);
             break;
 
         case 'General':
-            handleBlock(doc, parent, segment, context);
+            context.modelHandlers.block(doc, parent, segment, context);
             break;
 
         case 'Entity':
-            handleEntity(doc, parent, segment, context);
+            context.modelHandlers.entity(doc, parent, segment, context);
             break;
     }
 
@@ -77,4 +76,4 @@ export function handleSegment(
             ...regularSelection.current,
         };
     }
-}
+};
