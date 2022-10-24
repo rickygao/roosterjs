@@ -40,7 +40,6 @@ export { ContentModelBlockGroupBase } from './publicTypes/block/group/ContentMod
 export { ContentModelDocument } from './publicTypes/block/group/ContentModelDocument';
 export { ContentModelQuote } from './publicTypes/block/group/ContentModelQuote';
 export { ContentModelCode } from './publicTypes/block/group/ContentModelCode';
-export { ContentModelHeader } from './publicTypes/block/group/ContentModelHeader';
 export { ContentModelListItem } from './publicTypes/block/group/ContentModelListItem';
 export { ContentModelTableCell } from './publicTypes/block/group/ContentModelTableCell';
 export { ContentModelGeneralBlock } from './publicTypes/block/group/ContentModelGeneralBlock';

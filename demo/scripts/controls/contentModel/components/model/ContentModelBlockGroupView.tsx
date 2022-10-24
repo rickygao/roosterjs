@@ -19,9 +19,6 @@ export function ContentModelBlockGroupView(props: { group: ContentModelBlockGrou
         case 'General':
             return <ContentModelGeneralView model={group} />;
 
-        case 'Header':
-            return null;
-
         case 'ListItem':
             return <ContentModelListItemView listItem={group} />;
 

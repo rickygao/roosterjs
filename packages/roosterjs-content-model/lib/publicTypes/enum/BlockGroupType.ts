@@ -18,11 +18,6 @@ export type ContentModelBlockGroupType =
     | 'Code'
 
     /**
-     * Represents a header element (H1, H2, ..., H6)
-     */
-    | 'Header'
-
-    /**
      * Represents a list item (LI) element
      */
     | 'ListItem'

@@ -41,12 +41,12 @@ export const defaultProcessorMap: ElementProcessorMap = {
     form: knownElementProcessor, // TODO
     i: knownElementProcessor,
     img: imageProcessor,
-    h1: knownElementProcessor, // TODO
-    h2: knownElementProcessor, // TODO
-    h3: knownElementProcessor, // TODO
-    h4: knownElementProcessor, // TODO
-    h5: knownElementProcessor, // TODO
-    h6: knownElementProcessor, // TODO
+    h1: tempContainerProcessor,
+    h2: tempContainerProcessor,
+    h3: tempContainerProcessor,
+    h4: tempContainerProcessor,
+    h5: tempContainerProcessor,
+    h6: tempContainerProcessor,
     header: knownElementProcessor, // TODO
     hr: knownElementProcessor, // TODO
     li: listItemProcessor,

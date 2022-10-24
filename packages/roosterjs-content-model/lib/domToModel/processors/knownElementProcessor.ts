@@ -1,7 +1,7 @@
 import { addBlock } from '../../modelApi/common/addBlock';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
-import { isBlockElement } from 'roosterjs-editor-dom';
+import { isBlockElement, safeInstanceOf } from 'roosterjs-editor-dom';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
 
@@ -25,7 +25,13 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
                     context
                 );
 
-                addBlock(group, createParagraph(false /*isImplicit*/, context.blockFormat));
+                const block = createParagraph(false /*isImplicit*/, context.blockFormat);
+
+                if (safeInstanceOf(element, 'HTMLHeadingElement')) {
+                    block.headerLevel = getHeaderLevel(element);
+                }
+
+                addBlock(group, block);
 
                 context.elementProcessors.child(group, element, context);
             }
@@ -39,3 +45,11 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
         });
     }
 };
+
+function getHeaderLevel(element: HTMLHeadingElement): number | undefined {
+    // Parse the header level from tag name
+    // e.g. "H1" will return 1
+    const headerLevel = parseInt(element.tagName.substring(1));
+
+    return headerLevel >= 1 && headerLevel <= 6 ? headerLevel : undefined;
+}
