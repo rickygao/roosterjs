@@ -1,163 +1,107 @@
 import { DefaultStyleMap } from '../../publicTypes/context/DomToModelSettings';
 
+const blockElement: Partial<CSSStyleDeclaration> = {
+    display: 'block',
+};
+
+const headerElement: Partial<CSSStyleDeclaration> = {
+    display: 'block',
+    fontWeight: 'bold',
+};
+
 /**
  * @internal
  */
 export const defaultStyleMap: DefaultStyleMap = {
-    ADDRESS: {
-        display: 'block',
-        fontStyle: 'italic',
-    },
-    ARTICLE: {
-        display: 'block',
-    },
-    ASIDE: {
-        display: 'block',
-    },
-    B: {
+    address: blockElement,
+    article: blockElement,
+    aside: blockElement,
+    b: {
         fontWeight: 'bold',
     },
-    BODY: {
-        display: 'block',
-    },
-    BLOCKQUOTE: {
+    blockquote: {
         display: 'block',
         marginTop: '1em',
         marginBottom: '1em',
         marginLeft: '40px',
         marginRight: '40px',
     },
-    BR: {
-        display: 'block',
-    },
-    CENTER: {
+    br: blockElement,
+    center: {
         display: 'block',
         textAlign: 'center',
     },
-    DIV: {
-        display: 'block',
-    },
-    DD: {
-        display: 'block',
-        marginLeft: '40px',
-        marginRight: '40px',
-    },
-    DL: {
-        display: 'block',
-        marginTop: '1em',
-        marginBottom: '1em',
-    },
-    DT: {
-        display: 'block',
-    },
-    EM: {
+    dd: blockElement,
+    div: blockElement,
+    dl: blockElement,
+    dt: blockElement,
+    em: {
         fontStyle: 'italic',
     },
-    FIELDSET: {
-        display: 'block',
-    },
-    FIGURE: {
-        display: 'block',
-    },
-    FIGCAPTION: {
-        display: 'block',
-    },
-    FOOTER: {
-        display: 'block',
-    },
-    FORM: {
-        display: 'block',
-    },
-    H1: {
-        display: 'block',
-    },
-    H2: {
-        display: 'block',
-    },
-    H3: {
-        display: 'block',
-    },
-    H4: {
-        display: 'block',
-    },
-    H5: {
-        display: 'block',
-    },
-    H6: {
-        display: 'block',
-    },
-    HEADER: {
-        display: 'block',
-    },
-    HR: {
-        display: 'block',
-    },
-    I: {
+    fieldset: blockElement,
+    figcaption: blockElement,
+    figure: blockElement,
+    footer: blockElement,
+    form: blockElement,
+    h1: headerElement,
+    h2: headerElement,
+    h3: headerElement,
+    h4: headerElement,
+    h5: headerElement,
+    h6: headerElement,
+    header: blockElement,
+    hr: blockElement,
+    i: {
         fontStyle: 'italic',
     },
-    LI: {
+    li: {
         display: 'list-item',
     },
-    MAIN: {
+    main: blockElement,
+    nav: blockElement,
+    ol: blockElement,
+    p: {
         display: 'block',
+        marginTop: '1em',
+        marginBlock: '1em',
     },
-    NAV: {
+    pre: {
         display: 'block',
-    },
-    OL: {
-        display: 'block',
-    },
-    P: {
-        display: 'block',
+        fontFamily: 'monospace',
+        whiteSpace: 'pre',
         marginTop: '1em',
         marginBottom: '1em',
     },
-    PRE: {
-        display: 'block',
-        whiteSpace: 'pre',
-    },
-    S: {
+    s: {
         textDecoration: 'line-through',
     },
-    SECTION: {
-        display: 'block',
-    },
-    STRIKE: {
+    section: blockElement,
+    strike: {
         textDecoration: 'line-through',
     },
-    STRONG: {
+    strong: {
         fontWeight: 'bold',
     },
-    SUB: {
+    sub: {
         verticalAlign: 'sub',
         fontSize: 'smaller',
     },
-    SUP: {
+    sup: {
         verticalAlign: 'super',
         fontSize: 'smaller',
     },
-    TABLE: {
-        display: 'block',
+    table: {
+        display: 'table',
+        boxSizing: 'border-box',
     },
-    TD: {
-        display: 'block',
+    td: {
+        display: 'table-cell',
     },
-    TBODY: {
-        display: 'block',
+    th: {
+        display: 'table-cell',
     },
-    TFOOT: {
-        display: 'block',
-    },
-    TH: {
-        display: 'block',
-    },
-    U: {
+    u: {
         textDecoration: 'underline',
     },
-    UL: {
-        display: 'block',
-    },
-    VIDEO: {
-        display: 'block',
-    },
+    ul: blockElement,
 };

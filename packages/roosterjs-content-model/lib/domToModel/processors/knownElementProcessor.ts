@@ -1,15 +1,16 @@
 import { addBlock } from '../../modelApi/common/addBlock';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
-import { isBlockElement, safeInstanceOf } from 'roosterjs-editor-dom';
+import { isBlockElement } from '../utils/isBlockElement';
 import { parseFormat } from '../utils/parseFormat';
+import { safeInstanceOf } from 'roosterjs-editor-dom';
 import { stackFormat } from '../utils/stackFormat';
 
 /**
  * @internal
  */
 export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, element, context) => {
-    if (isBlockElement(element)) {
+    if (isBlockElement(element, context)) {
         stackFormat(
             context,
             {
