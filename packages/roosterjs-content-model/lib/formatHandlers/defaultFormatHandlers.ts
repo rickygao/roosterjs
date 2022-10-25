@@ -88,6 +88,7 @@ const defaultFormatKeysPerCategory: {
         'direction',
         'margin',
         'padding',
+        'size',
         'indent',
         'lineHeight',
         'whiteSpace',

@@ -1,33 +1,11 @@
 import * as React from 'react';
-import { BackgroundColorFormatRenderer } from '../format/formatPart/BackgroundColorFormatRenderer';
+import { BlockFormatView } from '../format/BlockFormatView';
+import { ContentModelParagraph, hasSelectionInBlock } from 'roosterjs-content-model';
 import { ContentModelSegmentView } from './ContentModelSegmentView';
 import { ContentModelView } from '../ContentModelView';
-import { DirectionFormatRenderers } from '../format/formatPart/DirectionFormatRenderers';
-import { FormatRenderer } from '../format/utils/FormatRenderer';
-import { FormatView } from '../format/FormatView';
-import { IndentationFormatRenderer } from '../format/formatPart/IndentationFormatRenderer';
-import { LineHeightFormatRenderer } from '../format/formatPart/LineHeightFormatRenderer';
-import { MarginFormatRenderer } from '../format/formatPart/MarginFormatRenderer';
-import { PaddingFormatRenderer } from '../format/formatPart/PaddingFormatRenderer';
 import { useProperty } from '../../hooks/useProperty';
-import { WhiteSpaceFormatRenderer } from '../format/formatPart/WhiteSpaceFormatRenderer';
-import {
-    ContentModelParagraph,
-    ContentModelBlockFormat,
-    hasSelectionInBlock,
-} from 'roosterjs-content-model';
 
 const styles = require('./ContentModelParagraphView.scss');
-
-const ParagraphFormatRenders: FormatRenderer<ContentModelBlockFormat>[] = [
-    BackgroundColorFormatRenderer,
-    ...DirectionFormatRenderers,
-    MarginFormatRenderer,
-    PaddingFormatRenderer,
-    IndentationFormatRenderer,
-    LineHeightFormatRenderer,
-    WhiteSpaceFormatRenderer,
-];
 
 export function ContentModelParagraphView(props: { paragraph: ContentModelParagraph }) {
     const { paragraph } = props;
@@ -83,7 +61,7 @@ export function ContentModelParagraphView(props: { paragraph: ContentModelParagr
     }, [paragraph, value, headerLevel]);
 
     const getFormat = React.useCallback(() => {
-        return <FormatView format={paragraph.format} renderers={ParagraphFormatRenders} />;
+        return <BlockFormatView format={paragraph.format} />;
     }, [paragraph.format]);
 
     return (
