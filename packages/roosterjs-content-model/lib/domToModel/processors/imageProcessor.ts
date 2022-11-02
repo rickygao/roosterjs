@@ -4,7 +4,9 @@ import { ContentModelImageFormat } from '../../publicTypes/format/ContentModelIm
 import { createImage } from '../../modelApi/creators/createImage';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
+import { ImageMetadataFormatDefinition } from '../../formatHandlers/metadata/ImageMetadataFormatDefinition';
 import { isBlockElement } from '../utils/isBlockElement';
+import { parseDatasetWithMetadata } from '../dataset/parseDatasetWithMetadata';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
 
@@ -30,6 +32,8 @@ export const imageProcessor: ElementProcessor<HTMLImageElement> = (group, elemen
             const image = createImage(element.src, imageFormat, context.linkFormat.format);
             const alt = element.alt;
             const title = element.title;
+
+            parseDatasetWithMetadata(image, element, ImageMetadataFormatDefinition);
 
             if (alt) {
                 image.alt = alt;

@@ -28,7 +28,7 @@ const RomanValues: Record<string, number> = {
 /**
  * @internal
  */
-export const listItemMetadataFormatHandler: FormatHandler<ListMetadataFormat> = {
+export const listItemStyleFormatHandler: FormatHandler<ListMetadataFormat> = {
     parse: () => {
         // TODO: Handle list style override
     },

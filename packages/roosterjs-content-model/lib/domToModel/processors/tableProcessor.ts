@@ -3,8 +3,11 @@ import { createTable } from '../../modelApi/creators/createTable';
 import { createTableCell } from '../../modelApi/creators/createTableCell';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
 import { normalizeTable } from '../../modelApi/table/normalizeTable';
+import { parseDatasetWithMetadata } from '../dataset/parseDatasetWithMetadata';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
+import { TableCellMetadataFormatDefinition } from 'roosterjs-content-model/lib/formatHandlers/metadata/TableCellMetadataFormatDefinition';
+import { TableFormatDefinition } from 'roosterjs-content-model/lib/formatHandlers/metadata/TableFormatDefinition';
 
 /**
  * @internal
@@ -28,6 +31,8 @@ export const tableProcessor: ElementProcessor<HTMLTableElement> = (
     const table = createTable(tableElement.rows.length);
     const { table: selectedTable, firstCell, lastCell } = context.tableSelection || {};
     const hasTableSelection = selectedTable == tableElement && !!firstCell && !!lastCell;
+
+    parseDatasetWithMetadata(table, tableElement, TableFormatDefinition);
 
     stackFormat(context, { segment: 'shallowClone' }, () => {
         parseFormat(tableElement, context.formatParsers.table, table.format, context);
@@ -85,6 +90,8 @@ export const tableProcessor: ElementProcessor<HTMLTableElement> = (
                         table.cells[row + rowSpan - 1][targetCol] = cell;
 
                         if (hasTd) {
+                            parseDatasetWithMetadata(cell, td, TableCellMetadataFormatDefinition);
+
                             stackFormat(context, { segment: 'shallowClone' }, () => {
                                 parseFormat(
                                     td,

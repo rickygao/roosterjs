@@ -9,7 +9,10 @@ export function setTableCellBackgroundColor(table: ContentModelTable, color: str
         row.forEach(cell => {
             if (hasSelectionInBlockGroup(cell)) {
                 cell.format.backgroundColor = color;
-                cell.format.bgColorOverride = true;
+                cell.metadata = {
+                    ...(cell.metadata || {}),
+                    bgColorOverride: true,
+                };
             }
         })
     );
