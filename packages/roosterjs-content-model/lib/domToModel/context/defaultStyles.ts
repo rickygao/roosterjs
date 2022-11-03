@@ -12,15 +12,9 @@ const headerElement: Partial<CSSStyleDeclaration> = {
 /**
  * @internal
  */
-export const DefaultLinkColorPlaceholder = '_defaultLinkColor';
-
-/**
- * @internal
- */
 export const defaultStyleMap: DefaultStyleMap = {
     a: {
         textDecoration: 'underline',
-        color: DefaultLinkColorPlaceholder,
     },
     address: blockElement,
     article: blockElement,

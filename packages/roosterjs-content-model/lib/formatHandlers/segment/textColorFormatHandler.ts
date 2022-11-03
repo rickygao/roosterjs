@@ -1,4 +1,3 @@
-import { DefaultLinkColorPlaceholder } from '../../domToModel/context/defaultStyles';
 import { FormatHandler } from '../FormatHandler';
 import { getColor, setColor } from '../utils/color';
 import { TextColorFormat } from '../../publicTypes/format/formatParts/TextColorFormat';
@@ -13,12 +12,15 @@ export const textColorFormatHandler: FormatHandler<TextColorFormat> = {
 
         if (textColor && textColor != 'inherit') {
             format.textColor = textColor;
+        } else if (!textColor && element.tagName == 'A') {
+            // Hyperlink won't inherit parent's color unless it has color explicitly specified
+            format.textColor = undefined;
         }
     },
     apply: (format, element, context) => {
         const isLink = element.tagName == 'A';
 
-        if (format.textColor && (!isLink || format.textColor != DefaultLinkColorPlaceholder)) {
+        if (format.textColor && (!isLink || !!format.textColor)) {
             setColor(
                 element,
                 format.textColor,

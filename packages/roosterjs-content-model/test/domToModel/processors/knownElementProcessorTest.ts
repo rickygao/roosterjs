@@ -1,7 +1,6 @@
 import * as parseFormat from '../../../lib/domToModel/utils/parseFormat';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
 import { createDomToModelContext } from '../../../lib/domToModel/context/createDomToModelContext';
-import { DefaultLinkColorPlaceholder } from '../../../lib/domToModel/context/defaultStyles';
 import { DomToModelContext } from '../../../lib/publicTypes/context/DomToModelContext';
 import { knownElementProcessor } from '../../../lib/domToModel/processors/knownElementProcessor';
 
@@ -224,7 +223,6 @@ describe('knownElementProcessor', () => {
                             segmentType: 'Text',
                             format: {
                                 underline: true,
-                                textColor: DefaultLinkColorPlaceholder,
                             },
                             link: { href: '/test' },
                             text: 'test',

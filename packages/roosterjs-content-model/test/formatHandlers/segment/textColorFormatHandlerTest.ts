@@ -1,6 +1,5 @@
 import { createDomToModelContext } from '../../../lib/domToModel/context/createDomToModelContext';
 import { createModelToDomContext } from '../../../lib/modelToDom/context/createModelToDomContext';
-import { DefaultLinkColorPlaceholder } from '../../../lib/domToModel/context/defaultStyles';
 import { DomToModelContext } from '../../../lib/publicTypes/context/DomToModelContext';
 import { ModelToDomContext } from '../../../lib/publicTypes/context/ModelToDomContext';
 import { TextColorFormat } from '../../../lib/publicTypes/format/formatParts/TextColorFormat';
@@ -96,9 +95,7 @@ describe('textColorFormatHandler.parse', () => {
     it('Color from hyperlink', () => {
         textColorFormatHandler.parse(format, div, context, context.defaultStyles.a!);
 
-        expect(format).toEqual({
-            textColor: DefaultLinkColorPlaceholder,
-        });
+        expect(format).toEqual({});
     });
 
     it('Color from hyperlink with override', () => {
@@ -167,7 +164,6 @@ describe('textColorFormatHandler.apply', () => {
     it('HyperLink with default color', () => {
         const a = document.createElement('a');
 
-        format.textColor = DefaultLinkColorPlaceholder;
         textColorFormatHandler.apply(format, a, context);
 
         expect(a.outerHTML).toBe('<a></a>');

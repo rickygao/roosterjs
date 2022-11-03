@@ -13,11 +13,22 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
     context: ModelToDomContext
 ) => {
     let container: HTMLElement;
-    let tagName: string | undefined;
+    const segmentFormatFromBlock = context.segmentFormatFromBlock;
 
-    if (shouldCreateElement(paragraph)) {
-        tagName = typeof paragraph.headerLevel == 'number' ? 'h' + paragraph.headerLevel : 'div';
-        container = doc.createElement(tagName);
+    if (paragraph.header) {
+        container = doc.createElement('h' + paragraph.header.headerLevel);
+        parent.appendChild(container);
+
+        applyFormat(container, context.formatAppliers.block, paragraph.format, context);
+        applyFormat(
+            container,
+            context.formatAppliers.segmentOnBlock,
+            paragraph.header.format,
+            context
+        );
+        context.segmentFormatFromBlock = paragraph.header.format;
+    } else if (!paragraph.isImplicit) {
+        container = doc.createElement('div');
         parent.appendChild(container);
 
         applyFormat(container, context.formatAppliers.block, paragraph.format, context);
@@ -30,16 +41,7 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
         segment: null,
     };
 
-    const segmentFormatFromBlock = context.segmentFormatFromBlock;
-
     try {
-        context.segmentFormatFromBlock = { ...segmentFormatFromBlock };
-
-        if (tagName && /h\d/.test(tagName)) {
-            // TODO: Need a unified way to handle all this kind of format that brought from block, but not just for headers
-            context.segmentFormatFromBlock.fontWeight = 'bold';
-        }
-
         paragraph.segments.forEach(segment => {
             context.modelHandlers.segment(doc, container, segment, context);
         });
@@ -47,10 +49,3 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
         context.segmentFormatFromBlock = segmentFormatFromBlock;
     }
 };
-
-function shouldCreateElement(paragraph: ContentModelParagraph) {
-    return (
-        !paragraph.isImplicit ||
-        (typeof paragraph.headerLevel == 'number' && paragraph.headerLevel > 0)
-    );
-}
