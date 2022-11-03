@@ -26,7 +26,6 @@ const TableCellFormatRenderers: FormatRenderer<ContentModelTableCellFormat>[] = 
     BackgroundColorFormatRenderer,
     PaddingFormatRenderer,
     VerticalAlignFormatRenderer,
-    TableCellMetadataFormatRender,
 ];
 
 export function ContentModelTableCellView(props: { cell: ContentModelTableCell }) {
@@ -95,6 +94,12 @@ export function ContentModelTableCellView(props: { cell: ContentModelTableCell }
         return <FormatView format={cell.format} renderers={TableCellFormatRenderers} />;
     }, [cell.format]);
 
+    const getMetadata = React.useCallback(() => {
+        return cell.metadata ? (
+            <FormatView format={cell.metadata} renderers={[TableCellMetadataFormatRender]} />
+        ) : null;
+    }, [cell.metadata]);
+
     const subTitle =
         cell.spanAbove && cell.spanLeft ? '↖' : cell.spanLeft ? '←' : cell.spanAbove ? '↑' : '';
 
@@ -108,6 +113,7 @@ export function ContentModelTableCellView(props: { cell: ContentModelTableCell }
             jsonSource={cell}
             getContent={getContent}
             getFormat={getFormat}
+            getMetadata={getMetadata}
         />
     );
 }

@@ -1,13 +1,16 @@
 import { ContentModelBlockGroupBase } from './ContentModelBlockGroupBase';
+import { ContentModelDatasetBase } from '../../format/ContentModelDatasetBase';
 import { ContentModelTableCellFormat } from '../../format/ContentModelTableCellFormat';
 import { ContentModelWithFormat } from '../../format/ContentModelWithFormat';
+import { TableCellMetadataFormat } from 'roosterjs-editor-types';
 
 /**
  * Content Model of Table Cell
  */
 export interface ContentModelTableCell
     extends ContentModelBlockGroupBase<'TableCell'>,
-        ContentModelWithFormat<ContentModelTableCellFormat> {
+        ContentModelWithFormat<ContentModelTableCellFormat>,
+        ContentModelDatasetBase<TableCellMetadataFormat> {
     /**
      * Whether this cell is spanned from left cell
      */

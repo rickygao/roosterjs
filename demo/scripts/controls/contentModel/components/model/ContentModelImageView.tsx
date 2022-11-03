@@ -17,7 +17,6 @@ const styles = require('./ContentModelImageView.scss');
 const ImageFormatRenderers: FormatRenderer<ContentModelImageFormat>[] = [
     IdFormatRenderer,
     ...SizeFormatRenderers,
-    ...ImageMetadataFormatRenderers,
     MarginFormatRenderer,
     PaddingFormatRenderer,
 ];
@@ -41,6 +40,12 @@ export function ContentModelImageView(props: { image: ContentModelImage }) {
             </>
         );
     }, [image.format]);
+
+    const getMetadata = React.useCallback(() => {
+        return image.metadata ? (
+            <FormatView format={image.metadata} renderers={ImageMetadataFormatRenderers} />
+        ) : null;
+    }, [image.metadata]);
 
     const getContent = React.useCallback(() => {
         return (
@@ -81,6 +86,7 @@ export function ContentModelImageView(props: { image: ContentModelImage }) {
             jsonSource={image}
             getFormat={getFormat}
             getContent={getContent}
+            getMetadata={getMetadata}
         />
     );
 }

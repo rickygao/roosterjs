@@ -349,7 +349,6 @@ describe('handleList without format handlers', () => {
         context = createModelToDomContext(undefined, {
             formatApplierOverride: {
                 listType: null,
-                listLevelMetadata: null,
                 listLevelThread: null,
             },
         });

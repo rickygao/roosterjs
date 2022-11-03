@@ -1,6 +1,8 @@
+import { applyDataset } from '../utils/applyDataset';
 import { applyFormat } from '../utils/applyFormat';
 import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
 import { ContentModelImage } from '../../publicTypes/segment/ContentModelImage';
+import { ImageMetadataFormatDefinition } from '../../formatHandlers/metadata/ImageMetadataFormatDefinition';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
 
 /**
@@ -14,6 +16,8 @@ export const handleImage: ContentModelHandler<ContentModelImage> = (
 ) => {
     const img = doc.createElement('img');
     img.src = imageModel.src;
+
+    applyDataset(img, imageModel, ImageMetadataFormatDefinition);
 
     if (imageModel.alt) {
         img.alt = imageModel.alt;

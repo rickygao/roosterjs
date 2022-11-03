@@ -185,7 +185,6 @@ describe('listProcessor without format handlers', () => {
             formatParserOverride: {
                 listType: null,
                 listLevelThread: null,
-                listLevelMetadata: null,
             },
         });
     });

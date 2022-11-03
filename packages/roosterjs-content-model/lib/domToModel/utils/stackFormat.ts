@@ -34,7 +34,12 @@ export function stackFormat(
     try {
         context.segmentFormat = stackFormatInternal(segmentFormat, segment);
         context.blockFormat = stackFormatInternal(blockFormat, paragraph);
-        context.linkFormat = link == 'empty' ? {} : linkFormat;
+        context.linkFormat =
+            link == 'empty'
+                ? {
+                      dataset: {},
+                  }
+                : linkFormat;
 
         callback();
     } finally {

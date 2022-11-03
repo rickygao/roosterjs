@@ -1,5 +1,6 @@
 import { ContentModelBlockFormat } from '../format/ContentModelBlockFormat';
 import { ContentModelBlockGroup } from '../block/group/ContentModelBlockGroup';
+import { ContentModelDatasetBase } from '../format/ContentModelDatasetBase';
 import { ContentModelListItemLevelFormat } from '../format/ContentModelListItemLevelFormat';
 import { ContentModelSegmentFormat } from '../format/ContentModelSegmentFormat';
 import { LinkFormat } from '../../publicTypes/format/formatParts/LinkFormat';
@@ -27,13 +28,11 @@ export interface DomToModelListFormat {
 /**
  * Represents the context object used when do DOM to Content Model conversion and processing a link
  */
-export interface DomToModelLinkFormat {
+export interface DomToModelLinkFormat extends ContentModelDatasetBase {
     /**
      * Current link format
      */
     format?: LinkFormat;
-
-    // TODO: Add more properties here for hyper link
 }
 
 /**

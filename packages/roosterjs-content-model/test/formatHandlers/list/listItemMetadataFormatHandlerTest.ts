@@ -6,10 +6,10 @@ import { ListMetadataFormat } from '../../../lib/publicTypes/format/formatParts/
 import { ModelToDomContext } from '../../../lib/publicTypes/context/ModelToDomContext';
 import {
     getOrderedListStyleValue,
-    listItemMetadataFormatHandler,
-} from '../../../lib/formatHandlers/list/listItemMetadataFormatHandler';
+    listItemStyleFormatHandler,
+} from '../../../lib/formatHandlers/list/listItemStyleFormatHandler';
 
-describe('listItemMetadataFormatHandler.parse', () => {
+describe('listItemStyleFormatHandler.parse', () => {
     let context: DomToModelContext;
     let format: ListMetadataFormat;
 
@@ -21,7 +21,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
     it('No OP', () => {
         const li = document.createElement('li');
 
-        listItemMetadataFormatHandler.parse(format, li, context, {});
+        listItemStyleFormatHandler.parse(format, li, context, {});
 
         expect(format).toEqual({});
         expect(context.listFormat).toEqual({
@@ -31,7 +31,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
     });
 });
 
-describe('listItemMetadataFormatHandler.parse', () => {
+describe('listItemStyleFormatHandler.parse', () => {
     let context: ModelToDomContext;
     let format: ListMetadataFormat;
     beforeEach(() => {
@@ -42,7 +42,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
     it('LI not under OL', () => {
         const li = document.createElement('li');
 
-        listItemMetadataFormatHandler.apply(format, li, context);
+        listItemStyleFormatHandler.apply(format, li, context);
 
         expect(li.outerHTML).toBe('<li></li>');
         expect(context.listFormat).toEqual({
@@ -56,7 +56,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
         const li = document.createElement('li');
 
         ol.appendChild(li);
-        listItemMetadataFormatHandler.apply(format, li, context);
+        listItemStyleFormatHandler.apply(format, li, context);
 
         expect(li.outerHTML).toBe('<li></li>');
         expect(context.listFormat).toEqual({
@@ -80,7 +80,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
             },
         ];
 
-        listItemMetadataFormatHandler.apply(format, li, context);
+        listItemStyleFormatHandler.apply(format, li, context);
 
         expect(li.outerHTML).toBe('<li></li>');
         expect(context.listFormat).toEqual({
@@ -114,7 +114,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
             },
         ];
 
-        listItemMetadataFormatHandler.apply(format, li, context);
+        listItemStyleFormatHandler.apply(format, li, context);
 
         expect(li.outerHTML).toBe('<li style="list-style-type: lower-alpha;"></li>');
         expect(context.listFormat).toEqual({
@@ -151,7 +151,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
             },
         ];
 
-        listItemMetadataFormatHandler.apply(format, li, context);
+        listItemStyleFormatHandler.apply(format, li, context);
 
         expect(li.outerHTML).toBe('<li style="list-style-type: lower-roman;"></li>');
         expect(context.listFormat).toEqual({
@@ -186,7 +186,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
             },
         ];
 
-        listItemMetadataFormatHandler.apply(format, li, context);
+        listItemStyleFormatHandler.apply(format, li, context);
 
         expect(li.outerHTML).toBe('<li style="list-style-type: &quot;(1) &quot;;"></li>');
         expect(context.listFormat).toEqual({
@@ -221,7 +221,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
             },
         ];
 
-        listItemMetadataFormatHandler.apply(format, li, context);
+        listItemStyleFormatHandler.apply(format, li, context);
 
         expect(li.outerHTML).toBe('<li style="list-style-type: &quot;➢ &quot;;"></li>');
         expect(context.listFormat).toEqual({
@@ -238,7 +238,7 @@ describe('listItemMetadataFormatHandler.parse', () => {
     });
 });
 
-describe('listItemMetadataFormatHandler.getOrderedListStyleValue', () => {
+describe('listItemStyleFormatHandler.getOrderedListStyleValue', () => {
     it('Invalid input and 1', () => {
         expect(getOrderedListStyleValue('test', 1)).toBe('test');
     });

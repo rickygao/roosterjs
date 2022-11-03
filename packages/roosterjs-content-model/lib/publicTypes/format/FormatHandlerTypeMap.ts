@@ -7,7 +7,6 @@ import { DisplayFormat } from './formatParts/DisplayFormat';
 import { FontFamilyFormat } from './formatParts/FontFamilyFormat';
 import { FontSizeFormat } from './formatParts/FontSizeFormat';
 import { IdFormat } from './formatParts/IdFormat';
-import { ImageMetadataFormat } from './formatParts/ImageMetadataFormat';
 import { ItalicFormat } from './formatParts/ItalicFormat';
 import { LineHeightFormat } from './formatParts/LineHeightFormat';
 import { LinkFormat } from './formatParts/LinkFormat';
@@ -20,8 +19,6 @@ import { SizeFormat } from './formatParts/SizeFormat';
 import { SpacingFormat } from './formatParts/SpacingFormat';
 import { StrikeFormat } from './formatParts/StrikeFormat';
 import { SuperOrSubScriptFormat } from './formatParts/SuperOrSubScriptFormat';
-import { TableCellMetadataFormat } from 'roosterjs-editor-types';
-import { TableMetadataFormat } from './formatParts/TableMetadataFormat';
 import { TextColorFormat } from './formatParts/TextColorFormat';
 import { UnderlineFormat } from './formatParts/UnderlineFormat';
 import { VerticalAlignFormat } from './formatParts/VerticalAlignFormat';
@@ -76,11 +73,6 @@ export interface FormatHandlerTypeMap {
     id: IdFormat;
 
     /**
-     * Format for ImageMetadataFormat
-     */
-    imageMetadata: ImageMetadataFormat;
-
-    /**
      * Format for ItalicFormat
      */
     italic: ItalicFormat;
@@ -98,17 +90,12 @@ export interface FormatHandlerTypeMap {
     /**
      * Format for ListMetadataFormat (used by list item)
      */
-    listItemMetadata: ListMetadataFormat;
+    listItemStyle: ListMetadataFormat;
 
     /**
      * Format for ListThreadFormat (used by list item)
      */
     listItemThread: ListThreadFormat;
-
-    /**
-     * Format for ListMetadataFormat (used by list level)
-     */
-    listLevelMetadata: ListMetadataFormat;
 
     /**
      * Format for ListThreadFormat (used by list level)
@@ -144,16 +131,6 @@ export interface FormatHandlerTypeMap {
      * Format for SuperOrSubScriptFormat
      */
     superOrSubScript: SuperOrSubScriptFormat;
-
-    /**
-     * Format for TableCellMetadataFormat
-     */
-    tableCellMetadata: TableCellMetadataFormat;
-
-    /**
-     * Format for TableMetadataFormat
-     */
-    tableMetadata: TableMetadataFormat;
 
     /**
      * Format for SpacingFormat

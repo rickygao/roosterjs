@@ -15,6 +15,7 @@ export function ContentModelView(props: {
     jsonSource: Object;
     getContent?: (() => JSX.Element) | null;
     getFormat?: (() => JSX.Element) | null;
+    getMetadata?: (() => JSX.Element) | null;
     isExpanded?: boolean;
 }) {
     const {
@@ -27,10 +28,11 @@ export function ContentModelView(props: {
         jsonSource,
         getContent,
         getFormat,
+        getMetadata,
     } = props;
-    const [bodyState, setBodyState] = useProperty<'collapsed' | 'children' | 'format' | 'json'>(
-        isExpanded ? 'children' : 'collapsed'
-    );
+    const [bodyState, setBodyState] = useProperty<
+        'collapsed' | 'children' | 'format' | 'json' | 'metadata'
+    >(isExpanded ? 'children' : 'collapsed');
 
     const toggleVisual = React.useCallback(() => {
         setBodyState(bodyState == 'children' ? 'collapsed' : 'children');
@@ -42,6 +44,10 @@ export function ContentModelView(props: {
 
     const toggleJson = React.useCallback(() => {
         setBodyState(bodyState == 'json' ? 'collapsed' : 'json');
+    }, [bodyState]);
+
+    const toggleMetadata = React.useCallback(() => {
+        setBodyState(bodyState == 'metadata' ? 'collapsed' : 'metadata');
     }, [bodyState]);
 
     return (
@@ -61,10 +67,12 @@ export function ContentModelView(props: {
                     <ButtonGroup
                         hasContent={!!getContent}
                         hasFormat={!!getFormat}
+                        hasMetadata={!!getMetadata}
                         bodyState={bodyState}
                         toggleJson={toggleJson}
                         toggleFormat={toggleFormat}
                         toggleVisual={toggleVisual}
+                        toggleMetadata={toggleMetadata}
                     />
                 </div>
                 <div
@@ -79,10 +87,12 @@ export function ContentModelView(props: {
                 <div className={styles.expandedBody}>
                     <ContentModelJson jsonSource={jsonSource} />
                 </div>
-            ) : bodyState == 'children' ? (
-                <div className={styles.expandedBody}>{getContent?.() || null}</div>
+            ) : bodyState == 'children' && !!getContent ? (
+                <div className={styles.expandedBody}>{getContent()}</div>
             ) : bodyState == 'format' && !!getFormat ? (
                 <div className={styles.expandedBody}>{getFormat()}</div>
+            ) : bodyState == 'metadata' && !!getMetadata ? (
+                <div className={styles.expandedBody}>{getMetadata()}</div>
             ) : null}
         </div>
     );

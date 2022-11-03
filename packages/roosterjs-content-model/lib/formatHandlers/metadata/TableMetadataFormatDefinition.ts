@@ -1,4 +1,3 @@
-import { createMetadataFormatHandler } from '../utils/createMetadataFormatHandler';
 import { TableBorderFormat } from 'roosterjs-editor-types';
 import { TableMetadataFormat } from '../../publicTypes/format/formatParts/TableMetadataFormat';
 import {
@@ -16,7 +15,10 @@ const NullStringDefinition = createStringDefinition(
 
 const BooleanDefinition = createBooleanDefinition(false /** isOptional */);
 
-const TableFormatDefinition = createObjectDefinition<Required<TableMetadataFormat>>(
+/**
+ * @internal
+ */
+export const TableMetadataFormatDefinition = createObjectDefinition<TableMetadataFormat>(
     {
         topBorderColor: NullStringDefinition,
         bottomBorderColor: NullStringDefinition,
@@ -37,24 +39,4 @@ const TableFormatDefinition = createObjectDefinition<Required<TableMetadataForma
     },
     false /* isOptional */,
     true /** allowNull */
-);
-
-/**
- * @internal
- */
-export const tableMetadataFormatHandler = createMetadataFormatHandler<TableMetadataFormat>(
-    TableFormatDefinition,
-    format => ({
-        topBorderColor: format.topBorderColor,
-        bottomBorderColor: format.bottomBorderColor,
-        verticalBorderColor: format.verticalBorderColor,
-        hasHeaderRow: format.hasHeaderRow,
-        headerRowColor: format.headerRowColor,
-        hasFirstColumn: format.hasFirstColumn,
-        hasBandedColumns: format.hasBandedColumns,
-        hasBandedRows: format.hasBandedRows,
-        bgColorEven: format.bgColorEven,
-        bgColorOdd: format.bgColorOdd,
-        tableBorderFormat: format.tableBorderFormat,
-    })
 );

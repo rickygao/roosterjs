@@ -22,7 +22,6 @@ const styles = require('./ContentModelListItemView.scss');
 const ListLevelFormatRenders: FormatRenderer<ContentModelListItemLevelFormat>[] = [
     ListTypeFormatRenderer,
     ...ListThreadFormatRenderers,
-    ...ListMetadataFormatRenderers,
 ];
 
 const ListItemFormatHolderRenderers: FormatRenderer<ContentModelSegmentFormat>[] = [
@@ -74,6 +73,21 @@ export function ContentModelListItemView(props: { listItem: ContentModelListItem
         );
     }, [listItem.levels, subTitle]);
 
+    const getMetadata = React.useCallback(() => {
+        return (
+            <>
+                <div>List levels:</div>
+                {listItem.levels.map((level, index) => (
+                    <FormatView
+                        format={level}
+                        renderers={ListMetadataFormatRenderers}
+                        key={index}
+                    />
+                ))}
+            </>
+        );
+    }, [listItem.levels]);
+
     return (
         <ContentModelView
             title="ListItem"
@@ -84,6 +98,7 @@ export function ContentModelListItemView(props: { listItem: ContentModelListItem
             jsonSource={listItem}
             getContent={getContent}
             getFormat={getFormat}
+            getMetadata={getMetadata}
         />
     );
 }

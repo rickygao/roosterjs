@@ -1,8 +1,11 @@
+import { applyDataset } from '../utils/applyDataset';
 import { applyFormat } from '../utils/applyFormat';
 import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
 import { ContentModelTable } from '../../publicTypes/block/ContentModelTable';
 import { isBlockEmpty } from '../../modelApi/common/isEmpty';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
+import { TableCellMetadataFormatDefinition } from '../../formatHandlers/metadata/TableCellMetadataFormatDefinition';
+import { TableMetadataFormatDefinition } from '../../formatHandlers/metadata/TableMetadataFormatDefinition';
 
 /**
  * @internal
@@ -20,7 +23,9 @@ export const handleTable: ContentModelHandler<ContentModelTable> = (
 
     const tableNode = doc.createElement('table');
     parent.appendChild(tableNode);
+
     applyFormat(tableNode, context.formatAppliers.table, table.format, context);
+    applyDataset(tableNode, table, TableMetadataFormatDefinition);
 
     const tbody = doc.createElement('tbody');
     tableNode.appendChild(tbody);
@@ -55,7 +60,9 @@ export const handleTable: ContentModelHandler<ContentModelTable> = (
             if (!cell.spanAbove && !cell.spanLeft) {
                 const td = doc.createElement(cell.isHeader ? 'th' : 'td');
                 tr.appendChild(td);
+
                 applyFormat(td, context.formatAppliers.tableCell, cell.format, context);
+                applyDataset(td, cell, TableCellMetadataFormatDefinition);
 
                 let rowSpan = 1;
                 let colSpan = 1;

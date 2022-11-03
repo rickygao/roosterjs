@@ -29,7 +29,9 @@ export function createDomToModelContext(
             levels: [],
             threadItemCounts: [],
         },
-        linkFormat: {},
+        linkFormat: {
+            dataset: {},
+        },
 
         elementProcessors: {
             ...defaultProcessorMap,

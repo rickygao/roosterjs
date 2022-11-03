@@ -28,7 +28,6 @@ const TableFormatRenderers: FormatRenderer<ContentModelTableFormat>[] = [
     MarginFormatRenderer,
     ...BorderFormatRenderers,
     BorderBoxFormatRenderer,
-    ...TableMetadataFormatRenders,
     DisplayFormatRenderer,
 ];
 
@@ -65,15 +64,19 @@ export function ContentModelTableView(props: { table: ContentModelTable }) {
     }, [table]);
 
     const getFormat = React.useCallback(() => {
-        return (
+        return <FormatView format={table.format} renderers={TableFormatRenderers} />;
+    }, [table.format]);
+
+    const getMetadata = React.useCallback(() => {
+        return table.metadata ? (
             <>
                 <div>
                     <button onClick={onApplyTableFormat}>Apply table format</button>
                 </div>
-                <FormatView format={table.format} renderers={TableFormatRenderers} />
+                <FormatView format={table.metadata} renderers={TableMetadataFormatRenders} />
             </>
-        );
-    }, [table.format]);
+        ) : null;
+    }, [table.metadata]);
 
     return (
         <ContentModelView
@@ -85,6 +88,7 @@ export function ContentModelTableView(props: { table: ContentModelTable }) {
             jsonSource={table}
             getContent={getContent}
             getFormat={getFormat}
+            getMetadata={getMetadata}
         />
     );
 }

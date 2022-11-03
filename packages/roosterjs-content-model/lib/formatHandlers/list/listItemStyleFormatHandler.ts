@@ -3,7 +3,7 @@ import { getObjectKeys, getTagOfNode } from 'roosterjs-editor-dom';
 import { isNodeOfType } from '../../domUtils/isNodeOfType';
 import { ListMetadataFormat } from '../../publicTypes/format/formatParts/ListMetadataFormat';
 import { NodeType } from 'roosterjs-editor-types';
-import { OrderedMap, UnorderedMap } from './listLevelMetadataFormatHandler';
+import { OrderedMap, UnorderedMap } from '../metadata/ListStyleMetadataFormatDefinition';
 
 const OrderedMapPlaceholderRegex = /\$\{(\w+)\}/;
 const DefaultOrderedListStyles = ['decimal', 'lower-alpha', 'lower-roman'];
@@ -28,7 +28,7 @@ const RomanValues: Record<string, number> = {
 /**
  * @internal
  */
-export const listItemMetadataFormatHandler: FormatHandler<ListMetadataFormat> = {
+export const listItemStyleFormatHandler: FormatHandler<ListMetadataFormat> = {
     parse: () => {
         // TODO: Handle list style override
     },
