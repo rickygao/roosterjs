@@ -83,11 +83,6 @@ export interface FormatHandlerTypeMap {
     lineHeight: LineHeightFormat;
 
     /**
-     * Format for LineHeightFormat
-     */
-    lineHeight: LineHeightFormat;
-
-    /**
      * Format for LinkFormat
      */
     link: LinkFormat;

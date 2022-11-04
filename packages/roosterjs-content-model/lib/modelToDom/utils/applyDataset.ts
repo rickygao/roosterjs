@@ -1,7 +1,7 @@
 import { ContentModelDatasetBase } from '../../publicTypes/format/ContentModelDatasetBase';
-import { Definition } from 'roosterjs-editor-types/lib';
+import { Definition } from 'roosterjs-editor-types';
 import { getObjectKeys } from 'roosterjs-editor-dom';
-import { setMetadata } from 'roosterjs-editor-dom/lib';
+import { setMetadata } from 'roosterjs-editor-dom';
 
 /**
  * @internal

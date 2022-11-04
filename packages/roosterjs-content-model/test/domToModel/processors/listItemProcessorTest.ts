@@ -193,7 +193,6 @@ describe('listItemProcessor without format handlers', () => {
             },
             formatParserOverride: {
                 listItemThread: null,
-                listItemMetadata: null,
             },
         });
     });

@@ -95,6 +95,7 @@ describe('addSelectionMarker', () => {
 
         context.linkFormat = {
             format: { href: '/test' },
+            dataset: {},
         };
 
         addSelectionMarker(doc, context);

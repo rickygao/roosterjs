@@ -29,6 +29,7 @@ describe('imageProcessor', () => {
                             segmentType: 'Image',
                             format: {},
                             src: '',
+                            dataset: {},
                         },
                     ],
                 },
@@ -59,6 +60,7 @@ describe('imageProcessor', () => {
                             format: {},
                             src: 'http://test.com/testSrc',
                             alt: 'testAlt',
+                            dataset: {},
                         },
                     ],
                 },
@@ -88,6 +90,7 @@ describe('imageProcessor', () => {
                             format: {},
                             src: '',
                             isSelected: true,
+                            dataset: {},
                         },
                     ],
                 },
@@ -118,6 +121,7 @@ describe('imageProcessor', () => {
                             src: '',
                             isSelected: true,
                             isSelectedAsImageSelection: true,
+                            dataset: {},
                         },
                     ],
                 },
@@ -152,6 +156,7 @@ describe('imageProcessor', () => {
                             src: '',
                             isSelected: true,
                             isSelectedAsImageSelection: true,
+                            dataset: {},
                         },
                     ],
                 },
@@ -171,6 +176,7 @@ describe('imageProcessor', () => {
 
         context.linkFormat = {
             format: { href: '/test' },
+            dataset: {},
         };
         img.src = 'http://test.com/testSrc';
 
@@ -192,6 +198,7 @@ describe('imageProcessor', () => {
                             link: {
                                 href: '/test',
                             },
+                            dataset: {},
                         },
                     ],
                 },

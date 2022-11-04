@@ -44,12 +44,14 @@ describe('tableProcessor', () => {
                         isHeader: false,
                         blocks: [],
                         format: {},
+                        dataset: {},
                     },
                 ],
             ],
             format: {},
             widths: [0],
             heights: [0],
+            dataset: {},
         });
     });
 
@@ -68,6 +70,7 @@ describe('tableProcessor', () => {
             format: {},
             widths: [0, 0],
             heights: [0, 0],
+            dataset: {},
         });
     });
 
@@ -85,6 +88,7 @@ describe('tableProcessor', () => {
             format: {},
             widths: [0, 0],
             heights: [0, 0],
+            dataset: {},
         });
     });
 
@@ -100,6 +104,7 @@ describe('tableProcessor', () => {
             format: {},
             widths: [0, 0],
             heights: [0, 0],
+            dataset: {},
         });
     });
 
@@ -113,6 +118,7 @@ describe('tableProcessor', () => {
             format: {},
             widths: [0],
             heights: [0],
+            dataset: {},
         });
 
         expect(childProcessor).toHaveBeenCalledTimes(1);
@@ -129,6 +135,7 @@ describe('tableProcessor', () => {
             format: {},
             widths: [0, 0],
             heights: [0],
+            dataset: {},
         });
 
         expect(childProcessor).toHaveBeenCalledTimes(2);
@@ -144,6 +151,7 @@ describe('tableProcessor', () => {
             format: {},
             widths: [0, 0],
             heights: [0],
+            dataset: {},
         });
 
         expect(childProcessor).toHaveBeenCalledTimes(1);
@@ -179,6 +187,7 @@ describe('tableProcessor', () => {
             format: {},
             widths: [0, 0],
             heights: [0, 0],
+            dataset: {},
         });
 
         expect(childProcessor).toHaveBeenCalledTimes(4);
@@ -260,6 +269,7 @@ describe('tableProcessor with format', () => {
                                 format: {
                                     format3: 'td',
                                 } as any,
+                                dataset: {},
                             },
                         ],
                     ],
@@ -268,6 +278,7 @@ describe('tableProcessor with format', () => {
                     format: {
                         format1: 'table',
                     } as any,
+                    dataset: {},
                 },
             ],
         });
@@ -322,9 +333,11 @@ describe('tableProcessor with format', () => {
                                 spanAbove: false,
                                 spanLeft: false,
                                 isHeader: false,
+                                dataset: {},
                             },
                         ],
                     ],
+                    dataset: {},
                 },
             ],
         });

@@ -176,7 +176,6 @@ describe('handleListItem without format handler', () => {
             },
             formatApplierOverride: {
                 listItemThread: null,
-                listItemMetadata: null,
             },
         });
 

@@ -239,6 +239,6 @@ describe('knownElementProcessor', () => {
                 },
             ],
         });
-        expect(context.linkFormat).toEqual({});
+        expect(context.linkFormat).toEqual({ dataset: {} });
     });
 });

@@ -1,17 +1,17 @@
 import { applyDataset } from '../utils/applyDataset';
 import { applyFormat } from '../utils/applyFormat';
-import { ContentModelDatasetBase } from 'roosterjs-content-model/lib/publicTypes/format/ContentModelDatasetBase';
+import { ContentModelDatasetBase } from '../../publicTypes/format/ContentModelDatasetBase';
 import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
 import { ContentModelListItem } from '../../publicTypes/block/group/ContentModelListItem';
-import { ContentModelListItemLevelFormat } from 'roosterjs-content-model/lib/publicTypes/format/ContentModelListItemLevelFormat';
+import { ContentModelListItemLevelFormat } from '../../publicTypes/format/ContentModelListItemLevelFormat';
 import { getTagOfNode } from 'roosterjs-editor-dom';
-import { ListMetadataFormat } from 'roosterjs-content-model/lib/publicTypes/format/formatParts/ListMetadataFormat';
+import { ListMetadataFormat } from '../../publicTypes/format/formatParts/ListMetadataFormat';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
 import {
     ListStyleMetadataFormatDefinition,
     OrderedMap,
     UnorderedMap,
-} from 'roosterjs-content-model/lib/formatHandlers/metadata/ListStyleMetadataFormatDefinition';
+} from '../../formatHandlers/metadata/ListStyleMetadataFormatDefinition';
 
 /**
  * @internal

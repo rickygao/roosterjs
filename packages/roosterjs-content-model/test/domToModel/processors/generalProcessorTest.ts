@@ -113,9 +113,7 @@ describe('generalProcessor', () => {
     it('Process a SPAN element with link format', () => {
         const doc = createContentModelDocument(document);
         const span = document.createElement('span');
-        context.linkFormat = {
-            format: { href: '/test' },
-        };
+        context.linkFormat = { dataset: {}, format: { href: '/test' } };
 
         generalProcessor(doc, span, context);
 
