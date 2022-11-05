@@ -82,8 +82,13 @@ function parseListMetadata(
         }
     }
 
-    format.orderedStyleType = orderedStyleType;
-    format.unorderedStyleType = unorderedStyleType;
+    if (typeof orderedStyleType == 'number') {
+        format.orderedStyleType = orderedStyleType;
+    }
+
+    if (typeof unorderedStyleType == 'number') {
+        format.unorderedStyleType = unorderedStyleType;
+    }
 }
 
 function getKeyFromValue<K extends string | number, V>(

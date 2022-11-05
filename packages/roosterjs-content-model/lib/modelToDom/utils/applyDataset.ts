@@ -15,5 +15,7 @@ export function applyDataset<MetadataType, ModelType extends ContentModelDataset
         element.dataset[key] = model.dataset[key];
     });
 
-    setMetadata(element, model.metadata, definition);
+    if (model.metadata) {
+        setMetadata(element, model.metadata, definition);
+    }
 }

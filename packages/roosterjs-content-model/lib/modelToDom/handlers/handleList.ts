@@ -72,11 +72,17 @@ function applyListMetadata(
     const tag = getTagOfNode(element);
     const container: ContentModelDatasetBase<ListMetadataFormat> = {
         dataset: {},
-        metadata: {
+    };
+
+    if (
+        typeof format.orderedStyleType == 'number' ||
+        typeof format.unorderedStyleType == 'number'
+    ) {
+        container.metadata = {
             orderedStyleType: format.orderedStyleType,
             unorderedStyleType: format.unorderedStyleType,
-        },
-    };
+        };
+    }
 
     applyDataset(element, container, ListStyleMetadataFormatDefinition);
 

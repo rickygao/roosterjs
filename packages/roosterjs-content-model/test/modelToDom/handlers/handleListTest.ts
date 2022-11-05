@@ -465,7 +465,9 @@ describe('handleList without format handlers', () => {
 
         handleList(document, parent, listItem, context);
 
-        expect(parent.outerHTML).toBe('<div><ol></ol><ol></ol></div>');
+        expect(parent.outerHTML).toBe(
+            '<div><ol></ol><ol data-editing-info="{&quot;orderedStyleType&quot;:2}"></ol></div>'
+        );
         expect(context.listFormat).toEqual({
             threadItemCounts: [1],
             nodeStack: [
@@ -500,7 +502,9 @@ describe('handleList without format handlers', () => {
 
         handleList(document, parent, listItem, context);
 
-        expect(parent.outerHTML).toBe('<div><ol><ol></ol></ol></div>');
+        expect(parent.outerHTML).toBe(
+            '<div><ol><ol data-editing-info="{&quot;orderedStyleType&quot;:2}"></ol></ol></div>'
+        );
         expect(context.listFormat).toEqual({
             threadItemCounts: [1],
             nodeStack: [
@@ -539,7 +543,9 @@ describe('handleList without format handlers', () => {
 
         handleList(document, parent, listItem, context);
 
-        expect(parent.outerHTML).toBe('<div><ol></ol><ol><ol></ol></ol></div>');
+        expect(parent.outerHTML).toBe(
+            '<div><ol></ol><ol data-editing-info="{&quot;unorderedStyleType&quot;:3}"><ol></ol></ol></div>'
+        );
         expect(context.listFormat).toEqual({
             threadItemCounts: [1],
             nodeStack: [
