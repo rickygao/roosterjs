@@ -1,6 +1,7 @@
 import createElement from '../utils/createElement';
 import getRootListNode from './getRootListNode';
 import getSelectedBlockElementsInRegion from '../region/getSelectedBlockElementsInRegion';
+import getTagOfNode from '../utils/getTagOfNode';
 import isNodeInRegion from '../region/isNodeInRegion';
 import Position from '../selection/Position';
 import safeInstanceOf from '../utils/safeInstanceOf';
@@ -130,6 +131,16 @@ function createVListFromItemNode(node: Node): VList {
     // Wrap all child nodes under a single one, and put the new list under original root node
     // so that the list can carry over styles under the root node.
     const childNodes = toArray(node.childNodes);
+
+    // When the DOM element under block is something like
+    // <span>...</span><br>
+    // We should remove <BR> here since it does not provide any value after convert to a list,
+    // and it also causes an extra <SPAN> tag around all nodes. So if we have any style on the first SPAN
+    // tag, the new SPAN around it will cause it be ignored when try copy those style to new <LI> node
+    if (childNodes.length == 2 && getTagOfNode(childNodes[1]) == 'BR') {
+        childNodes.pop();
+    }
+
     const nodeForItem = childNodes.length == 1 ? childNodes[0] : wrap(childNodes, 'SPAN');
 
     // Create a temporary OL root element for this list.
