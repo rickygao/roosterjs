@@ -379,13 +379,4 @@ describe('Creators', () => {
             format: {},
         });
     });
-
-    it('createHR', () => {
-        const hr = createHR();
-
-        expect(hr).toEqual({
-            blockType: 'HR',
-            format: {},
-        });
-    });
 });

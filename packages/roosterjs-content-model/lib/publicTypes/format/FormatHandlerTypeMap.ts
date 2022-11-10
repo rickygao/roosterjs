@@ -7,7 +7,6 @@ import { DirectionFormat } from './formatParts/DirectionFormat';
 import { DisplayFormat } from './formatParts/DisplayFormat';
 import { FontFamilyFormat } from './formatParts/FontFamilyFormat';
 import { FontSizeFormat } from './formatParts/FontSizeFormat';
-import { HyperLinkFormat } from './formatParts/HyperLinkFormat';
 import { IdFormat } from './formatParts/IdFormat';
 import { IndentationFormat } from './formatParts/IndentationFormat';
 import { ItalicFormat } from './formatParts/ItalicFormat';
@@ -75,11 +74,6 @@ export interface FormatHandlerTypeMap {
      * Format for FontSizeFormat
      */
     fontSize: FontSizeFormat;
-
-    /**
-     * Format for HyperLinkFormat
-     */
-    hyperLink: HyperLinkFormat;
 
     /**
      * Format for IdFormat

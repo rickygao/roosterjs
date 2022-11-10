@@ -11,7 +11,6 @@ import { fontSizeFormatHandler } from './segment/fontSizeFormatHandler';
 import { FormatHandler } from './FormatHandler';
 import { FormatHandlerTypeMap, FormatKey } from '../publicTypes/format/FormatHandlerTypeMap';
 import { getObjectKeys } from 'roosterjs-editor-dom';
-import { hyperLinkFormatHandler } from './segment/hyperLinkFormatHandler';
 import { idFormatHandler } from './common/idFormatHandler';
 import { indentFormatHandler } from './block/indentFormatHandler';
 import { italicFormatHandler } from './segment/italicFormatHandler';
@@ -57,7 +56,6 @@ const defaultFormatHandlerMap: FormatHandlers = {
     display: displayFormatHandler,
     fontFamily: fontFamilyFormatHandler,
     fontSize: fontSizeFormatHandler,
-    hyperLink: hyperLinkFormatHandler,
     id: idFormatHandler,
     indent: indentFormatHandler,
     italic: italicFormatHandler,
