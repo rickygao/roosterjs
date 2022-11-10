@@ -3,7 +3,7 @@
  */
 export type LineHeightFormat = {
     /**
-     * Line space
+     * Line height of this block
      */
     lineHeight?: string;
 };

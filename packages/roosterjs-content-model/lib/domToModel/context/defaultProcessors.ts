@@ -1,6 +1,5 @@
 import { brProcessor } from '../processors/brProcessor';
 import { childProcessor } from '../processors/childProcessor';
-import { createTempContainerProcessor } from '../processors/tempContainerProcessor';
 import { elementProcessor } from '../processors/elementProcessor';
 import { ElementProcessorMap } from '../../publicTypes/context/DomToModelSettings';
 import { entityProcessor } from '../processors/entityProcessor';
@@ -15,8 +14,6 @@ import { quoteProcessor } from '../processors/quoteProcessor';
 import { tableProcessor } from '../processors/tableProcessor';
 import { textProcessor } from '../processors/textProcessor';
 
-const tempContainerProcessor = createTempContainerProcessor();
-
 /**
  * @internal
  */
@@ -29,7 +26,7 @@ export const defaultProcessorMap: ElementProcessorMap = {
     blockquote: quoteProcessor,
     br: brProcessor,
     code: knownElementProcessor, // TODO
-    div: tempContainerProcessor,
+    div: knownElementProcessor,
     dd: knownElementProcessor, // TODO
     dl: knownElementProcessor, // TODO
     dt: knownElementProcessor, // TODO
@@ -42,12 +39,12 @@ export const defaultProcessorMap: ElementProcessorMap = {
     form: knownElementProcessor, // TODO
     i: knownElementProcessor,
     img: imageProcessor,
-    h1: tempContainerProcessor,
-    h2: tempContainerProcessor,
-    h3: tempContainerProcessor,
-    h4: tempContainerProcessor,
-    h5: tempContainerProcessor,
-    h6: tempContainerProcessor,
+    h1: knownElementProcessor,
+    h2: knownElementProcessor,
+    h3: knownElementProcessor,
+    h4: knownElementProcessor,
+    h5: knownElementProcessor,
+    h6: knownElementProcessor,
     header: knownElementProcessor, // TODO
     hr: hrProcessor,
     li: listItemProcessor,
@@ -58,7 +55,7 @@ export const defaultProcessorMap: ElementProcessorMap = {
     pre: knownElementProcessor,
     s: knownElementProcessor,
     section: knownElementProcessor,
-    span: tempContainerProcessor,
+    span: knownElementProcessor,
     strike: knownElementProcessor,
     strong: knownElementProcessor,
     sub: knownElementProcessor,

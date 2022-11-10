@@ -5,10 +5,7 @@ import { LineHeightFormat } from 'roosterjs-content-model';
 export const LineHeightFormatRenderer: FormatRenderer<LineHeightFormat> = createTextFormatRenderer<
     LineHeightFormat
 >(
-    'Line height',
+    'LineHeight',
     format => format.lineHeight,
-    (format, value) => {
-        format.lineHeight = value;
-        return undefined;
-    }
+    (format, value) => (format.lineHeight = value)
 );

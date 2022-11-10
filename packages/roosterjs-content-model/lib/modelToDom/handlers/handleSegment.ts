@@ -1,4 +1,3 @@
-import { applyFormat } from '../utils/applyFormat';
 import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
@@ -21,35 +20,13 @@ export const handleSegment: ContentModelHandler<ContentModelSegment> = (
         };
     }
 
-    let element: HTMLElement | null = null;
-
     switch (segment.segmentType) {
         case 'Text':
-            const txt = doc.createTextNode(segment.text);
-
-            if (segment.format.linkHref) {
-                element = doc.createElement('a');
-                element.setAttribute('href', segment.format.linkHref);
-                if (segment.format.linkTarget) {
-                    element.setAttribute('target', segment.format.linkTarget);
-                }
-            } else {
-                element = doc.createElement('span');
-            }
-            element.appendChild(txt);
-            regularSelection.current.segment = txt;
-
-            applyFormat(element, context.formatAppliers.segment, segment.format, context);
-
+            context.modelHandlers.text(doc, parent, segment, context);
             break;
 
         case 'Br':
-            const br = doc.createElement('br');
-            element = doc.createElement('span');
-            element.appendChild(br);
-            regularSelection.current.segment = br;
-
-            applyFormat(element, context.formatAppliers.segment, segment.format, context);
+            context.modelHandlers.br(doc, parent, segment, context);
             break;
 
         case 'Image':
@@ -57,16 +34,12 @@ export const handleSegment: ContentModelHandler<ContentModelSegment> = (
             break;
 
         case 'General':
-            context.modelHandlers.block(doc, parent, segment, context);
+            context.modelHandlers.general(doc, parent, segment, context);
             break;
 
         case 'Entity':
             context.modelHandlers.entity(doc, parent, segment, context);
             break;
-    }
-
-    if (element) {
-        parent.appendChild(element);
     }
 
     // If end position is not set, or it is not finalized, and current segment is still in selection, set end position

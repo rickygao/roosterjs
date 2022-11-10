@@ -8,7 +8,7 @@ export const lineHeightFormatHandler: FormatHandler<LineHeightFormat> = {
     parse: (format, element, context, defaultStyle) => {
         const lineHeight = element.style.lineHeight || defaultStyle.lineHeight;
 
-        if (lineHeight) {
+        if (lineHeight && lineHeight != 'inherit') {
             format.lineHeight = lineHeight;
         }
     },
