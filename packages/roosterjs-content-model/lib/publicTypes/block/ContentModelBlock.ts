@@ -1,4 +1,3 @@
-import { ContentModelCode } from './group/ContentModelCode';
 import { ContentModelEntity } from '../entity/ContentModelEntity';
 import { ContentModelGeneralBlock } from '../group/ContentModelGeneralBlock';
 import { ContentModelHR } from './ContentModelHR';
@@ -12,7 +11,6 @@ import { ContentModelTable } from './ContentModelTable';
  */
 export type ContentModelBlock =
     | ContentModelQuote
-    | ContentModelCode
     | ContentModelListItem
     | ContentModelGeneralBlock
     | ContentModelTable

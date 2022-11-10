@@ -1,5 +1,5 @@
 import getSelectedSegments from '../selection/getSelectedSegments';
-import { ContentModelDocument } from '../../publicTypes/block/group/ContentModelDocument';
+import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 
 /**

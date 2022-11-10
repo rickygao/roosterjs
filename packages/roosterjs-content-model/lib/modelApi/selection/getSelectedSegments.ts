@@ -1,6 +1,6 @@
 import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
-import { ContentModelBlockGroup } from '../../publicTypes/block/group/ContentModelBlockGroup';
-import { ContentModelDocument } from '../../publicTypes/block/group/ContentModelDocument';
+import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
+import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 
 /**

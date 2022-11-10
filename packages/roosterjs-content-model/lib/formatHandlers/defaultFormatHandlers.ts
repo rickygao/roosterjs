@@ -13,11 +13,8 @@ import { FormatHandlerTypeMap, FormatKey } from '../publicTypes/format/FormatHan
 import { getObjectKeys } from 'roosterjs-editor-dom';
 import { hyperLinkFormatHandler } from './segment/hyperLinkFormatHandler';
 import { idFormatHandler } from './common/idFormatHandler';
-import { imageMetadataFormatHandler } from './image/imageMetadataFormatHandler';
 import { indentFormatHandler } from './block/indentFormatHandler';
 import { italicFormatHandler } from './segment/italicFormatHandler';
-import { italicFormatHandler } from './segment/italicFormatHandler';
-import { lineHeightFormatHandler } from './block/lineHeightFormatHandler';
 import { lineHeightFormatHandler } from './block/lineHeightFormatHandler';
 import { linkFormatHandler } from './segment/linkFormatHandler';
 import { listItemMetadataFormatHandler } from './list/listItemMetadataFormatHandler';

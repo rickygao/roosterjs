@@ -10,9 +10,6 @@ export function ContentModelBlockGroupView(props: { group: ContentModelBlockGrou
     const { group } = props;
 
     switch (group.blockGroupType) {
-        case 'Code':
-            return null;
-
         case 'Document':
             return <ContentModelDocumentView doc={group} />;
 

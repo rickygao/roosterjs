@@ -13,11 +13,6 @@ export type ContentModelBlockGroupType =
     | 'Quote'
 
     /**
-     * Represents a Code element
-     */
-    | 'Code'
-
-    /**
      * Represents a list item (LI) element
      */
     | 'ListItem'

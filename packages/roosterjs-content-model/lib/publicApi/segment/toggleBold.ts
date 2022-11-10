@@ -12,9 +12,9 @@ export default function toggleBold(editor: IExperimentalContentModelEditor) {
     setSegmentStyle(
         model,
         (segment, isTurningOn) => {
-            segment.format.bold = !!isTurningOn;
+            segment.format.fontWeight = isTurningOn ? 'bold' : undefined;
         },
-        segment => !!segment.format.bold
+        segment => isBold(segment.format.fontWeight)
     );
 
     editor.addUndoSnapshot(
@@ -29,5 +29,11 @@ export default function toggleBold(editor: IExperimentalContentModelEditor) {
         {
             formatApiName: 'toggleBold',
         }
+    );
+}
+
+function isBold(boldStyle?: string): boolean {
+    return (
+        !!boldStyle && (boldStyle == 'bold' || boldStyle == 'bolder' || parseInt(boldStyle) >= 600)
     );
 }
