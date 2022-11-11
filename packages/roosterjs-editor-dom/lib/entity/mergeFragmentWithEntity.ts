@@ -1,8 +1,8 @@
 import isNodeAfter from '../utils/isNodeAfter';
 import moveChildNodes from '../utils/moveChildNodes';
-import { Entity, EntityPlaceholderPair } from 'roosterjs-editor-types';
+import { Entity, EntityPlaceholderPair, NodeType } from 'roosterjs-editor-types';
 
-const EntityPlaceHolderCommentPrefix = '_Entity:';
+const EntityPlaceHolderCommentPrefix = 'Entity:';
 
 /**
  * Default implementation of merging DOM tree generated from Content Model in to existing container
@@ -36,25 +36,30 @@ export default function mergeFragmentWithEntity(
         nodesToRemove.forEach(node => target.removeChild(node));
 
         for (let i = 0; i <= reusableWrappers.length; i++) {
-            while (source.firstChild && source.firstChild != placeholders[i]) {
+            while (source.firstChild && !isSamePlaceholder(source.firstChild, placeholders[i])) {
                 target.insertBefore(source.firstChild, reusableWrappers[i] || null);
             }
 
-            if (source.firstChild && source.firstChild == placeholders[i]) {
-                source.removeChild(placeholders[i]);
+            if (source.firstChild && isSamePlaceholder(source.firstChild, placeholders[i])) {
+                source.removeChild(source.firstChild);
             }
         }
     }
 }
 
+function isSamePlaceholder(nodeToCheck: Node, placeholder: Node): boolean {
+    return (
+        nodeToCheck.nodeType == NodeType.Comment && nodeToCheck.nodeValue == placeholder.nodeValue
+    );
+}
+
 /**
  * Create a placeholder comment node for entity
- * @param doc HTML Document
  * @param entity The entity to create placeholder from
  * @returns A placeholder comment node as
  */
-export function createEntityPlaceholder(doc: Document, entity: Entity): Comment {
-    return doc.createComment(EntityPlaceHolderCommentPrefix + entity.id);
+export function createEntityPlaceholder(entity: Entity): Comment {
+    return entity.wrapper.ownerDocument.createComment(EntityPlaceHolderCommentPrefix + entity.id);
 }
 
 /**
@@ -69,7 +74,7 @@ export function preprocessEntitiesFromContentModel(
     const placeholders: Node[] = [];
 
     entityPairs?.forEach(pair => {
-        const { entityWrapper, placeholder } = pair;
+        const { entityWrapper, placeholder, skipRootCheck } = pair;
         const parent = placeholder.parentNode;
         const lastWrapper = reusableWrappers[reusableWrappers.length - 1];
         const lastPlaceholder = placeholders[placeholders.length - 1];
@@ -77,7 +82,7 @@ export function preprocessEntitiesFromContentModel(
         if (
             source &&
             target &&
-            parent == source &&
+            (skipRootCheck || parent == source) &&
             entityWrapper.parentNode == target &&
             (!lastWrapper || isNodeAfter(entityWrapper, lastWrapper)) &&
             (!lastPlaceholder || isNodeAfter(placeholder, lastPlaceholder))

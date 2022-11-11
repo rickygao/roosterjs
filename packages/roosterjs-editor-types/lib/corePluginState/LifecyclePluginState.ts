@@ -1,6 +1,8 @@
 import CustomData from '../interface/CustomData';
 import DefaultFormat from '../interface/DefaultFormat';
 import SelectionPath from '../interface/SelectionPath';
+import { ContentMetadata } from '../interface/ContentMetadata';
+import { EntityPlaceholderPair } from '../interface/EntityPlaceholderPair';
 import { ExperimentalFeatures } from '../enum/ExperimentalFeatures';
 import type { CompatibleExperimentalFeatures } from '../compatibleEnum/ExperimentalFeatures';
 
@@ -44,16 +46,29 @@ export default interface LifecyclePluginState {
     shadowEditFragment: DocumentFragment | null;
 
     /**
+     * Cached selection metadata for original content
+     */
+    shadowEditMetadata: ContentMetadata | null;
+
+    /**
+     * Cached entity pairs for original content
+     */
+    shadowEditEntityPairs: EntityPlaceholderPair[] | null;
+
+    /**
+     * @deprecated Use shadowEditMetadata instead
      * Cached selection path for original content
      */
     shadowEditSelectionPath: SelectionPath | null;
 
     /**
+     * @deprecated Use shadowEditMetadata instead
      * Cached table selection path for original content
      */
     shadowEditTableSelectionPath: SelectionPath[] | null;
 
     /**
+     * @deprecated Use shadowEditMetadata instead
      * Cached image selection path for original content
      */
     shadowEditImageSelectionPath: SelectionPath[] | null;

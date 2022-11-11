@@ -1,9 +1,16 @@
-import { createRange, getSelectionPath, moveChildNodes } from 'roosterjs-editor-dom';
+import { metadataToRangeEx, rangeExToMetadata, selectRangeEx } from './utils/contentMetadataUtils';
+import {
+    createEntityPlaceholder,
+    getEntityFromElement,
+    getEntitySelector,
+    mergeFragmentWithEntity,
+    moveChildNodes,
+    queryElements,
+} from 'roosterjs-editor-dom';
 import {
     EditorCore,
+    EntityPlaceholderPair,
     PluginEventType,
-    SelectionRangeEx,
-    SelectionRangeTypes,
     SwitchShadowEdit,
 } from 'roosterjs-editor-types';
 
@@ -12,67 +19,57 @@ import {
  */
 export const switchShadowEdit: SwitchShadowEdit = (core: EditorCore, isOn: boolean): void => {
     const { lifecycle, contentDiv } = core;
-    let {
-        shadowEditFragment,
-        shadowEditSelectionPath,
-        shadowEditTableSelectionPath,
-        shadowEditImageSelectionPath,
-    } = lifecycle;
-    const wasInShadowEdit = !!shadowEditFragment;
 
-    const getShadowEditSelectionPath = (
-        selectionType: SelectionRangeTypes,
-        shadowEditSelection?: SelectionRangeEx
-    ) => {
-        return (
-            (shadowEditSelection?.type == selectionType &&
-                shadowEditSelection.ranges
-                    .map(range => getSelectionPath(contentDiv, range))
-                    .map(w => w!!)) ||
-            null
-        );
-    };
+    const wasInShadowEdit = !!lifecycle.shadowEditFragment;
 
     if (isOn) {
         if (!wasInShadowEdit) {
-            const selection = core.api.getSelectionRangeEx(core);
-            const range = core.api.getSelectionRange(core, true /*tryGetFromCache*/);
+            const fragment = contentDiv.ownerDocument.createDocumentFragment();
+            const selection =
+                rangeExToMetadata(
+                    contentDiv,
+                    core.api.getSelectionRangeEx(core),
+                    core.lifecycle.isDarkMode
+                ) || null;
 
-            shadowEditSelectionPath = range && getSelectionPath(contentDiv, range);
-            shadowEditTableSelectionPath = getShadowEditSelectionPath(
-                SelectionRangeTypes.TableSelection,
-                selection
-            );
-            shadowEditFragment = core.contentDiv.ownerDocument.createDocumentFragment();
-            shadowEditImageSelectionPath = getShadowEditSelectionPath(
-                SelectionRangeTypes.ImageSelection,
-                selection
-            );
+            moveChildNodes(fragment, contentDiv.cloneNode(true /*deep*/));
+            fragment.normalize();
 
-            moveChildNodes(shadowEditFragment, contentDiv);
-            shadowEditFragment.normalize();
+            const entityPairs = extractEntityPairs(fragment, contentDiv);
+
             core.api.triggerEvent(
                 core,
                 {
                     eventType: PluginEventType.EnteredShadowEdit,
-                    fragment: shadowEditFragment,
-                    selectionPath: shadowEditSelectionPath,
+                    fragment: fragment,
+                    selectionPath: null,
+                    selectionMetadata: selection,
                 },
                 false /*broadcast*/
             );
 
-            lifecycle.shadowEditFragment = shadowEditFragment;
-            lifecycle.shadowEditSelectionPath = shadowEditSelectionPath;
-            lifecycle.shadowEditTableSelectionPath = shadowEditTableSelectionPath;
-            lifecycle.shadowEditImageSelectionPath = shadowEditImageSelectionPath;
+            lifecycle.shadowEditFragment = fragment;
+            lifecycle.shadowEditMetadata = selection;
+            lifecycle.shadowEditEntityPairs = entityPairs;
         }
 
-        moveChildNodes(contentDiv);
         if (lifecycle.shadowEditFragment) {
-            contentDiv.appendChild(lifecycle.shadowEditFragment.cloneNode(true /*deep*/));
+            mergeFragmentWithEntity(
+                lifecycle.shadowEditFragment.cloneNode(true /*deep*/) as DocumentFragment, // Clone fragment to avoid nodes under fragment are moved to target so that it can be reused
+                contentDiv,
+                lifecycle.shadowEditEntityPairs
+            );
         }
     } else {
+        const {
+            shadowEditFragment,
+            shadowEditMetadata: shadowEditSelection,
+            shadowEditEntityPairs,
+        } = lifecycle;
+
         lifecycle.shadowEditFragment = null;
+        lifecycle.shadowEditMetadata = null;
+        lifecycle.shadowEditEntityPairs = null;
         lifecycle.shadowEditSelectionPath = null;
 
         if (wasInShadowEdit) {
@@ -84,43 +81,43 @@ export const switchShadowEdit: SwitchShadowEdit = (core: EditorCore, isOn: boole
                 false /*broadcast*/
             );
 
-            moveChildNodes(contentDiv);
             if (shadowEditFragment) {
-                contentDiv.appendChild(shadowEditFragment);
+                mergeFragmentWithEntity(shadowEditFragment, contentDiv, shadowEditEntityPairs); // No need to clone here since we are leaving shadow edit and fragment will be cleared
             }
+
             core.api.focus(core);
 
-            if (shadowEditSelectionPath) {
-                core.api.selectRange(
-                    core,
-                    createRange(
-                        contentDiv,
-                        shadowEditSelectionPath.start,
-                        shadowEditSelectionPath.end
-                    )
-                );
-            }
-
-            if (core.domEvent.imageSelectionRange) {
-                const { image } = core.domEvent.imageSelectionRange;
-                const imageElement = core.contentDiv.querySelector('#' + image.id);
-                if (imageElement) {
-                    core.api.selectImage(core, image);
-                }
-            }
-
-            if (core.domEvent.tableSelectionRange) {
-                const { table, coordinates } = core.domEvent.tableSelectionRange;
-                const tableId = table.id;
-                const tableElement = core.contentDiv.querySelector('#' + tableId);
-                if (table) {
-                    core.domEvent.tableSelectionRange = core.api.selectTable(
-                        core,
-                        tableElement as HTMLTableElement,
-                        coordinates
-                    );
-                }
+            if (shadowEditSelection) {
+                selectRangeEx(core, metadataToRangeEx(contentDiv, shadowEditSelection));
             }
         }
     }
 };
+function extractEntityPairs(
+    fragment: DocumentFragment,
+    contentDiv: HTMLDivElement
+): EntityPlaceholderPair[] {
+    const entityWrappers = queryElements(fragment, getEntitySelector());
+    const entityPairs: EntityPlaceholderPair[] = [];
+
+    entityWrappers.forEach(wrapper => {
+        const entity = getEntityFromElement(wrapper);
+        const originalWrapper =
+            entity &&
+            (contentDiv.querySelector(getEntitySelector(entity.type, entity.id)) as HTMLElement);
+
+        if (entity && originalWrapper) {
+            const placeholder = createEntityPlaceholder(entity);
+            const skipRootCheck = wrapper.parentNode == fragment;
+
+            entityPairs.push({
+                entityWrapper: originalWrapper,
+                placeholder: placeholder,
+                skipRootCheck: skipRootCheck,
+            });
+
+            wrapper.parentNode?.replaceChild(placeholder, wrapper);
+        }
+    });
+    return entityPairs;
+}

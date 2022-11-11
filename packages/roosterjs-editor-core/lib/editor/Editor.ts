@@ -1,5 +1,6 @@
 import createCorePlugins, { getPluginState } from '../corePlugins/createCorePlugins';
 import { coreApiMap } from '../coreApi/coreApiMap';
+import { selectRangeEx } from '../coreApi/utils/contentMetadataUtils';
 import {
     BlockElement,
     ChangeSource,
@@ -509,39 +510,7 @@ export default class Editor implements IEditor {
         }
 
         if (rangeEx) {
-            switch (rangeEx.type) {
-                case SelectionRangeTypes.TableSelection:
-                    if (this.contains(rangeEx.table)) {
-                        core.domEvent.imageSelectionRange = core.api.selectImage(core, null);
-                        core.domEvent.tableSelectionRange = core.api.selectTable(
-                            core,
-                            rangeEx.table,
-                            rangeEx.coordinates
-                        );
-                        rangeEx = core.domEvent.tableSelectionRange;
-                    }
-                    break;
-                case SelectionRangeTypes.ImageSelection:
-                    if (this.contains(rangeEx.image)) {
-                        core.domEvent.tableSelectionRange = core.api.selectTable(core, null);
-                        core.domEvent.imageSelectionRange = core.api.selectImage(
-                            core,
-                            rangeEx.image
-                        );
-                        rangeEx = core.domEvent.imageSelectionRange;
-                    }
-                    break;
-                case SelectionRangeTypes.Normal:
-                    core.domEvent.tableSelectionRange = core.api.selectTable(core, null);
-                    core.domEvent.imageSelectionRange = core.api.selectImage(core, null);
-
-                    if (this.contains(rangeEx.ranges[0])) {
-                        core.api.selectRange(core, rangeEx.ranges[0]);
-                    } else {
-                        rangeEx = null;
-                    }
-                    break;
-            }
+            rangeEx = selectRangeEx(core, rangeEx);
 
             this.triggerPluginEvent(
                 PluginEventType.SelectionChanged,

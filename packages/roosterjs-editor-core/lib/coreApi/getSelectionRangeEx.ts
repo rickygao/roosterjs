@@ -1,4 +1,5 @@
-import { contains, createRange, findClosestElementAncestor } from 'roosterjs-editor-dom';
+import { contains } from 'roosterjs-editor-dom';
+import { metadataToRangeEx } from './utils/contentMetadataUtils';
 import {
     EditorCore,
     GetSelectionRangeEx,
@@ -14,55 +15,8 @@ import {
  */
 export const getSelectionRangeEx: GetSelectionRangeEx = (core: EditorCore) => {
     let result: SelectionRangeEx | null = null;
-    if (core.lifecycle.shadowEditFragment) {
-        const {
-            shadowEditTableSelectionPath,
-            shadowEditSelectionPath,
-            shadowEditImageSelectionPath,
-        } = core.lifecycle;
-
-        if ((shadowEditTableSelectionPath?.length || 0) > 0) {
-            const ranges = core.lifecycle.shadowEditTableSelectionPath!.map(path =>
-                createRange(core.contentDiv, path.start, path.end)
-            );
-
-            return {
-                type: SelectionRangeTypes.TableSelection,
-                ranges,
-                areAllCollapsed: checkAllCollapsed(ranges),
-                table: findClosestElementAncestor(
-                    ranges[0].startContainer,
-                    core.contentDiv,
-                    'table'
-                ) as HTMLTableElement,
-                coordinates: undefined,
-            };
-        } else if ((shadowEditImageSelectionPath?.length || 0) > 0) {
-            const ranges = core.lifecycle.shadowEditImageSelectionPath!.map(path =>
-                createRange(core.contentDiv, path.start, path.end)
-            );
-            return {
-                type: SelectionRangeTypes.ImageSelection,
-                ranges,
-                areAllCollapsed: checkAllCollapsed(ranges),
-                image: findClosestElementAncestor(
-                    ranges[0].startContainer,
-                    core.contentDiv,
-                    'img'
-                ) as HTMLImageElement,
-                imageId: undefined,
-            };
-        } else {
-            const shadowRange =
-                shadowEditSelectionPath &&
-                createRange(
-                    core.contentDiv,
-                    shadowEditSelectionPath.start,
-                    shadowEditSelectionPath.end
-                );
-
-            return createNormalSelectionEx(shadowRange ? [shadowRange] : []);
-        }
+    if (core.lifecycle.shadowEditMetadata) {
+        return metadataToRangeEx(core.contentDiv, core.lifecycle.shadowEditMetadata);
     } else {
         if (core.api.hasFocus(core)) {
             if (core.domEvent.tableSelectionRange) {

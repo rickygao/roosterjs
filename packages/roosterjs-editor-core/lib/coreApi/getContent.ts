@@ -1,3 +1,4 @@
+import { metadataToRangeEx } from './utils/contentMetadataUtils';
 import {
     ColorTransformDirection,
     EditorCore,
@@ -44,8 +45,11 @@ export const getContent: GetContent = (
         const originalRange = core.api.getSelectionRange(core, true /*tryGetFromCache*/);
         const path = !includeSelectionMarker
             ? null
-            : core.lifecycle.shadowEditFragment
-            ? core.lifecycle.shadowEditSelectionPath
+            : core.lifecycle.shadowEditMetadata
+            ? getSelectionPath(
+                  core.contentDiv,
+                  metadataToRangeEx(core.contentDiv, core.lifecycle.shadowEditMetadata).ranges[0]
+              )
             : originalRange
             ? getSelectionPath(core.contentDiv, originalRange)
             : null;

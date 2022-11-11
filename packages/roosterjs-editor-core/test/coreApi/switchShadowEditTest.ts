@@ -45,13 +45,14 @@ describe('switchShadowEdit', () => {
         switchShadowEdit(core, true);
 
         expect(core.lifecycle.shadowEditFragment).not.toBeNull();
-        expect(core.lifecycle.shadowEditSelectionPath).not.toBeNull();
+        expect(core.lifecycle.shadowEditMetadata).not.toBeNull();
         expect(triggerEvent).toHaveBeenCalledWith(
             core,
             {
                 eventType: PluginEventType.EnteredShadowEdit,
                 fragment: core.lifecycle.shadowEditFragment,
-                selectionPath: core.lifecycle.shadowEditSelectionPath,
+                selectionMetadata: core.lifecycle.shadowEditMetadata,
+                selectionPath: null,
             },
             false
         );

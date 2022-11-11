@@ -11,4 +11,9 @@ export interface EntityPlaceholderPair {
      * Placeholder comment node
      */
     placeholder: Comment;
+
+    /**
+     * Skip checking if this placeholder is directly under root node when merge back
+     */
+    skipRootCheck?: boolean;
 }

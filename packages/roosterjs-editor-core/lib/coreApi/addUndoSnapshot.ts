@@ -1,16 +1,14 @@
+import { Position } from 'roosterjs-editor-dom';
+import { rangeExToMetadata } from './utils/contentMetadataUtils';
 import {
     AddUndoSnapshot,
     ChangeSource,
     ContentChangedData,
     ContentChangedEvent,
-    ContentMetadata,
     EditorCore,
     NodePosition,
     PluginEventType,
-    SelectionRangeEx,
-    SelectionRangeTypes,
 } from 'roosterjs-editor-types';
-import { getSelectionPath, Position } from 'roosterjs-editor-dom';
 import type { CompatibleChangeSource } from 'roosterjs-editor-types/lib/compatibleTypes';
 
 /**
@@ -82,7 +80,7 @@ function addUndoSnapshotInternal(core: EditorCore, canUndoByBackspace: boolean) 
     if (!core.lifecycle.shadowEditFragment) {
         const rangeEx = core.api.getSelectionRangeEx(core);
         const isDarkMode = core.lifecycle.isDarkMode;
-        const metadata = createContentMetadata(core.contentDiv, rangeEx, isDarkMode) || null;
+        const metadata = rangeExToMetadata(core.contentDiv, rangeEx, isDarkMode) || null;
 
         core.undo.snapshotsService.addSnapshot(
             {
@@ -92,35 +90,5 @@ function addUndoSnapshotInternal(core: EditorCore, canUndoByBackspace: boolean) 
             canUndoByBackspace
         );
         core.undo.hasNewContent = false;
-    }
-}
-
-function createContentMetadata(
-    root: HTMLElement,
-    rangeEx: SelectionRangeEx,
-    isDarkMode: boolean
-): ContentMetadata | undefined {
-    switch (rangeEx?.type) {
-        case SelectionRangeTypes.TableSelection:
-            return {
-                type: SelectionRangeTypes.TableSelection,
-                tableId: rangeEx.table.id,
-                isDarkMode: !!isDarkMode,
-                ...rangeEx.coordinates!,
-            };
-        case SelectionRangeTypes.ImageSelection:
-            return {
-                type: SelectionRangeTypes.ImageSelection,
-                imageId: rangeEx.image.id,
-                isDarkMode: !!isDarkMode,
-            };
-        case SelectionRangeTypes.Normal:
-            return {
-                type: SelectionRangeTypes.Normal,
-                isDarkMode: !!isDarkMode,
-                start: [],
-                end: [],
-                ...(getSelectionPath(root, rangeEx.ranges[0]) || {}),
-            };
     }
 }
