@@ -31,7 +31,7 @@ describe('createModelToDomContext', () => {
         formatAppliers: getFormatAppliers(),
         modelHandlers: defaultContentModelHandlers,
         defaultImplicitSegmentFormatMap: defaultImplicitSegmentFormatMap,
-        entityPairs: [],
+        entities: {},
         defaultModelHandlers: defaultContentModelHandlers,
         defaultFormatAppliers: defaultFormatAppliers,
     };
@@ -96,7 +96,7 @@ describe('createModelToDomContext', () => {
         ]);
         expect(context.modelHandlers.br).toBe(mockedBrHandler);
         expect(context.defaultImplicitSegmentFormatMap.a).toEqual(mockedAStyle);
-        expect(context.entityPairs).toEqual([]);
+        expect(context.entities).toEqual({});
         expect(context.defaultModelHandlers).toEqual(defaultContentModelHandlers);
         expect(context.defaultFormatAppliers).toEqual(defaultFormatAppliers);
     });

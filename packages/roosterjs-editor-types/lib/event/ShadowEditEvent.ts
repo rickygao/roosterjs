@@ -1,5 +1,6 @@
 import BasePluginEvent from './BasePluginEvent';
 import SelectionPath from '../interface/SelectionPath';
+import { ContentMetadata } from '../interface/ContentMetadata';
 import { PluginEventType } from '../enum/PluginEventType';
 import type { CompatiblePluginEventType } from '../compatibleEnum/PluginEventType';
 
@@ -13,6 +14,12 @@ export interface EnterShadowEditEventData {
     fragment: DocumentFragment;
 
     /**
+     * Selection metadata of current selection
+     */
+    selectionMetadata: ContentMetadata | null;
+
+    /**
+     * @deprecated
      * The selection path of original editor content
      */
     selectionPath: SelectionPath | null;

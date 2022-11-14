@@ -104,7 +104,6 @@ export { default as getEntityFromElement } from './entity/getEntityFromElement';
 export { default as getEntitySelector } from './entity/getEntitySelector';
 export {
     default as mergeFragmentWithEntity,
-    preprocessEntitiesFromContentModel,
     createEntityPlaceholder,
 } from './entity/mergeFragmentWithEntity';
 

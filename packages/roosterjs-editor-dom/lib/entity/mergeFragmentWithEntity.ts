@@ -1,92 +1,78 @@
-import isNodeAfter from '../utils/isNodeAfter';
-import moveChildNodes from '../utils/moveChildNodes';
-import { Entity, EntityPlaceholderPair } from 'roosterjs-editor-types';
+import getTagOfNode from '../utils/getTagOfNode';
+import safeInstanceOf from '../utils/safeInstanceOf';
+import { Entity } from 'roosterjs-editor-types';
 
-const EntityPlaceHolderCommentPrefix = '_Entity:';
+const EntityPlaceHolderTagName = 'ENTITY-PLACEHOLDER';
 
 /**
  * Default implementation of merging DOM tree generated from Content Model in to existing container
  * @param source Source document fragment that is generated from Content Model
  * @param target Target container, usually to be editor root container
- * @param entityPairs An array of entity wrapper - placeholder pairs, used for reuse existing DOM structure for entity
+ * @param entities A map from entity id to entity wrapper, used for reusing existing DOM structure for entity
+ * @param insertClonedNode When pass true, merge with a cloned copy of the nodes from source fragment rather than the nodes themselves @default false
  */
 export default function mergeFragmentWithEntity(
     source: DocumentFragment,
     target: HTMLElement,
-    entityPairs: EntityPlaceholderPair[] | null
+    entities: Record<string, HTMLElement> | null,
+    insertClonedNode?: boolean
 ) {
-    const { reusableWrappers, placeholders } = preprocessEntitiesFromContentModel(
-        entityPairs,
-        source,
-        target
-    );
+    let anchor = target.firstChild;
+    entities = entities || {};
 
-    if (reusableWrappers.length == 0) {
-        moveChildNodes(target);
-        target.appendChild(source);
-    } else {
-        const nodesToRemove: Node[] = [];
+    for (let current = source.firstChild; current; ) {
+        let wrapper: HTMLElement | null = null;
+        const next = current.nextSibling;
 
-        for (let child = target.firstChild; child; child = child.nextSibling) {
-            if (reusableWrappers.indexOf(child) < 0) {
-                nodesToRemove.push(child);
+        if (
+            getTagOfNode(current) == EntityPlaceHolderTagName &&
+            (wrapper = entities[(<HTMLElement>current).id])
+        ) {
+            anchor = removeUntil(anchor, wrapper);
+
+            if (anchor) {
+                anchor = anchor.nextSibling;
+            } else {
+                target.appendChild(wrapper);
+            }
+        } else {
+            const nodeToInsert = insertClonedNode ? current.cloneNode(true /*deep*/) : current;
+            target.insertBefore(nodeToInsert, anchor);
+
+            if (safeInstanceOf(nodeToInsert, 'HTMLElement')) {
+                nodeToInsert.querySelectorAll(EntityPlaceHolderTagName).forEach(placeholder => {
+                    wrapper = entities![placeholder.id];
+
+                    if (wrapper) {
+                        placeholder.parentNode?.replaceChild(wrapper, placeholder);
+                    }
+                });
             }
         }
 
-        nodesToRemove.forEach(node => target.removeChild(node));
-
-        for (let i = 0; i <= reusableWrappers.length; i++) {
-            while (source.firstChild && source.firstChild != placeholders[i]) {
-                target.insertBefore(source.firstChild, reusableWrappers[i] || null);
-            }
-
-            if (source.firstChild && source.firstChild == placeholders[i]) {
-                source.removeChild(placeholders[i]);
-            }
-        }
+        current = next;
     }
+
+    removeUntil(anchor);
+}
+
+function removeUntil(anchor: ChildNode | null, nodeToStop?: HTMLElement) {
+    while (anchor && (!nodeToStop || anchor != nodeToStop)) {
+        const nodeToRemove = anchor;
+        anchor = anchor.nextSibling;
+        nodeToRemove.parentNode?.removeChild(nodeToRemove);
+    }
+    return anchor;
 }
 
 /**
  * Create a placeholder comment node for entity
- * @param doc HTML Document
  * @param entity The entity to create placeholder from
  * @returns A placeholder comment node as
  */
-export function createEntityPlaceholder(doc: Document, entity: Entity): Comment {
-    return doc.createComment(EntityPlaceHolderCommentPrefix + entity.id);
-}
+export function createEntityPlaceholder(entity: Entity): HTMLElement {
+    const placeholder = entity.wrapper.ownerDocument.createElement(EntityPlaceHolderTagName);
+    placeholder.id = entity.id;
 
-/**
- * @internal
- */
-export function preprocessEntitiesFromContentModel(
-    entityPairs: EntityPlaceholderPair[] | null,
-    source?: DocumentFragment,
-    target?: HTMLElement
-): { reusableWrappers: Node[]; placeholders: Node[] } {
-    const reusableWrappers: Node[] = [];
-    const placeholders: Node[] = [];
-
-    entityPairs?.forEach(pair => {
-        const { entityWrapper, placeholder } = pair;
-        const parent = placeholder.parentNode;
-        const lastWrapper = reusableWrappers[reusableWrappers.length - 1];
-        const lastPlaceholder = placeholders[placeholders.length - 1];
-
-        if (
-            source &&
-            target &&
-            parent == source &&
-            entityWrapper.parentNode == target &&
-            (!lastWrapper || isNodeAfter(entityWrapper, lastWrapper)) &&
-            (!lastPlaceholder || isNodeAfter(placeholder, lastPlaceholder))
-        ) {
-            reusableWrappers.push(entityWrapper);
-            placeholders.push(placeholder);
-        } else if (parent) {
-            parent.replaceChild(pair.entityWrapper, pair.placeholder);
-        }
-    });
-    return { reusableWrappers, placeholders };
+    return placeholder;
 }

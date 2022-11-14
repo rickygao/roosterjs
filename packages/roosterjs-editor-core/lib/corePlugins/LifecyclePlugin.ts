@@ -97,6 +97,8 @@ export default class LifecyclePlugin implements PluginWithState<LifecyclePluginS
             onExternalContentTransform: options.onExternalContentTransform ?? null,
             experimentalFeatures: options.experimentalFeatures || [],
             shadowEditFragment: null,
+            shadowEditEntities: null,
+            shadowEditMetadata: null,
             shadowEditSelectionPath: null,
             shadowEditTableSelectionPath: null,
             shadowEditImageSelectionPath: null,
