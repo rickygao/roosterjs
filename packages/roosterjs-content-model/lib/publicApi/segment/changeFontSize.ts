@@ -1,6 +1,7 @@
-import { ChangeSource } from 'roosterjs-editor-types';
+import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 import { FontSizeFormat } from '../../publicTypes/format/formatParts/FontSizeFormat';
 import { FormatParser } from '../../publicTypes/context/DomToModelSettings';
+import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { getComputedStyle } from 'roosterjs-editor-dom';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 import { setSegmentStyle } from '../../modelApi/segment/setSegmentStyle';
@@ -23,44 +24,20 @@ export default function changeFontSize(
     editor: IExperimentalContentModelEditor,
     change: 'increase' | 'decrease'
 ) {
-    const model = editor.createContentModel(undefined /*startNode*/, {
-        formatParserOverride: {
-            fontSize: fontSizeHandler,
-        },
-    });
-
-    setSegmentStyle(
-        model,
-        segment => {
-            if (segment.format.fontSize) {
-                let sizeNumber = parseFloat(segment.format.fontSize);
-
-                if (sizeNumber > 0) {
-                    const newSize = getNewFontSize(
-                        sizeNumber,
-                        change == 'increase' ? 1 : -1,
-                        FONT_SIZES
-                    );
-
-                    segment.format.fontSize = newSize + 'pt';
-                }
-            }
-        },
-        undefined /* segmentHasStyleCallback*/,
-        true /*includingFormatHandler*/
-    );
-
-    editor.addUndoSnapshot(
-        () => {
-            editor.focus();
-            if (model) {
-                editor.setContentModel(model);
-            }
-        },
-        ChangeSource.Format,
-        false /*canUndoByBackspace*/,
+    formatWithContentModel(
+        editor,
+        'changeFontSize',
+        mode =>
+            setSegmentStyle(
+                mode,
+                segment => changeFontSizeInternal(segment, change),
+                undefined /* segmentHasStyleCallback*/,
+                true /*includingFormatHandler*/
+            ),
         {
-            formatApiName: 'changeFontSize',
+            formatParserOverride: {
+                fontSize: fontSizeHandler,
+            },
         }
     );
 }
@@ -72,6 +49,18 @@ const fontSizeHandler: FormatParser<FontSizeFormat> = (format, element, context,
         format.fontSize = getComputedStyle(element, 'font-size');
     }
 };
+
+function changeFontSizeInternal(segment: ContentModelSegment, change: 'increase' | 'decrease') {
+    if (segment.format.fontSize) {
+        let sizeNumber = parseFloat(segment.format.fontSize);
+
+        if (sizeNumber > 0) {
+            const newSize = getNewFontSize(sizeNumber, change == 'increase' ? 1 : -1, FONT_SIZES);
+
+            segment.format.fontSize = newSize + 'pt';
+        }
+    }
+}
 
 function getNewFontSize(pt: number, changeBase: 1 | -1, fontSizes: number[]): number {
     pt = changeBase == 1 ? Math.floor(pt) : Math.ceil(pt);
