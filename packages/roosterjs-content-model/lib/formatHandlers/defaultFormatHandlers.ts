@@ -12,6 +12,7 @@ import { FormatHandler } from './FormatHandler';
 import { FormatHandlerTypeMap, FormatKey } from '../publicTypes/format/FormatHandlerTypeMap';
 import { getObjectKeys } from 'roosterjs-editor-dom';
 import { idFormatHandler } from './common/idFormatHandler';
+import { indentFormatHandler } from './block/indentFormatHandler';
 import { italicFormatHandler } from './segment/italicFormatHandler';
 import { lineHeightFormatHandler } from './block/lineHeightFormatHandler';
 import { linkFormatHandler } from './segment/linkFormatHandler';
@@ -29,6 +30,7 @@ import { tableSpacingFormatHandler } from './table/tableSpacingFormatHandler';
 import { textColorFormatHandler } from './segment/textColorFormatHandler';
 import { underlineFormatHandler } from './segment/underlineFormatHandler';
 import { verticalAlignFormatHandler } from './common/verticalAlignFormatHandler';
+import { whiteSpaceFormatHandler } from './block/whiteSpaceFormatHandler';
 import {
     FormatApplier,
     FormatAppliers,
@@ -55,6 +57,7 @@ const defaultFormatHandlerMap: FormatHandlers = {
     fontFamily: fontFamilyFormatHandler,
     fontSize: fontSizeFormatHandler,
     id: idFormatHandler,
+    indent: indentFormatHandler,
     italic: italicFormatHandler,
     lineHeight: lineHeightFormatHandler,
     link: linkFormatHandler,
@@ -72,12 +75,22 @@ const defaultFormatHandlerMap: FormatHandlers = {
     textColor: textColorFormatHandler,
     underline: underlineFormatHandler,
     verticalAlign: verticalAlignFormatHandler,
+    whiteSpace: whiteSpaceFormatHandler,
 };
 
 const defaultFormatKeysPerCategory: {
     [key in keyof ContentModelFormatMap]: (keyof FormatHandlerTypeMap)[];
 } = {
-    block: ['backgroundColor', 'direction', 'margin', 'padding', 'lineHeight'],
+    block: [
+        'backgroundColor',
+        'direction',
+        'margin',
+        'padding',
+        'size',
+        'indent',
+        'lineHeight',
+        'whiteSpace',
+    ],
     listItem: ['listItemThread', 'listItemMetadata'],
     listLevel: ['listType', 'listLevelThread', 'listLevelMetadata'],
     segment: [
