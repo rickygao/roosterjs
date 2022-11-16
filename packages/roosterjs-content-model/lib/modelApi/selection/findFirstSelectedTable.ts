@@ -6,7 +6,9 @@ import { getSelections } from '../selection/getSelections';
 /**
  * @internal
  */
-export function findSelectedTable(model: ContentModelBlockGroup): ContentModelTable | undefined {
+export function findFirstSelectedTable(
+    model: ContentModelBlockGroup
+): ContentModelTable | undefined {
     const selections = getSelections(model);
     let table: ContentModelTable | undefined;
 
@@ -14,11 +16,13 @@ export function findSelectedTable(model: ContentModelBlockGroup): ContentModelTa
         const selection = selections[i];
 
         for (let j = 0; j < selection.path.length; j++) {
-            const cell = selection.path[j];
-            if ((<ContentModelTableCell>cell).blockGroupType == 'TableCell') {
+            const group = selection.path[j];
+
+            if (isTableCell(group)) {
                 const tableParent = selection.path[j + 1];
-                table = tableParent.blocks.filter(
-                    x => x.blockType == 'Table' && x.cells.some(y => y.some(cell => cell == cell))
+
+                table = tableParent?.blocks.filter(
+                    x => x.blockType == 'Table' && x.cells.some(row => row.indexOf(group) >= 0)
                 )[0] as ContentModelTable;
 
                 if (table) {
@@ -33,4 +37,8 @@ export function findSelectedTable(model: ContentModelBlockGroup): ContentModelTa
     }
 
     return table;
+}
+
+function isTableCell(group: ContentModelBlockGroup): group is ContentModelTableCell {
+    return group.blockGroupType == 'TableCell';
 }

@@ -1,5 +1,5 @@
 import { applyTableFormat } from '../../modelApi/table/applyTableFormat';
-import { findSelectedTable } from '../../modelApi/table/findSelectedTable';
+import { findFirstSelectedTable } from '../../modelApi/selection/findFirstSelectedTable';
 import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 import { TableMetadataFormat } from '../../publicTypes/format/formatParts/TableMetadataFormat';
@@ -16,7 +16,7 @@ export default function formatTable(
     keepCellShade?: boolean
 ) {
     formatWithContentModel(editor, 'formatTable', model => {
-        const tableModel = findSelectedTable(model);
+        const tableModel = findFirstSelectedTable(model);
 
         if (tableModel) {
             applyTableFormat(tableModel, format, keepCellShade);

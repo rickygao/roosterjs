@@ -4,7 +4,7 @@ import { applyTableFormat } from '../../modelApi/table/applyTableFormat';
 import { deleteTable } from '../../modelApi/table/deleteTable';
 import { deleteTableColumn } from '../../modelApi/table/deleteTableColumn';
 import { deleteTableRow } from '../../modelApi/table/deleteTableRow';
-import { findSelectedTable } from '../../modelApi/table/findSelectedTable';
+import { findFirstSelectedTable } from '../../modelApi/selection/findFirstSelectedTable';
 import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { hasMetadata } from '../../modelApi/metadata/updateMetadata';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
@@ -28,7 +28,7 @@ export default function editTable(
     operation: TableOperation
 ) {
     formatWithContentModel(editor, 'editTable', model => {
-        const tableModel = findSelectedTable(model);
+        const tableModel = findFirstSelectedTable(model);
 
         if (tableModel) {
             switch (operation) {
