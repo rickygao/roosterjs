@@ -18,6 +18,14 @@ export function normalizeModel(group: ContentModelBlockGroup) {
                         block.segments.splice(j, 1);
                     }
                 }
+
+                if (
+                    block.isImplicit &&
+                    block.segments.length == 1 &&
+                    block.segments[0].segmentType == 'SelectionMarker'
+                ) {
+                    block.segments.splice(0, 1);
+                }
                 break;
             case 'Table':
                 for (let r = 0; r < block.cells.length; r++) {

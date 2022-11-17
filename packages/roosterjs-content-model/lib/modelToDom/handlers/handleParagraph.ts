@@ -1,6 +1,7 @@
 import { applyFormat } from '../utils/applyFormat';
 import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
+import { getObjectKeys } from 'roosterjs-editor-dom';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
 
 /**
@@ -34,7 +35,7 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
         );
 
         Object.assign(context.implicitSegmentFormat, paragraph.header.format);
-    } else if (!paragraph.isImplicit) {
+    } else if (!paragraph.isImplicit || getObjectKeys(paragraph.format).length > 0) {
         container = doc.createElement('div');
         parent.appendChild(container);
 
