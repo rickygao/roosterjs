@@ -1,13 +1,13 @@
 import { ContentModelBlockGroup } from '../../../lib/publicTypes/group/ContentModelBlockGroup';
+import { ContentModelFormatContainer } from '../../../lib/publicTypes/group/ContentModelFormatContainer';
 import { ContentModelGeneralBlock } from '../../../lib/publicTypes/group/ContentModelGeneralBlock';
 import { ContentModelHandler } from '../../../lib/publicTypes/context/ContentModelHandler';
 import { ContentModelListItem } from '../../../lib/publicTypes/group/ContentModelListItem';
-import { ContentModelQuote } from '../../../lib/publicTypes/group/ContentModelQuote';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
+import { createFormatContainer } from '../../../lib/modelApi/creators/createFormatContainer';
 import { createGeneralBlock } from '../../../lib/modelApi/creators/createGeneralBlock';
 import { createListItem } from '../../../lib/modelApi/creators/createListItem';
 import { createModelToDomContext } from '../../../lib/modelToDom/context/createModelToDomContext';
-import { createQuote } from '../../../lib/modelApi/creators/createQuote';
 import { handleBlockGroup } from '../../../lib/modelToDom/handlers/handleBlockGroup';
 import { ModelToDomContext } from '../../../lib/publicTypes/context/ModelToDomContext';
 
@@ -16,20 +16,20 @@ describe('handleBlockGroup', () => {
     let parent: HTMLDivElement;
     let handleBlockGroupChildren: jasmine.Spy<ContentModelHandler<ContentModelBlockGroup>>;
     let handleListItem: jasmine.Spy<ContentModelHandler<ContentModelListItem>>;
-    let handleQuote: jasmine.Spy<ContentModelHandler<ContentModelQuote>>;
+    let handleFormatContainer: jasmine.Spy<ContentModelHandler<ContentModelFormatContainer>>;
     let handleGeneralModel: jasmine.Spy<ContentModelHandler<ContentModelGeneralBlock>>;
 
     beforeEach(() => {
         handleBlockGroupChildren = jasmine.createSpy('handleBlockGroupChildren');
         handleListItem = jasmine.createSpy('handleListItem');
-        handleQuote = jasmine.createSpy('handleQuote');
+        handleFormatContainer = jasmine.createSpy('handleFormatContainer');
         handleGeneralModel = jasmine.createSpy('handleGeneralModel');
 
         context = createModelToDomContext(undefined, {
             modelHandlerOverride: {
                 blockGroupChildren: handleBlockGroupChildren,
                 listItem: handleListItem,
-                quote: handleQuote,
+                formatContainer: handleFormatContainer,
                 general: handleGeneralModel,
             },
         });
@@ -60,14 +60,14 @@ describe('handleBlockGroup', () => {
         expect(handleGeneralModel).toHaveBeenCalledWith(document, parent, group, context);
     });
 
-    it('Quote', () => {
-        const group = createQuote();
+    it('Format Container', () => {
+        const group = createFormatContainer();
 
         handleBlockGroup(document, parent, group, context);
 
         expect(parent.outerHTML).toBe('<div></div>');
-        expect(handleQuote).toHaveBeenCalledTimes(1);
-        expect(handleQuote).toHaveBeenCalledWith(document, parent, group, context);
+        expect(handleFormatContainer).toHaveBeenCalledTimes(1);
+        expect(handleFormatContainer).toHaveBeenCalledWith(document, parent, group, context);
     });
 
     it('ListItem', () => {

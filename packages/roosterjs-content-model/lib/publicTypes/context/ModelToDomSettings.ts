@@ -3,6 +3,7 @@ import { ContentModelBlockGroup } from '../group/ContentModelBlockGroup';
 import { ContentModelBr } from '../segment/ContentModelBr';
 import { ContentModelEntity } from '../entity/ContentModelEntity';
 import { ContentModelFormatBase } from '../format/ContentModelFormatBase';
+import { ContentModelFormatContainer } from '../group/ContentModelFormatContainer';
 import { ContentModelFormatMap } from '../format/ContentModelFormatMap';
 import { ContentModelGeneralBlock } from '../group/ContentModelGeneralBlock';
 import { ContentModelHandler } from './ContentModelHandler';
@@ -10,7 +11,6 @@ import { ContentModelHR } from '../block/ContentModelHR';
 import { ContentModelImage } from '../segment/ContentModelImage';
 import { ContentModelListItem } from '../group/ContentModelListItem';
 import { ContentModelParagraph } from '../block/ContentModelParagraph';
-import { ContentModelQuote } from '../group/ContentModelQuote';
 import { ContentModelSegment } from '../segment/ContentModelSegment';
 import { ContentModelSegmentFormat } from '../format/ContentModelSegmentFormat';
 import { ContentModelTable } from '../block/ContentModelTable';
@@ -109,9 +109,9 @@ export interface ContentModelHandlerTypeMap {
     paragraph: ContentModelParagraph;
 
     /**
-     * Content Model type for ContentModelQuote
+     * Content Model type for ContentModelFormatContainer
      */
-    quote: ContentModelQuote;
+    formatContainer: ContentModelFormatContainer;
 
     /**
      * Content Model type for ContentModelSegment

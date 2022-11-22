@@ -1,15 +1,15 @@
+import { ContentModelFormatContainer } from '../../publicTypes/group/ContentModelFormatContainer';
 import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
-import { ContentModelQuote } from '../../publicTypes/group/ContentModelQuote';
 import { isBlockGroupEmpty } from '../../modelApi/common/isEmpty';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
 
 /**
  * @internal
  */
-export const handleQuote: ContentModelHandler<ContentModelQuote> = (
+export const handleFormatContainer: ContentModelHandler<ContentModelFormatContainer> = (
     doc: Document,
     parent: Node,
-    quote: ContentModelQuote,
+    quote: ContentModelFormatContainer,
     context: ModelToDomContext
 ) => {
     if (!isBlockGroupEmpty(quote)) {

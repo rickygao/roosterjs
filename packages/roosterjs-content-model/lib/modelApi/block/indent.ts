@@ -1,9 +1,9 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
+import { ContentModelFormatContainer } from '../../publicTypes/group/ContentModelFormatContainer';
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
 import { ContentModelListItemLevelFormat } from '../../publicTypes/format/ContentModelListItemLevelFormat';
-import { ContentModelQuote } from '../../publicTypes/group/ContentModelQuote';
-import { createQuote } from '../creators/createQuote';
+import { createFormatContainer } from '../creators/createFormatContainer';
 import { getOperationalBlocks } from '../common/getOperationalBlocks';
 import { getSelections } from '../selection/getSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
@@ -17,7 +17,7 @@ export function indent(model: ContentModelDocument) {
         'ListItem',
     ]);
 
-    let quoteInfo: TempQuoteInfo | undefined;
+    let containerInfo: TempContainerInfo | undefined;
 
     paragraphOrListItem.forEach(item => {
         if (isBlockGroupOfType(item, 'ListItem')) {
@@ -32,47 +32,47 @@ export function indent(model: ContentModelDocument) {
 
             item.levels.push(newLevel);
 
-            commitQuote(quoteInfo);
-            quoteInfo = undefined;
+            commitContainer(containerInfo);
+            containerInfo = undefined;
         } else if (item.paragraph) {
             if (
-                !quoteInfo ||
-                quoteInfo.parentGroup != item.path[0] ||
-                quoteInfo.parentGroup.blocks[quoteInfo.deleteIndex + quoteInfo.itemsToDelete] !=
-                    item.paragraph
+                !containerInfo ||
+                containerInfo.parentGroup != item.path[0] ||
+                containerInfo.parentGroup.blocks[
+                    containerInfo.deleteIndex + containerInfo.itemsToDelete
+                ] != item.paragraph
             ) {
-                commitQuote(quoteInfo);
+                commitContainer(containerInfo);
 
-                // TODO: Consider use CSS and a particular Content Model type to represent Indent rather than Quote
-                quoteInfo = {
+                containerInfo = {
                     parentGroup: item.path[0],
-                    quote: createQuote(),
+                    container: createFormatContainer(),
                     deleteIndex: item.path[0].blocks.indexOf(item.paragraph),
                     itemsToDelete: 0,
                 };
             }
 
-            quoteInfo.quote.blocks.push(item.paragraph);
-            quoteInfo.itemsToDelete++;
+            containerInfo.container.blocks.push(item.paragraph);
+            containerInfo.itemsToDelete++;
         }
     });
 
-    commitQuote(quoteInfo);
+    commitContainer(containerInfo);
 
     return paragraphOrListItem.length > 0;
 }
 
-interface TempQuoteInfo {
+interface TempContainerInfo {
     parentGroup: ContentModelBlockGroup;
-    quote: ContentModelQuote;
+    container: ContentModelFormatContainer;
     itemsToDelete: number;
     deleteIndex: number;
 }
 
-function commitQuote(quoteInfo?: TempQuoteInfo) {
-    if (quoteInfo) {
-        const { parentGroup, deleteIndex, itemsToDelete, quote } = quoteInfo;
+function commitContainer(containerInfo?: TempContainerInfo) {
+    if (containerInfo) {
+        const { parentGroup, deleteIndex, itemsToDelete, container } = containerInfo;
 
-        parentGroup.blocks.splice(deleteIndex, itemsToDelete, quote);
+        parentGroup.blocks.splice(deleteIndex, itemsToDelete, container);
     }
 }

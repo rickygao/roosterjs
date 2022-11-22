@@ -16,8 +16,8 @@ export const handleBlockGroup: ContentModelHandler<ContentModelBlockGroup> = (
             context.modelHandlers.general(doc, parent, group, context);
             break;
 
-        case 'Quote':
-            context.modelHandlers.quote(doc, parent, group, context);
+        case 'FormatContainer':
+            context.modelHandlers.formatContainer(doc, parent, group, context);
             break;
 
         case 'ListItem':

@@ -37,7 +37,7 @@ export { ContentModelBlockBase } from './publicTypes/block/ContentModelBlockBase
 export { ContentModelTable } from './publicTypes/block/ContentModelTable';
 export { ContentModelBlockGroupBase } from './publicTypes/group/ContentModelBlockGroupBase';
 export { ContentModelDocument } from './publicTypes/group/ContentModelDocument';
-export { ContentModelQuote } from './publicTypes/group/ContentModelQuote';
+export { ContentModelFormatContainer } from './publicTypes/group/ContentModelFormatContainer';
 export { ContentModelListItem } from './publicTypes/group/ContentModelListItem';
 export { ContentModelTableCell } from './publicTypes/group/ContentModelTableCell';
 export { ContentModelGeneralBlock } from './publicTypes/group/ContentModelGeneralBlock';
@@ -65,6 +65,7 @@ export { ContentModelListItemLevelFormat } from './publicTypes/format/ContentMod
 export { ContentModelImageFormat } from './publicTypes/format/ContentModelImageFormat';
 export { ContentModelWithFormat } from './publicTypes/format/ContentModelWithFormat';
 export { ContentModelWithDataset } from './publicTypes/format/ContentModelWithDataset';
+export { ContentModelBlockGroupFormat } from './publicTypes/format/ContentModelBlockGroupFormat';
 
 export { VerticalAlignFormat } from './publicTypes/format/formatParts/VerticalAlignFormat';
 export { BackgroundColorFormat } from './publicTypes/format/formatParts/BackgroundColorFormat';

@@ -1,8 +1,8 @@
 import * as applyFormat from '../../../lib/modelToDom/utils/applyFormat';
 import { ContentModelBlockGroup } from '../../../lib/publicTypes/group/ContentModelBlockGroup';
+import { ContentModelFormatContainer } from '../../../lib/publicTypes/group/ContentModelFormatContainer';
 import { ContentModelHandler } from '../../../lib/publicTypes/context/ContentModelHandler';
 import { ContentModelListItem } from '../../../lib/publicTypes/group/ContentModelListItem';
-import { ContentModelQuote } from '../../../lib/publicTypes/group/ContentModelQuote';
 import { createGeneralBlock } from '../../../lib/modelApi/creators/createGeneralBlock';
 import { createGeneralSegment } from '../../../lib/modelApi/creators/createGeneralSegment';
 import { createModelToDomContext } from '../../../lib/modelToDom/context/createModelToDomContext';
@@ -14,18 +14,18 @@ describe('handleBlockGroup', () => {
     let parent: HTMLDivElement;
     let handleBlockGroupChildren: jasmine.Spy<ContentModelHandler<ContentModelBlockGroup>>;
     let handleListItem: jasmine.Spy<ContentModelHandler<ContentModelListItem>>;
-    let handleQuote: jasmine.Spy<ContentModelHandler<ContentModelQuote>>;
+    let handleFormatContainer: jasmine.Spy<ContentModelHandler<ContentModelFormatContainer>>;
 
     beforeEach(() => {
         handleBlockGroupChildren = jasmine.createSpy('handleBlockGroupChildren');
         handleListItem = jasmine.createSpy('handleListItem');
-        handleQuote = jasmine.createSpy('handleQuote');
+        handleFormatContainer = jasmine.createSpy('handleQuote');
 
         context = createModelToDomContext(undefined, {
             modelHandlerOverride: {
                 blockGroupChildren: handleBlockGroupChildren,
                 listItem: handleListItem,
-                quote: handleQuote,
+                formatContainer: handleFormatContainer,
             },
         });
         parent = document.createElement('div');

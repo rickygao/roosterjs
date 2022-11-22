@@ -1,7 +1,7 @@
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
+import { ContentModelFormatContainer } from '../../publicTypes/group/ContentModelFormatContainer';
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
-import { ContentModelQuote } from '../../publicTypes/group/ContentModelQuote';
-import { createQuote } from '../creators/createQuote';
+import { createFormatContainer } from '../creators/createFormatContainer';
 import { getOperationalBlocks } from '../common/getOperationalBlocks';
 import { getSelections } from '../selection/getSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
@@ -22,14 +22,16 @@ export function outdent(model: ContentModelDocument) {
             const parent = item.path[0];
             const grandParent = item.path[1];
 
-            // TODO: Consider use CSS and a particular Content Model type to represent Indent rather than Quote
-            if (isBlockGroupOfType<ContentModelQuote>(parent, 'Quote') && grandParent) {
+            if (
+                isBlockGroupOfType<ContentModelFormatContainer>(parent, 'FormatContainer') &&
+                grandParent
+            ) {
                 const index = item.paragraph ? parent.blocks.indexOf(item.paragraph) : -1;
                 let grandIndex = grandParent.blocks.indexOf(parent);
 
                 // When there are blocks before current one under the same parent, need to break the parent into two
                 if (index > 0) {
-                    const newParent = createQuote();
+                    const newParent = createFormatContainer();
 
                     newParent.blocks = parent.blocks.splice(0, index);
                     grandParent.blocks.splice(grandIndex, 0, newParent);

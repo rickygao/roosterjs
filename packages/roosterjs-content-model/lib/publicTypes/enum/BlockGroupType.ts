@@ -8,9 +8,10 @@ export type ContentModelBlockGroupType =
     | 'Document'
 
     /**
-     * Represents a Quote element
+     * Represents group of blocks that has a bunch of format that need to be applied to a shared container.
+     * e.g. margin, padding, border.
      */
-    | 'Quote'
+    | 'FormatContainer'
 
     /**
      * Represents a list item (LI) element

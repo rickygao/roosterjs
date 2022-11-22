@@ -1,5 +1,5 @@
 import { addBlock } from '../../modelApi/common/addBlock';
-import { createQuote } from '../../modelApi/creators/createQuote';
+import { createFormatContainer } from '../../modelApi/creators/createFormatContainer';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
 import { getObjectKeys, getStyles } from 'roosterjs-editor-dom';
 
@@ -16,9 +16,7 @@ export const quoteProcessor: ElementProcessor<HTMLQuoteElement> = (group, elemen
         parseInt(element.style.marginBottom) === 0 &&
         getObjectKeys(styles).every(key => KnownQuoteStyleNames.indexOf(key) >= 0)
     ) {
-        // Temporary solution: Use Quote to provide indentation
-        // TODO: We should use CSS to do indentation, and only use Quote for quoted text
-        const quote = createQuote();
+        const quote = createFormatContainer();
 
         addBlock(group, quote);
         context.elementProcessors.child(quote, element, context);
