@@ -145,8 +145,8 @@ describe('knownElementProcessor', () => {
                 {
                     blockType: 'Paragraph',
                     format: {},
-                    header: {
-                        headerLevel: 1,
+                    decorator: {
+                        tagName: 'h1',
                         format: { fontWeight: 'bold', fontSize: '2em', fontFamily: 'Test' },
                     },
                     segments: [
@@ -186,8 +186,8 @@ describe('knownElementProcessor', () => {
                 {
                     blockType: 'Paragraph',
                     format: {},
-                    header: {
-                        headerLevel: 1,
+                    decorator: {
+                        tagName: 'h1',
                         format: { fontWeight: 'bold', fontSize: '2em' },
                     },
                     segments: [

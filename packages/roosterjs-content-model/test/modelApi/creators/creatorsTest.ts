@@ -3,10 +3,10 @@ import { ContentModelSegmentFormat } from '../../../lib/publicTypes/format/Conte
 import { ContentModelTableCellFormat } from '../../../lib/publicTypes/format/ContentModelTableCellFormat';
 import { createBr } from '../../../lib/modelApi/creators/createBr';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
+import { createDivider } from '../../../lib/modelApi/creators/createDivider';
 import { createEntity } from '../../../lib/modelApi/creators/createEntity';
 import { createGeneralBlock } from '../../../lib/modelApi/creators/createGeneralBlock';
 import { createGeneralSegment } from '../../../lib/modelApi/creators/createGeneralSegment';
-import { createHR } from '../../../lib/modelApi/creators/createHR';
 import { createImage } from '../../../lib/modelApi/creators/createImage';
 import { createListItem } from '../../../lib/modelApi/creators/createListItem';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
@@ -380,11 +380,12 @@ describe('Creators', () => {
         });
     });
 
-    it('createHR', () => {
-        const hr = createHR();
+    it('createDivider', () => {
+        const hr = createDivider('HR');
 
         expect(hr).toEqual({
-            blockType: 'HR',
+            blockType: 'Divider',
+            tagName: 'HR',
             format: {},
         });
     });

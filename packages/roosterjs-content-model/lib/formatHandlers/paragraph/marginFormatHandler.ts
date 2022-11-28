@@ -21,12 +21,12 @@ export const marginFormatHandler: FormatHandler<MarginFormat> = {
             }
         });
     },
-    apply: (format, element) => {
+    apply: (format, element, context) => {
         MarginKeys.forEach(key => {
             const value = format[key];
 
-            if (value) {
-                element.style[key] = value;
+            if (value != context.implicitFormat[key]) {
+                element.style[key] = value || '0';
             }
         });
     },
