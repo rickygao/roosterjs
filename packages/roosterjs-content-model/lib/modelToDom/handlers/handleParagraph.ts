@@ -37,13 +37,25 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
         Object.assign(context.implicitSegmentFormat, paragraph.header.format);
     } else if (
         !paragraph.isImplicit ||
+        paragraph.tagName ||
         (getObjectKeys(paragraph.format).length > 0 &&
             paragraph.segments.some(segment => segment.segmentType != 'SelectionMarker'))
     ) {
-        container = doc.createElement('div');
+        container = doc.createElement(paragraph.tagName || 'div');
         parent.appendChild(container);
 
+        const implicitSegmentFormat = context.implicitSegmentFormat;
+
+        if (paragraph.tagName == 'P') {
+            context.implicitSegmentFormat = {
+                ...context.implicitSegmentFormat,
+                ...(context.defaultImplicitSegmentFormatMap.p || {}),
+            };
+        }
+
         applyFormat(container, context.formatAppliers.block, paragraph.format, context);
+
+        context.implicitSegmentFormat = implicitSegmentFormat;
     } else {
         container = parent as HTMLElement;
     }

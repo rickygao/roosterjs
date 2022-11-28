@@ -1,5 +1,7 @@
 import { addBlock } from '../../modelApi/common/addBlock';
+import { ContentModelDivider } from '../../publicTypes/block/ContentModelDivider';
 import { ContentModelHeader } from '../../publicTypes/decorator/ContentModelHeader';
+import { createDivider } from '../../modelApi/creators/createDivider';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
 import { DomToModelContext } from '../../publicTypes/context/DomToModelContext';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
@@ -23,6 +25,9 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
             link: isLink ? 'empty' : undefined,
         },
         () => {
+            let topDivider: ContentModelDivider | undefined;
+            let bottomDivider: ContentModelDivider | undefined;
+
             if (isLink) {
                 parseFormat(element, context.formatParsers.link, context.link.format, context);
                 parseFormat(element, context.formatParsers.dataset, context.link.dataset, context);
@@ -45,6 +50,31 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
                         context.segmentFormat,
                         context
                     );
+
+                    if (element.tagName == 'P') {
+                        paragraph.tagName = 'P';
+                    } else {
+                        const marginTop = parseInt(context.blockFormat.marginTop || '');
+                        const marginBottom = parseInt(context.blockFormat.marginBottom || '');
+
+                        if (marginTop > 0) {
+                            topDivider = createDivider('DIV', {
+                                marginTop: context.blockFormat.marginTop,
+                            });
+                            delete context.blockFormat.marginTop;
+                        }
+
+                        if (marginBottom > 0) {
+                            bottomDivider = createDivider('DIV', {
+                                marginBottom: context.blockFormat.marginBottom,
+                            });
+                            delete context.blockFormat.marginBottom;
+                        }
+                    }
+                }
+
+                if (topDivider) {
+                    addBlock(group, topDivider);
                 }
 
                 addBlock(group, paragraph);
@@ -53,6 +83,10 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
             }
 
             context.elementProcessors.child(group, element, context);
+
+            if (bottomDivider) {
+                addBlock(group, bottomDivider);
+            }
         }
     );
 

@@ -21,4 +21,9 @@ export interface ContentModelParagraph extends ContentModelBlockBase<'Paragraph'
      * True means it doesn't have a related block element, false means it was from a block element
      */
     isImplicit?: boolean;
+
+    /**
+     * Tag name of this block. @default DIV
+     */
+    tagName?: 'P' | 'DIV';
 }

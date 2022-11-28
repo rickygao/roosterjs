@@ -1,3 +1,4 @@
+import { ContentModelSegmentFormat } from '../../publicTypes/format/ContentModelSegmentFormat';
 import { defaultImplicitSegmentFormatMap } from '../../formatHandlers/utils/defaultStyles';
 import { formatParagraphWithContentModel } from '../utils/formatParagraphWithContentModel';
 import { getObjectKeys } from 'roosterjs-editor-dom';
@@ -20,7 +21,8 @@ export default function setHeaderLevel(
             : para.header && para.header.headerLevel > 0
             ? 'h' + para.header.headerLevel
             : null) as HeaderLevelTags | null;
-        const headerStyle = (tag && defaultImplicitSegmentFormatMap[tag]) || {};
+        const headerStyle =
+            (tag && (defaultImplicitSegmentFormatMap[tag] as ContentModelSegmentFormat)) || {};
 
         if (headerLevel > 0) {
             para.header = {

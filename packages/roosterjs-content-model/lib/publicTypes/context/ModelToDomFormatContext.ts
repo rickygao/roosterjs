@@ -1,3 +1,4 @@
+import { ContentModelBlockFormat } from '../format/ContentModelBlockFormat';
 import { ContentModelListItemLevelFormat } from '../format/ContentModelListItemLevelFormat';
 import { ContentModelSegmentFormat } from '../format/ContentModelSegmentFormat';
 
@@ -38,5 +39,5 @@ export interface ModelToDomFormatContext {
     /**
      * Existing segment format implicitly applied from parent element
      */
-    implicitSegmentFormat: ContentModelSegmentFormat;
+    implicitSegmentFormat: ContentModelSegmentFormat & ContentModelBlockFormat;
 }

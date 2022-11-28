@@ -52,7 +52,7 @@ export { ContentModelImage } from './publicTypes/segment/ContentModelImage';
 export { ContentModelGeneralSegment } from './publicTypes/segment/ContentModelGeneralSegment';
 export { ContentModelSegment } from './publicTypes/segment/ContentModelSegment';
 export { ContentModelEntity } from './publicTypes/entity/ContentModelEntity';
-export { ContentModelHR } from './publicTypes/block/ContentModelHR';
+export { ContentModelDivider } from './publicTypes/block/ContentModelDivider';
 export { ContentModelHeader } from './publicTypes/decorator/ContentModelHeader';
 export { ContentModelLink } from './publicTypes/decorator/ContentModelLink';
 
@@ -99,6 +99,7 @@ export {
     ImageRotateMetadataFormat,
 } from './publicTypes/format/formatParts/ImageMetadataFormat';
 export { DatasetFormat } from './publicTypes/format/formatParts/DatasetFormat';
+export { WhiteSpaceFormat } from './publicTypes/format/formatParts/WhiteSpaceFormat';
 
 export { ContentModelFormatMap } from './publicTypes/format/ContentModelFormatMap';
 

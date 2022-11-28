@@ -33,6 +33,7 @@ export const defaultStyleMap: DefaultStyleMap = {
         display: 'block',
         textAlign: 'center',
     },
+    code: { fontFamily: 'monospace' },
     dd: blockElement,
     div: blockElement,
     dl: blockElement,
@@ -159,5 +160,9 @@ export const defaultImplicitSegmentFormatMap: DefaultImplicitSegmentFormatMap = 
     h6: {
         fontWeight: 'bold',
         fontSize: '0.67em',
+    },
+    p: {
+        marginTop: '1em',
+        marginBottom: '1em',
     },
 };

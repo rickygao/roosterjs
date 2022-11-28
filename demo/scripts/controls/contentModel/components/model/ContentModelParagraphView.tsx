@@ -12,8 +12,10 @@ export function ContentModelParagraphView(props: { paragraph: ContentModelParagr
     const { paragraph } = props;
     const implicitCheckbox = React.useRef<HTMLInputElement>(null);
     const headerLevelDropDown = React.useRef<HTMLSelectElement>(null);
+    const tagNameDropDown = React.useRef<HTMLSelectElement>(null);
     const [value, setValue] = useProperty(!!paragraph.isImplicit);
     const [headerLevel, setHeaderLevel] = useProperty((paragraph.header?.headerLevel || '') + '');
+    const [tagName, setTagName] = useProperty(paragraph.tagName || '');
 
     const onChange = React.useCallback(() => {
         const newValue = implicitCheckbox.current.checked;
@@ -30,9 +32,24 @@ export function ContentModelParagraphView(props: { paragraph: ContentModelParagr
         setHeaderLevel(newValue);
     }, [paragraph, setHeaderLevel]);
 
+    const onTagNameChange = React.useCallback(() => {
+        const newValue = tagNameDropDown.current.value as 'DIV' | 'P';
+
+        paragraph.tagName = newValue;
+        setTagName(newValue);
+    }, [paragraph, setTagName]);
+
     const getContent = React.useCallback(() => {
         return (
             <>
+                <div>
+                    Tag name:
+                    <select value={tagName} ref={tagNameDropDown} onChange={onTagNameChange}>
+                        <option value=""></option>
+                        <option value="DIV">DIV</option>
+                        <option value="P">P</option>
+                    </select>
+                </div>
                 <div>
                     <input
                         type="checkbox"
