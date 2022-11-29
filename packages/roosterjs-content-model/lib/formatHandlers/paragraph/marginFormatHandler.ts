@@ -12,7 +12,7 @@ const MarginKeys: (keyof MarginFormat & keyof CSSStyleDeclaration)[] = [
  * @internal
  */
 export const marginFormatHandler: FormatHandler<MarginFormat> = {
-    parse: (format, element, context, defaultStyle) => {
+    parse: (format, element, _, defaultStyle) => {
         MarginKeys.forEach(key => {
             const value = element.style[key] || defaultStyle[key];
 
