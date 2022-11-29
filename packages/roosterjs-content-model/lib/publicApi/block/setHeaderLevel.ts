@@ -1,6 +1,6 @@
 import { ContentModelParagraphDecorator } from '../../publicTypes/decorator/ContentModelParagraphDecorator';
 import { ContentModelSegmentFormat } from '../../publicTypes/format/ContentModelSegmentFormat';
-import { defaultImplicitSegmentFormatMap } from '../../formatHandlers/utils/defaultStyles';
+import { defaultImplicitFormatMap } from '../../formatHandlers/utils/defaultStyles';
 import { formatParagraphWithContentModel } from '../utils/formatParagraphWithContentModel';
 import { getObjectKeys } from 'roosterjs-editor-dom';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
@@ -22,8 +22,7 @@ export default function setHeaderLevel(
                 ? (('h' + headerLevel) as HeaderLevelTags | null)
                 : getExistingHeaderHeaderTag(para.decorator);
         const headerStyle =
-            (tagName && (defaultImplicitSegmentFormatMap[tagName] as ContentModelSegmentFormat)) ||
-            {};
+            (tagName && (defaultImplicitFormatMap[tagName] as ContentModelSegmentFormat)) || {};
 
         if (headerLevel > 0) {
             para.decorator = {
@@ -37,8 +36,10 @@ export default function setHeaderLevel(
         } else if (tagName) {
             delete para.decorator;
 
+            const headerStyleKeys = getObjectKeys(headerStyle);
+
             para.segments.forEach(segment => {
-                getObjectKeys(headerStyle).forEach(key => {
+                headerStyleKeys.forEach(key => {
                     delete segment.format[key];
                 });
             });

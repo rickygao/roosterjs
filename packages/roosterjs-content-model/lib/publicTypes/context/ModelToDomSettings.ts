@@ -22,7 +22,7 @@ import { ModelToDomContext } from './ModelToDomContext';
 /**
  * Default implicit format map from tag name (lower case) to segment format
  */
-export type DefaultImplicitSegmentFormatMap = Record<
+export type DefaultImplicitFormatMap = Record<
     string,
     Readonly<ContentModelSegmentFormat & ContentModelBlockFormat>
 >;
@@ -157,7 +157,7 @@ export interface ModelToDomSettings {
     /**
      * Map of default implicit format for segment
      */
-    defaultImplicitSegmentFormatMap: DefaultImplicitSegmentFormatMap;
+    defaultImplicitFormatMap: DefaultImplicitFormatMap;
 
     /**
      * Default Content Model to DOM handlers before overriding.
