@@ -283,4 +283,48 @@ describe('knownElementProcessor', () => {
         });
         expect(context.link).toEqual({ format: {}, dataset: {} });
     });
+
+    it('P tag', () => {
+        const group = createContentModelDocument();
+        const p = document.createElement('p');
+
+        spyOn(parseFormat, 'parseFormat');
+
+        knownElementProcessor(group, p, context);
+
+        expect(group).toEqual({
+            blockGroupType: 'Document',
+            blocks: [
+                {
+                    blockType: 'Paragraph',
+                    format: {},
+                    decorator: {
+                        tagName: 'p',
+                        format: {},
+                    },
+                    segments: [],
+                },
+                {
+                    blockType: 'Paragraph',
+                    format: {},
+                    segments: [],
+                    isImplicit: true,
+                },
+            ],
+        });
+
+        expect(parseFormat.parseFormat).toHaveBeenCalledTimes(2);
+        expect(parseFormat.parseFormat).toHaveBeenCalledWith(
+            p,
+            context.formatParsers.block,
+            context.blockFormat,
+            context
+        );
+        expect(parseFormat.parseFormat).toHaveBeenCalledWith(
+            p,
+            context.formatParsers.segmentOnBlock,
+            context.segmentFormat,
+            context
+        );
+    });
 });
