@@ -13,7 +13,7 @@ describe('handleDivider', () => {
     it('Simple HR', () => {
         const hr: ContentModelDivider = {
             blockType: 'Divider',
-            tagName: 'HR',
+            tagName: 'hr',
             format: {},
         };
 
@@ -27,7 +27,7 @@ describe('handleDivider', () => {
     it('HR with format', () => {
         const hr: ContentModelDivider = {
             blockType: 'Divider',
-            tagName: 'HR',
+            tagName: 'hr',
             format: { marginTop: '10px' },
         };
 
@@ -36,5 +36,19 @@ describe('handleDivider', () => {
         handleDivider(document, parent, hr, context);
 
         expect(parent.innerHTML).toBe('<hr style="margin-top: 10px;">');
+    });
+
+    it('DIV with format', () => {
+        const hr: ContentModelDivider = {
+            blockType: 'Divider',
+            tagName: 'div',
+            format: { marginTop: '10px' },
+        };
+
+        const parent = document.createElement('div');
+
+        handleDivider(document, parent, hr, context);
+
+        expect(parent.innerHTML).toBe('<div style="margin-top: 10px;"></div>');
     });
 });

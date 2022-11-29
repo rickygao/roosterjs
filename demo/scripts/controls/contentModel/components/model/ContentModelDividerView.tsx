@@ -11,7 +11,7 @@ export function ContentModelDividerView(props: { divider: ContentModelDivider })
     const [tagName, setTagName] = useProperty(divider.tagName);
     const tagNameDropDown = React.useRef<HTMLSelectElement>(null);
     const onTagNameChange = React.useCallback(() => {
-        const newValue = tagNameDropDown.current.value as 'HR' | 'DIV';
+        const newValue = tagNameDropDown.current.value as 'hr' | 'div';
         divider.tagName = newValue;
         setTagName(newValue);
     }, [divider, setTagName]);
@@ -21,8 +21,8 @@ export function ContentModelDividerView(props: { divider: ContentModelDivider })
             <div>
                 TagName:
                 <select value={tagName} ref={tagNameDropDown} onChange={onTagNameChange}>
-                    <option value="HR">HR</option>
-                    <option value="DIV">DIV</option>
+                    <option value="hr">HR</option>
+                    <option value="div">DIV</option>
                 </select>
             </div>
         );

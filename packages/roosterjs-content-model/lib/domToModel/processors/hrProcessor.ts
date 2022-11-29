@@ -16,7 +16,7 @@ export const hrProcessor: ElementProcessor<HTMLHRElement> = (group, element, con
         () => {
             parseFormat(element, context.formatParsers.block, context.blockFormat, context);
 
-            const hr = createDivider('HR', context.blockFormat);
+            const hr = createDivider('hr', context.blockFormat);
 
             if (context.isInSelection) {
                 hr.isSelected = true;

@@ -131,7 +131,7 @@ describe('handleBlock', () => {
     it('HR block', () => {
         const block: ContentModelDivider = {
             blockType: 'Divider',
-            tagName: 'HR',
+            tagName: 'hr',
             format: {},
         };
 

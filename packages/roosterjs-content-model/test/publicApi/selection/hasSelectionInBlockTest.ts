@@ -223,7 +223,7 @@ describe('hasSelectionInBlock', () => {
     it('HR has selection', () => {
         const block: ContentModelDivider = {
             blockType: 'Divider',
-            tagName: 'HR',
+            tagName: 'hr',
             format: {},
             isSelected: true,
         };

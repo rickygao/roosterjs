@@ -7,7 +7,7 @@ export interface ContentModelDivider extends ContentModelBlockBase<'Divider'> {
     /**
      * Tag name of this element, either HR or DIV
      */
-    tagName: 'HR' | 'DIV';
+    tagName: 'hr' | 'div';
 
     /**
      * Whether this element is selected

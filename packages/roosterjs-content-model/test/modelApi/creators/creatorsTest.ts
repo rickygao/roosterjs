@@ -421,12 +421,22 @@ describe('Creators', () => {
     });
 
     it('createDivider', () => {
-        const hr = createDivider('HR');
+        const hr = createDivider('hr');
 
         expect(hr).toEqual({
             blockType: 'Divider',
-            tagName: 'HR',
+            tagName: 'hr',
             format: {},
+        });
+    });
+
+    it('createDivider with format', () => {
+        const hr = createDivider('div', { marginTop: '10px' });
+
+        expect(hr).toEqual({
+            blockType: 'Divider',
+            tagName: 'div',
+            format: { marginTop: '10px' },
         });
     });
 });

@@ -96,11 +96,11 @@ function tryCreateDivider(
     format: MarginFormat,
     propName: keyof MarginFormat
 ): ContentModelDivider | undefined {
-    const marginTop = parseInt(format[propName] || '');
+    const margin = parseInt(format[propName] || '');
     let result: ContentModelDivider | undefined;
 
-    if (marginTop > 0) {
-        result = createDivider('DIV', { marginTop: format[propName] });
+    if (margin > 0) {
+        result = createDivider('div', { [propName]: format[propName] });
         delete format[propName];
     }
 

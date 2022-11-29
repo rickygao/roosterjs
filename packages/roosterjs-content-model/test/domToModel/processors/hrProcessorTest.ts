@@ -21,7 +21,7 @@ describe('hrProcessor', () => {
             blocks: [
                 {
                     blockType: 'Divider',
-                    tagName: 'HR',
+                    tagName: 'hr',
                     format: {},
                 },
             ],
@@ -42,7 +42,7 @@ describe('hrProcessor', () => {
             blocks: [
                 {
                     blockType: 'Divider',
-                    tagName: 'HR',
+                    tagName: 'hr',
                     format: {
                         marginTop: '10px',
                         marginBottom: '20px',
@@ -65,7 +65,7 @@ describe('hrProcessor', () => {
             blocks: [
                 {
                     blockType: 'Divider',
-                    tagName: 'HR',
+                    tagName: 'hr',
                     format: {},
                     isSelected: true,
                 },

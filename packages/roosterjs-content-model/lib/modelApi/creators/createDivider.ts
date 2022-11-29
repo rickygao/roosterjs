@@ -5,7 +5,7 @@ import { ContentModelDivider } from '../../publicTypes/block/ContentModelDivider
  * @internal
  */
 export function createDivider(
-    tagName: 'HR' | 'DIV',
+    tagName: 'hr' | 'div',
     format?: ContentModelBlockFormat
 ): ContentModelDivider {
     return {
