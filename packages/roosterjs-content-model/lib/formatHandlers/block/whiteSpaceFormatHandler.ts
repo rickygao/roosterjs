@@ -5,7 +5,7 @@ import { WhiteSpaceFormat } from '../../publicTypes/format/formatParts/WhiteSpac
  * @internal
  */
 export const whiteSpaceFormatHandler: FormatHandler<WhiteSpaceFormat> = {
-    parse: (format, element, context, defaultStyle) => {
+    parse: (format, element, _, defaultStyle) => {
         const whiteSpace = element.style.whiteSpace || defaultStyle.whiteSpace;
 
         if (whiteSpace) {

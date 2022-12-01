@@ -1,11 +1,15 @@
 import { addBlock } from '../../modelApi/common/addBlock';
-import { ContentModelHeader } from '../../publicTypes/decorator/ContentModelHeader';
+import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
+import { ContentModelDivider } from '../../publicTypes/block/ContentModelDivider';
+import { ContentModelParagraphDecorator } from '../../publicTypes/decorator/ContentModelParagraphDecorator';
+import { createDivider } from '../../modelApi/creators/createDivider';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
-import { DomToModelContext } from '../../publicTypes/context/DomToModelContext';
+import { createParagraphDecorator } from '../../modelApi/creators/createParagraphDecorator';
+import { createQuote } from '../../modelApi/creators/createQuote';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
 import { isBlockElement } from '../utils/isBlockElement';
+import { MarginFormat } from '../../publicTypes/format/formatParts/MarginFormat';
 import { parseFormat } from '../utils/parseFormat';
-import { safeInstanceOf } from 'roosterjs-editor-dom';
 import { stackFormat } from '../utils/stackFormat';
 
 /**
@@ -13,16 +17,21 @@ import { stackFormat } from '../utils/stackFormat';
  */
 export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, element, context) => {
     const isBlock = isBlockElement(element, context);
-    const isLink = element.tagName == 'A';
+    const tagName = element.tagName;
+    const isLink = tagName == 'A';
 
     stackFormat(
         context,
         {
-            segment: 'shallowClone',
+            segment: isBlock ? 'shallowCloneForBlock' : 'shallowClone',
             paragraph: 'shallowClone',
             link: isLink ? 'empty' : undefined,
         },
         () => {
+            let topDivider: ContentModelDivider | undefined;
+            let bottomDivider: ContentModelDivider | undefined;
+            let newParent = group;
+
             if (isLink) {
                 parseFormat(element, context.formatParsers.link, context.link.format, context);
                 parseFormat(element, context.formatParsers.dataset, context.link.dataset, context);
@@ -30,29 +39,59 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
 
             if (isBlock) {
                 parseFormat(element, context.formatParsers.block, context.blockFormat, context);
+                parseFormat(
+                    element,
+                    context.formatParsers.segmentOnBlock,
+                    context.segmentFormat,
+                    context
+                );
 
-                const paragraph = createParagraph(false /*isImplicit*/, context.blockFormat);
+                let decorator: ContentModelParagraphDecorator | undefined;
+                let block: ContentModelBlock | undefined;
 
-                if (safeInstanceOf(element, 'HTMLHeadingElement')) {
-                    // For headers, inline format won't go into its child nodes, so we parse its format here and clear the format of context
-                    paragraph.header = headerProcessor(element, context);
+                switch (tagName) {
+                    case 'P':
+                    case 'H1':
+                    case 'H2':
+                    case 'H3':
+                    case 'H4':
+                    case 'H5':
+                    case 'H6':
+                        decorator = createParagraphDecorator(tagName, context.segmentFormat);
+                        break;
+                    default:
+                        if (
+                            tagName == 'BLOCKQUOTE' &&
+                            (context.blockFormat.borderLeft || context.blockFormat.borderRight)
+                        ) {
+                            block = createQuote(context.blockFormat);
+                            newParent = block;
+                            context.blockFormat = {};
+                        } else {
+                            topDivider = tryCreateDivider(context.blockFormat, 'marginTop');
+                            bottomDivider = tryCreateDivider(context.blockFormat, 'marginBottom');
+                        }
 
-                    Object.assign(context.segmentFormat, paragraph.header.format);
-                } else {
-                    parseFormat(
-                        element,
-                        context.formatParsers.segmentOnBlock,
-                        context.segmentFormat,
-                        context
-                    );
+                        break;
                 }
 
-                addBlock(group, paragraph);
+                block =
+                    block || createParagraph(false /*isImplicit*/, context.blockFormat, decorator);
+
+                if (topDivider) {
+                    addBlock(group, topDivider);
+                }
+
+                addBlock(group, block);
             } else {
                 parseFormat(element, context.formatParsers.segment, context.segmentFormat, context);
             }
 
-            context.elementProcessors.child(group, element, context);
+            context.elementProcessors.child(newParent, element, context);
+
+            if (bottomDivider) {
+                addBlock(group, bottomDivider);
+            }
         }
     );
 
@@ -61,19 +100,17 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
     }
 };
 
-function headerProcessor(
-    element: HTMLHeadingElement,
-    context: DomToModelContext
-): ContentModelHeader {
-    // Parse the header level from tag name
-    // e.g. "H1" will return 1
-    const headerLevel = parseInt(element.tagName.substring(1));
-    const result: ContentModelHeader = {
-        format: {},
-        headerLevel,
-    };
+function tryCreateDivider(
+    format: MarginFormat,
+    propName: keyof MarginFormat
+): ContentModelDivider | undefined {
+    const margin = parseInt(format[propName] || '');
+    let result: ContentModelDivider | undefined;
 
-    parseFormat(element, context.formatParsers.segmentOnBlock, result.format, context);
+    if (margin > 0) {
+        result = createDivider('div', { [propName]: format[propName] });
+        delete format[propName];
+    }
 
     return result;
 }

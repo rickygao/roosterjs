@@ -90,6 +90,7 @@ const defaultFormatKeysPerCategory: {
         'indent',
         'lineHeight',
         'whiteSpace',
+        'border',
     ],
     listItem: ['listItemThread', 'listItemMetadata'],
     listLevel: ['listType', 'listLevelThread', 'listLevelMetadata'],
