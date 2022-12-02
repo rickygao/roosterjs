@@ -108,6 +108,15 @@ const defaultFormatKeysPerCategory: {
     image: ['id', 'size', 'margin', 'padding', 'borderBox'],
     link: ['link'],
     dataset: ['dataset'],
+    quote: [
+        'backgroundColor',
+        'direction',
+        'margin',
+        'padding',
+        'lineHeight',
+        'whiteSpace',
+        'border',
+    ],
 };
 
 /**
