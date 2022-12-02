@@ -30,6 +30,7 @@ import { textColorFormatHandler } from './segment/textColorFormatHandler';
 import { underlineFormatHandler } from './segment/underlineFormatHandler';
 import { verticalAlignFormatHandler } from './common/verticalAlignFormatHandler';
 import { whiteSpaceFormatHandler } from './block/whiteSpaceFormatHandler';
+import { wordBreakFormatHandler } from './common/wordBreakFormatHandler';
 import {
     FormatApplier,
     FormatAppliers,
@@ -74,6 +75,7 @@ const defaultFormatHandlerMap: FormatHandlers = {
     underline: underlineFormatHandler,
     verticalAlign: verticalAlignFormatHandler,
     whiteSpace: whiteSpaceFormatHandler,
+    wordBreak: wordBreakFormatHandler,
 };
 
 const defaultFormatKeysPerCategory: {
@@ -93,7 +95,15 @@ const defaultFormatKeysPerCategory: {
         'textColor',
         'backgroundColor',
     ],
-    segmentOnBlock: ['fontFamily', 'fontSize', 'underline', 'italic', 'bold', 'textColor'],
+    segmentOnBlock: [
+        'fontFamily',
+        'fontSize',
+        'underline',
+        'italic',
+        'bold',
+        'textColor',
+        'wordBreak',
+    ],
     tableCell: ['border', 'borderBox', 'backgroundColor', 'padding', 'direction', 'verticalAlign'],
     table: [
         'id',
