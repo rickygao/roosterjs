@@ -369,6 +369,19 @@ describe('Creators', () => {
         });
     });
 
+    it('createQuote with format', () => {
+        const quote = createQuote({
+            borderLeft: 'solid 1px black',
+        });
+
+        expect(quote).toEqual({
+            blockType: 'BlockGroup',
+            blockGroupType: 'Quote',
+            blocks: [],
+            format: { borderLeft: 'solid 1px black' },
+        });
+    });
+
     it('createEntity', () => {
         const id = 'entity_1';
         const type = 'entity';
