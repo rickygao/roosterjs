@@ -26,6 +26,7 @@ export { default as setIndentation } from './publicApi/block/setIndentation';
 export { default as setAlignment } from './publicApi/block/setAlignment';
 export { default as setDirection } from './publicApi/block/setDirection';
 export { default as setHeaderLevel } from './publicApi/block/setHeaderLevel';
+export { default as toggleBlockQuote } from './publicApi/block/toggleBlockQuote';
 
 export { combineBorderValue, extractBorderValues, Border } from './domUtils/borderValues';
 
@@ -66,6 +67,7 @@ export { ContentModelListItemLevelFormat } from './publicTypes/format/ContentMod
 export { ContentModelImageFormat } from './publicTypes/format/ContentModelImageFormat';
 export { ContentModelWithFormat } from './publicTypes/format/ContentModelWithFormat';
 export { ContentModelWithDataset } from './publicTypes/format/ContentModelWithDataset';
+export { ContentModelQuoteFormat } from './publicTypes/format/ContentModelQuoteFormat';
 
 export { VerticalAlignFormat } from './publicTypes/format/formatParts/VerticalAlignFormat';
 export { BackgroundColorFormat } from './publicTypes/format/formatParts/BackgroundColorFormat';
@@ -75,8 +77,6 @@ export { IdFormat } from './publicTypes/format/formatParts/IdFormat';
 export { SizeFormat } from './publicTypes/format/formatParts/SizeFormat';
 export { SpacingFormat } from './publicTypes/format/formatParts/SpacingFormat';
 export { DirectionFormat } from './publicTypes/format/formatParts/DirectionFormat';
-export { IndentationFormat } from './publicTypes/format/formatParts/IndentationFormat';
-export { WhiteSpaceFormat } from './publicTypes/format/formatParts/WhiteSpaceFormat';
 export { TextColorFormat } from './publicTypes/format/formatParts/TextColorFormat';
 export { FontSizeFormat } from './publicTypes/format/formatParts/FontSizeFormat';
 export { FontFamilyFormat } from './publicTypes/format/formatParts/FontFamilyFormat';
@@ -103,6 +103,7 @@ export {
 } from './publicTypes/format/formatParts/ImageMetadataFormat';
 export { DatasetFormat } from './publicTypes/format/formatParts/DatasetFormat';
 export { WhiteSpaceFormat } from './publicTypes/format/formatParts/WhiteSpaceFormat';
+export { WordBreakFormat } from './publicTypes/format/formatParts/WordBreakFormat';
 
 export { ContentModelFormatMap } from './publicTypes/format/ContentModelFormatMap';
 

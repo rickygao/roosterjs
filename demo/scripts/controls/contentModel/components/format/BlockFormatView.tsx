@@ -4,7 +4,6 @@ import { ContentModelBlockFormat, ContentModelSegmentFormat } from 'roosterjs-co
 import { DirectionFormatRenderers } from './formatPart/DirectionFormatRenderers';
 import { FormatRenderer } from './utils/FormatRenderer';
 import { FormatView } from './FormatView';
-import { IndentationFormatRenderer } from './formatPart/IndentationFormatRenderer';
 import { LineHeightFormatRenderer } from './formatPart/LineHeightFormatRenderer';
 import { MarginFormatRenderer } from './formatPart/MarginFormatRenderer';
 import { PaddingFormatRenderer } from './formatPart/PaddingFormatRenderer';
@@ -17,7 +16,6 @@ const BlockFormatRenders: FormatRenderer<ContentModelBlockFormat>[] = [
     MarginFormatRenderer,
     PaddingFormatRenderer,
     ...SizeFormatRenderers,
-    IndentationFormatRenderer,
     LineHeightFormatRenderer,
     WhiteSpaceFormatRenderer,
 ];

@@ -8,7 +8,6 @@ import { DisplayFormat } from './formatParts/DisplayFormat';
 import { FontFamilyFormat } from './formatParts/FontFamilyFormat';
 import { FontSizeFormat } from './formatParts/FontSizeFormat';
 import { IdFormat } from './formatParts/IdFormat';
-import { IndentationFormat } from './formatParts/IndentationFormat';
 import { ItalicFormat } from './formatParts/ItalicFormat';
 import { LineHeightFormat } from './formatParts/LineHeightFormat';
 import { LinkFormat } from './formatParts/LinkFormat';
@@ -25,6 +24,7 @@ import { TextColorFormat } from './formatParts/TextColorFormat';
 import { UnderlineFormat } from './formatParts/UnderlineFormat';
 import { VerticalAlignFormat } from './formatParts/VerticalAlignFormat';
 import { WhiteSpaceFormat } from './formatParts/WhiteSpaceFormat';
+import { WordBreakFormat } from './formatParts/WordBreakFormat';
 
 /**
  * Represents a record of all format handlers
@@ -84,11 +84,6 @@ export interface FormatHandlerTypeMap {
      * Format for ItalicFormat
      */
     italic: ItalicFormat;
-
-    /**
-     * Format for IndentationFormat
-     */
-    indent: IndentationFormat;
 
     /**
      * Format for LineHeightFormat
@@ -174,6 +169,11 @@ export interface FormatHandlerTypeMap {
      * Format for WhiteSpaceFormat
      */
     whiteSpace: WhiteSpaceFormat;
+
+    /**
+     * Format for WordBreakFormat
+     */
+    wordBreak: WordBreakFormat;
 }
 
 /**

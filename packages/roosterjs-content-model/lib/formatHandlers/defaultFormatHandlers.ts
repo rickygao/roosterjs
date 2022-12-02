@@ -12,7 +12,6 @@ import { FormatHandler } from './FormatHandler';
 import { FormatHandlerTypeMap, FormatKey } from '../publicTypes/format/FormatHandlerTypeMap';
 import { getObjectKeys } from 'roosterjs-editor-dom';
 import { idFormatHandler } from './common/idFormatHandler';
-import { indentFormatHandler } from './block/indentFormatHandler';
 import { italicFormatHandler } from './segment/italicFormatHandler';
 import { lineHeightFormatHandler } from './block/lineHeightFormatHandler';
 import { linkFormatHandler } from './segment/linkFormatHandler';
@@ -31,6 +30,7 @@ import { textColorFormatHandler } from './segment/textColorFormatHandler';
 import { underlineFormatHandler } from './segment/underlineFormatHandler';
 import { verticalAlignFormatHandler } from './common/verticalAlignFormatHandler';
 import { whiteSpaceFormatHandler } from './block/whiteSpaceFormatHandler';
+import { wordBreakFormatHandler } from './common/wordBreakFormatHandler';
 import {
     FormatApplier,
     FormatAppliers,
@@ -57,7 +57,6 @@ const defaultFormatHandlerMap: FormatHandlers = {
     fontFamily: fontFamilyFormatHandler,
     fontSize: fontSizeFormatHandler,
     id: idFormatHandler,
-    indent: indentFormatHandler,
     italic: italicFormatHandler,
     lineHeight: lineHeightFormatHandler,
     link: linkFormatHandler,
@@ -76,22 +75,13 @@ const defaultFormatHandlerMap: FormatHandlers = {
     underline: underlineFormatHandler,
     verticalAlign: verticalAlignFormatHandler,
     whiteSpace: whiteSpaceFormatHandler,
+    wordBreak: wordBreakFormatHandler,
 };
 
 const defaultFormatKeysPerCategory: {
     [key in keyof ContentModelFormatMap]: (keyof FormatHandlerTypeMap)[];
 } = {
-    block: [
-        'backgroundColor',
-        'direction',
-        'margin',
-        'padding',
-        'size',
-        'indent',
-        'lineHeight',
-        'whiteSpace',
-        'border',
-    ],
+    block: ['backgroundColor', 'direction', 'margin', 'padding', 'lineHeight', 'whiteSpace'],
     listItem: ['listItemThread', 'listItemMetadata'],
     listLevel: ['listType', 'listLevelThread', 'listLevelMetadata'],
     segment: [
@@ -106,7 +96,15 @@ const defaultFormatKeysPerCategory: {
         'backgroundColor',
     ],
     segmentOnBlock: ['fontFamily', 'fontSize', 'underline', 'italic', 'bold', 'textColor'],
-    tableCell: ['border', 'borderBox', 'backgroundColor', 'padding', 'direction', 'verticalAlign'],
+    tableCell: [
+        'border',
+        'borderBox',
+        'backgroundColor',
+        'padding',
+        'direction',
+        'verticalAlign',
+        'wordBreak',
+    ],
     table: [
         'id',
         'border',
@@ -120,6 +118,15 @@ const defaultFormatKeysPerCategory: {
     image: ['id', 'size', 'margin', 'padding', 'borderBox'],
     link: ['link'],
     dataset: ['dataset'],
+    quote: [
+        'backgroundColor',
+        'direction',
+        'margin',
+        'padding',
+        'lineHeight',
+        'whiteSpace',
+        'border',
+    ],
 };
 
 /**

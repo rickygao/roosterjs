@@ -1,7 +1,6 @@
 import { BackgroundColorFormat } from './formatParts/BackgroundColorFormat';
 import { BorderFormat } from './formatParts/BorderFormat';
 import { DirectionFormat } from './formatParts/DirectionFormat';
-import { IndentationFormat } from './formatParts/IndentationFormat';
 import { LineHeightFormat } from './formatParts/LineHeightFormat';
 import { MarginFormat } from './formatParts/MarginFormat';
 import { PaddingFormat } from './formatParts/PaddingFormat';
@@ -16,7 +15,6 @@ export type ContentModelBlockFormat = BackgroundColorFormat &
     MarginFormat &
     PaddingFormat &
     SizeFormat &
-    IndentationFormat &
     LineHeightFormat &
     WhiteSpaceFormat &
     BorderFormat;
