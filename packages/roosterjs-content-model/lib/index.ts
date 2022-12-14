@@ -27,6 +27,7 @@ export { default as setAlignment } from './publicApi/block/setAlignment';
 export { default as setDirection } from './publicApi/block/setDirection';
 export { default as setHeaderLevel } from './publicApi/block/setHeaderLevel';
 export { default as toggleBlockQuote } from './publicApi/block/toggleBlockQuote';
+export { default as insertContent } from './publicApi/doc/insertContent';
 
 export { combineBorderValue, extractBorderValues, Border } from './domUtils/borderValues';
 

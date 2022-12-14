@@ -1,9 +1,11 @@
 import { applyTableFormat } from '../../modelApi/table/applyTableFormat';
-import { ChangeSource } from 'roosterjs-editor-types';
+import { clearSelection } from 'roosterjs-content-model/lib/modelApi/selection/clearSelection';
 import { createContentModelDocument } from '../../modelApi/creators/createContentModelDocument';
 import { createSelectionMarker } from '../../modelApi/creators/createSelectionMarker';
 import { createTableStructure } from '../../modelApi/table/createTableStructure';
+import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
+import { mergeModel } from '../../modelApi/common/mergeModel';
 import { normalizeTable } from '../../modelApi/table/normalizeTable';
 import { TableMetadataFormat } from '../../publicTypes/format/formatParts/TableMetadataFormat';
 
@@ -22,29 +24,23 @@ export default function insertTable(
     rows: number,
     format?: TableMetadataFormat
 ) {
-    const doc = createContentModelDocument();
-    const table = createTableStructure(doc, columns, rows);
+    formatWithContentModel(editor, 'insertTable', model => {
+        const doc = createContentModelDocument();
+        const table = createTableStructure(doc, columns, rows);
 
-    normalizeTable(table);
-    applyTableFormat(table, format);
+        normalizeTable(table);
+        applyTableFormat(table, format);
 
-    const firstBlock = table.cells[0]?.[0]?.blocks[0];
+        mergeModel(model, doc);
 
-    if (firstBlock?.blockType == 'Paragraph') {
-        firstBlock.segments.unshift(createSelectionMarker());
-    }
+        clearSelection(model);
 
-    editor.addUndoSnapshot(
-        () => {
-            editor.setContentModel(doc, {
-                doNotReuseEntityDom: true,
-                mergingCallback: fragment => {
-                    editor.insertNode(fragment);
-                },
-            });
-        },
-        ChangeSource.Format,
-        false /*canUndoByBackspace*/,
-        { formatApiName: 'insertTable' }
-    );
+        const firstBlock = table.cells[0]?.[0]?.blocks[0];
+
+        if (firstBlock?.blockType == 'Paragraph') {
+            firstBlock.segments.unshift(createSelectionMarker());
+        }
+
+        return true;
+    });
 }

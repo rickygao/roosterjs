@@ -7,6 +7,7 @@ import { FormatView } from './FormatView';
 import { LineHeightFormatRenderer } from './formatPart/LineHeightFormatRenderer';
 import { MarginFormatRenderer } from './formatPart/MarginFormatRenderer';
 import { PaddingFormatRenderer } from './formatPart/PaddingFormatRenderer';
+import { SizeFormatRenderers } from './formatPart/SizeFormatRenderers';
 import { WhiteSpaceFormatRenderer } from './formatPart/WhiteSpaceFormatRenderer';
 
 const BlockFormatRenders: FormatRenderer<ContentModelBlockFormat>[] = [
@@ -14,6 +15,7 @@ const BlockFormatRenders: FormatRenderer<ContentModelBlockFormat>[] = [
     ...DirectionFormatRenderers,
     MarginFormatRenderer,
     PaddingFormatRenderer,
+    ...SizeFormatRenderers,
     LineHeightFormatRenderer,
     WhiteSpaceFormatRenderer,
 ];
