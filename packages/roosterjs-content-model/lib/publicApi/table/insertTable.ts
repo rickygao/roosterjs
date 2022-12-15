@@ -1,5 +1,4 @@
 import { applyTableFormat } from '../../modelApi/table/applyTableFormat';
-import { clearSelection } from 'roosterjs-content-model/lib/modelApi/selection/clearSelection';
 import { createContentModelDocument } from '../../modelApi/creators/createContentModelDocument';
 import { createSelectionMarker } from '../../modelApi/creators/createSelectionMarker';
 import { createTableStructure } from '../../modelApi/table/createTableStructure';
@@ -7,6 +6,7 @@ import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 import { mergeModel } from '../../modelApi/common/mergeModel';
 import { normalizeTable } from '../../modelApi/table/normalizeTable';
+import { setSelection } from '../../modelApi/selection/setSelection';
 import { TableMetadataFormat } from '../../publicTypes/format/formatParts/TableMetadataFormat';
 
 /**
@@ -33,12 +33,12 @@ export default function insertTable(
 
         mergeModel(model, doc);
 
-        clearSelection(model);
-
         const firstBlock = table.cells[0]?.[0]?.blocks[0];
 
         if (firstBlock?.blockType == 'Paragraph') {
-            firstBlock.segments.unshift(createSelectionMarker());
+            const marker = createSelectionMarker(firstBlock.segments[0]?.format);
+            firstBlock.segments.unshift(marker);
+            setSelection(model, marker);
         }
 
         return true;

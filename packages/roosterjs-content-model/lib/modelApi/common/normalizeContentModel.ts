@@ -1,4 +1,5 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
+import { createBr } from '../creators/createBr';
 import { isBlockEmpty, isSegmentEmpty } from './isEmpty';
 
 /**
@@ -16,6 +17,24 @@ export function normalizeModel(group: ContentModelBlockGroup) {
                 for (let j = block.segments.length - 1; j >= 0; j--) {
                     if (isSegmentEmpty(block.segments[j])) {
                         block.segments.splice(j, 1);
+                    }
+                }
+
+                if (!block.isImplicit) {
+                    const segments = block.segments;
+
+                    if (segments.length == 1 && segments[0].segmentType == 'SelectionMarker') {
+                        segments.push(createBr(segments[0].format));
+                    } else if (
+                        segments.length > 1 &&
+                        segments[segments.length - 1].segmentType == 'Br' &&
+                        segments.some(
+                            segment =>
+                                segment.segmentType != 'SelectionMarker' &&
+                                segment.segmentType != 'Br'
+                        )
+                    ) {
+                        segments.pop();
                     }
                 }
                 break;

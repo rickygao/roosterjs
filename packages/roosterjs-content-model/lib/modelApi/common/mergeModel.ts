@@ -1,4 +1,3 @@
-import { clearSelection } from '../selection/clearSelection';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
@@ -6,16 +5,16 @@ import { ContentModelSelectionMarker } from '../../publicTypes/segment/ContentMo
 import { createParagraph } from '../creators/createParagraph';
 import { deleteSelectedSegments } from '../selection/deleteSelectedSegments';
 import { normalizeModel } from './normalizeContentModel';
+import { setSelection } from '../selection/setSelection';
 
 /**
  * @internal
  */
 export function mergeModel(majorModel: ContentModelDocument, sourceModel: ContentModelDocument) {
-    clearSelection(sourceModel);
-
     const selection = deleteSelectedSegments(majorModel);
 
     normalizeModel(majorModel);
+    setSelection(sourceModel);
 
     if (
         selection &&

@@ -84,19 +84,9 @@ describe('mergeModel', () => {
                             text: 'test2',
                             format: {},
                         },
-                    ],
-                    format: {},
-                },
-                {
-                    blockType: 'Paragraph',
-                    segments: [
                         {
                             segmentType: 'SelectionMarker',
                             isSelected: true,
-                            format: {},
-                        },
-                        {
-                            segmentType: 'Br',
                             format: {},
                         },
                     ],
@@ -155,21 +145,9 @@ describe('mergeModel', () => {
                                 textColor: 'yellow',
                             },
                         },
-                    ],
-                    format: {},
-                },
-                {
-                    blockType: 'Paragraph',
-                    segments: [
                         {
                             segmentType: 'SelectionMarker',
                             isSelected: true,
-                            format: {
-                                textColor: 'green',
-                            },
-                        },
-                        {
-                            segmentType: 'Br',
                             format: {
                                 textColor: 'green',
                             },
@@ -181,5 +159,3 @@ describe('mergeModel', () => {
         });
     });
 });
-
-//         console.log(JSON.stringify(majorModel, null, 4));
