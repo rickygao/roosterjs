@@ -39,6 +39,8 @@ export function mergeModel(majorModel: ContentModelDocument, sourceModel: Conten
                     break;
 
                 case 'Table':
+                case 'Divider':
+                case 'Entity':
                     paragraph = splitBlock(paragraph, marker, group);
 
                     let blockIndex = group.blocks.indexOf(paragraph);
@@ -51,12 +53,13 @@ export function mergeModel(majorModel: ContentModelDocument, sourceModel: Conten
                         case 'General':
                         case 'ListItem':
                         case 'Quote':
+                            paragraph = splitBlock(paragraph, marker, group);
+
+                            let blockIndex = group.blocks.indexOf(paragraph);
+
+                            group.blocks.splice(blockIndex, 0, block);
                             break;
                     }
-                    break;
-
-                case 'Divider':
-                case 'Entity':
                     break;
             }
 
@@ -66,6 +69,7 @@ export function mergeModel(majorModel: ContentModelDocument, sourceModel: Conten
 
     normalizeModel(majorModel);
 }
+
 function splitBlock(
     paragraph: ContentModelParagraph,
     marker: ContentModelSelectionMarker,
