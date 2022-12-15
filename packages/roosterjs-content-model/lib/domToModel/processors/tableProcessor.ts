@@ -65,12 +65,15 @@ export const tableProcessor: ElementProcessor<HTMLTableElement> = (
                 if (needCalcWidth || needCalcHeight) {
                     const rect = td.getBoundingClientRect();
 
-                    if (needCalcWidth) {
-                        columnPositions[colEnd] =
-                            columnPositions[targetCol] + rect.width / zoomScale;
-                    }
-                    if (needCalcHeight) {
-                        rowPositions[rowEnd] = rowPositions[row] + rect.height / zoomScale;
+                    if (rect.width > 0 || rect.height > 0) {
+                        if (needCalcWidth) {
+                            columnPositions[colEnd] =
+                                columnPositions[targetCol] + rect.width / zoomScale;
+                        }
+
+                        if (needCalcHeight) {
+                            rowPositions[rowEnd] = rowPositions[row] + rect.height / zoomScale;
+                        }
                     }
                 }
 
