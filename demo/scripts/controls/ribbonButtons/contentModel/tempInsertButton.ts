@@ -2,7 +2,7 @@ import isContentModelEditor from '../../editor/isContentModelEditor';
 import { insertContent } from 'roosterjs-content-model';
 import { RibbonButton } from 'roosterjs-react';
 
-const htmlContent = '<table><tr><td>test</td></tr><tr><td>test2</td></tr></table>';
+const htmlContent = 'aa<div>bb</div>cc';
 
 /**
  * @internal

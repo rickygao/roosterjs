@@ -1,9 +1,13 @@
-import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
+import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
-import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
+import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
+import { ContentModelSelection } from '../selection/getSelections';
 import { ContentModelSelectionMarker } from '../../publicTypes/segment/ContentModelSelectionMarker';
+import { createListItem } from '../creators/createListItem';
 import { createParagraph } from '../creators/createParagraph';
 import { deleteSelectedSegments } from '../selection/deleteSelectedSegments';
+import { getOperationalBlocks } from './getOperationalBlocks';
+import { isBlockGroupOfType } from './isBlockGroupOfType';
 import { normalizeModel } from './normalizeContentModel';
 import { setSelection } from '../selection/setSelection';
 
@@ -11,7 +15,7 @@ import { setSelection } from '../selection/setSelection';
  * @internal
  */
 export function mergeModel(majorModel: ContentModelDocument, sourceModel: ContentModelDocument) {
-    const selection = deleteSelectedSegments(majorModel);
+    let selection = deleteSelectedSegments(majorModel);
 
     normalizeModel(majorModel);
     setSelection(sourceModel);
@@ -22,30 +26,23 @@ export function mergeModel(majorModel: ContentModelDocument, sourceModel: Conten
         selection.segments[0].segmentType == 'SelectionMarker'
     ) {
         const marker = selection.segments[0] as ContentModelSelectionMarker;
-        const group = selection.path[0];
-        let paragraph = selection.paragraph!;
         let isFirstBlock = true;
 
         sourceModel.blocks.forEach(block => {
             switch (block.blockType) {
                 case 'Paragraph':
-                    if (!isFirstBlock) {
-                        paragraph = splitBlock(paragraph, marker, group);
-                    }
+                    const paragraph = isFirstBlock
+                        ? selection!.paragraph
+                        : splitParagraph(selection);
+                    const segmentIndex = paragraph ? paragraph.segments.indexOf(marker) : -1;
 
-                    let segmentIndex = paragraph.segments.indexOf(marker);
-                    paragraph.segments.splice(segmentIndex, 0, ...block.segments);
-
+                    paragraph?.segments.splice(segmentIndex, 0, ...block.segments);
                     break;
 
                 case 'Table':
                 case 'Divider':
                 case 'Entity':
-                    paragraph = splitBlock(paragraph, marker, group);
-
-                    let blockIndex = group.blocks.indexOf(paragraph);
-
-                    group.blocks.splice(blockIndex, 0, block);
+                    insertBlock(selection, block);
                     break;
 
                 case 'BlockGroup':
@@ -53,11 +50,7 @@ export function mergeModel(majorModel: ContentModelDocument, sourceModel: Conten
                         case 'General':
                         case 'ListItem':
                         case 'Quote':
-                            paragraph = splitBlock(paragraph, marker, group);
-
-                            let blockIndex = group.blocks.indexOf(paragraph);
-
-                            group.blocks.splice(blockIndex, 0, block);
+                            insertBlock(selection, block);
                             break;
                     }
                     break;
@@ -70,17 +63,61 @@ export function mergeModel(majorModel: ContentModelDocument, sourceModel: Conten
     normalizeModel(majorModel);
 }
 
-function splitBlock(
-    paragraph: ContentModelParagraph,
-    marker: ContentModelSelectionMarker,
-    group: ContentModelBlockGroup
-) {
-    let index = paragraph.segments.indexOf(marker);
-    let paraIndex = group.blocks.indexOf(paragraph);
-    const newParagraph = createParagraph(false /*isImplicit*/, paragraph.format);
+function insertBlock(selection: ContentModelSelection | null, block: ContentModelBlock) {
+    const paragraph = splitParagraph(selection);
 
-    newParagraph.segments = paragraph.segments.splice(index);
-    group.blocks.splice(paraIndex + 1, 0, newParagraph);
+    if (paragraph && selection) {
+        let blockIndex = selection.path[0].blocks.indexOf(paragraph);
 
-    return newParagraph;
+        selection.path[0].blocks.splice(blockIndex, 0, block);
+        return paragraph;
+    } else {
+        return null;
+    }
+}
+
+function splitParagraph(selection: ContentModelSelection | null) {
+    if (
+        selection &&
+        selection.paragraph &&
+        selection.segments.length == 1 &&
+        selection.segments[0].segmentType == 'SelectionMarker'
+    ) {
+        const segmentIndex = selection.paragraph.segments.indexOf(selection.segments[0]);
+        const paraIndex = selection.path[0].blocks.indexOf(selection.paragraph);
+        const newParagraph = createParagraph(false /*isImplicit*/, selection.paragraph.format);
+
+        newParagraph.segments = selection.paragraph.segments.splice(segmentIndex);
+        selection.path[0].blocks.splice(paraIndex + 1, 0, newParagraph);
+
+        const operationalBlock = getOperationalBlocks<ContentModelListItem>(
+            [selection],
+            ['ListItem'],
+            ['Quote', 'TableCell']
+        )[0];
+
+        if (isBlockGroupOfType<ContentModelListItem>(operationalBlock, 'ListItem')) {
+            const index = selection.path.indexOf(operationalBlock);
+            const listParent = index >= 0 ? selection.path[index + 1] : null;
+            const blockIndex = listParent ? listParent.blocks.indexOf(operationalBlock) : -1;
+
+            if (blockIndex >= 0 && listParent) {
+                const newListItem = createListItem(
+                    operationalBlock.levels,
+                    operationalBlock.formatHolder.format
+                );
+
+                newListItem.blocks = operationalBlock.blocks.splice(paraIndex + 1);
+                listParent.blocks.splice(blockIndex + 1, 0, newListItem);
+
+                selection.path[index] = newListItem;
+            }
+        }
+
+        selection.paragraph = newParagraph;
+
+        return newParagraph;
+    } else {
+        return null;
+    }
 }
