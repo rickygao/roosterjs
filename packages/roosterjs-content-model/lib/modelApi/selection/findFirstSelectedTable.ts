@@ -1,15 +1,14 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
+import { ContentModelSelection } from '../selection/getSelections';
 import { ContentModelTable } from '../../publicTypes/block/ContentModelTable';
 import { ContentModelTableCell } from '../../publicTypes/group/ContentModelTableCell';
-import { getSelections } from '../selection/getSelections';
 
 /**
  * @internal
  */
 export function findFirstSelectedTable(
-    model: ContentModelBlockGroup
+    selections: ContentModelSelection[]
 ): ContentModelTable | undefined {
-    const selections = getSelections(model);
     let table: ContentModelTable | undefined;
 
     for (let i = 0; i < selections.length; i++) {
