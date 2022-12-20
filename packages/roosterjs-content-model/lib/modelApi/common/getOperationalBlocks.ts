@@ -30,7 +30,7 @@ export function getOperationalBlocks<T extends ContentModelBlockGroup>(
         const findSequence = deepFirst ? blockGroupTypes.map(type => [type]) : [blockGroupTypes];
 
         for (let i = 0; i < findSequence.length; i++) {
-            const group = getClosestAncestorBlockGroupWithType(p, findSequence[i], stopTypes);
+            const group = getClosestAncestorBlockGroup(p, findSequence[i], stopTypes);
 
             if (group) {
                 if (result.indexOf(group) < 0) {
@@ -47,10 +47,13 @@ export function getOperationalBlocks<T extends ContentModelBlockGroup>(
     return result;
 }
 
-function getClosestAncestorBlockGroupWithType<T extends ContentModelBlockGroup>(
+/**
+ * @internal
+ */
+export function getClosestAncestorBlockGroup<T extends ContentModelBlockGroup>(
     selections: ContentModelSelection,
     blockGroupTypes: TypeOfBlockGroup<T>[],
-    stopTypes: ContentModelBlockGroupType[]
+    stopTypes: ContentModelBlockGroupType[] = []
 ): T | null {
     for (let i = 0; i < selections.path.length; i++) {
         const group = selections.path[i];

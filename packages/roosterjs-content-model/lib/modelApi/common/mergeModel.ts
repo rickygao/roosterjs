@@ -13,8 +13,7 @@ import { createSelectionMarker } from '../creators/createSelectionMarker';
 import { createTableCell } from '../creators/createTableCell';
 import { deleteSelection } from '../selection/deleteSelection';
 import { findFirstSelectedTable } from '../selection/findFirstSelectedTable';
-import { getOperationalBlocks } from './getOperationalBlocks';
-import { isBlockGroupOfType } from './isBlockGroupOfType';
+import { getClosestAncestorBlockGroup } from './getOperationalBlocks';
 import { normalizeModel } from './normalizeContentModel';
 import { normalizeTable } from '../table/normalizeTable';
 import { setSelection } from '../selection/setSelection';
@@ -30,21 +29,12 @@ interface MarkerSelection extends ContentModelSelection {
 export function mergeModel(target: ContentModelDocument, source: ContentModelDocument) {
     const selection = replaceSelectionsWithSelectionMarker(target);
 
-    setSelection(source);
-
     if (selection) {
-        const marker = selection.segments[0];
-        let isFirstBlock = true;
-
-        source.blocks.forEach(block => {
+        setSelection(source);
+        source.blocks.forEach((block, i) => {
             switch (block.blockType) {
                 case 'Paragraph':
-                    const paragraph = isFirstBlock
-                        ? selection!.paragraph
-                        : splitParagraph(selection);
-                    const segmentIndex = paragraph.segments.indexOf(marker);
-
-                    paragraph.segments.splice(segmentIndex, 0, ...block.segments);
+                    mergeParagraph(selection, block, i == 0);
                     break;
 
                 case 'Divider':
@@ -59,15 +49,15 @@ export function mergeModel(target: ContentModelDocument, source: ContentModelDoc
                 case 'BlockGroup':
                     switch (block.blockGroupType) {
                         case 'General':
-                        case 'ListItem':
                         case 'Quote':
                             insertBlock(selection, block);
+                            break;
+                        case 'ListItem':
+                            mergeList(selection, block);
                             break;
                     }
                     break;
             }
-
-            isFirstBlock = false;
         });
 
         normalizeModel(target);
@@ -97,60 +87,22 @@ function replaceSelectionsWithSelectionMarker(model: ContentModelDocument): Mark
     };
 }
 
-function insertBlock(selection: MarkerSelection, block: ContentModelBlock) {
-    const paragraph = splitParagraph(selection);
+function mergeParagraph(
+    selection: MarkerSelection,
+    newPara: ContentModelParagraph,
+    mergeToCurrentParagraph: boolean
+) {
+    const paragraph = mergeToCurrentParagraph ? selection.paragraph : splitParagraph(selection);
+    const segmentIndex = paragraph.segments.indexOf(selection.segments[0]);
 
-    let blockIndex = selection.path[0].blocks.indexOf(paragraph);
-
-    selection.path[0].blocks.splice(blockIndex, 0, block);
-}
-
-function splitParagraph(selection: MarkerSelection) {
-    const segmentIndex = selection.paragraph.segments.indexOf(selection.segments[0]);
-    const paraIndex = selection.path[0].blocks.indexOf(selection.paragraph);
-    const newParagraph = createParagraph(false /*isImplicit*/, selection.paragraph.format);
-
-    newParagraph.segments = selection.paragraph.segments.splice(segmentIndex);
-    selection.path[0].blocks.splice(paraIndex + 1, 0, newParagraph);
-
-    const operationalBlock = getOperationalBlocks<ContentModelListItem>(
-        [selection],
-        ['ListItem'],
-        ['Quote', 'TableCell']
-    )[0];
-
-    if (isBlockGroupOfType<ContentModelListItem>(operationalBlock, 'ListItem')) {
-        const index = selection.path.indexOf(operationalBlock);
-        const listParent = index >= 0 ? selection.path[index + 1] : null;
-        const blockIndex = listParent ? listParent.blocks.indexOf(operationalBlock) : -1;
-
-        if (blockIndex >= 0 && listParent) {
-            const newListItem = createListItem(
-                operationalBlock.levels,
-                operationalBlock.formatHolder.format
-            );
-
-            newListItem.blocks = operationalBlock.blocks.splice(paraIndex + 1);
-            listParent.blocks.splice(blockIndex + 1, 0, newListItem);
-
-            selection.path[index] = newListItem;
-        }
-    }
-
-    selection.paragraph = newParagraph;
-
-    return newParagraph;
+    paragraph.segments.splice(segmentIndex, 0, ...newPara.segments);
 }
 
 function mergeTable(selection: MarkerSelection, newTable: ContentModelTable) {
-    const tableCell = getOperationalBlocks<ContentModelTableCell>([selection], ['TableCell'])[0];
+    const tableCell = getClosestAncestorBlockGroup<ContentModelTableCell>(selection, ['TableCell']);
     let table: ContentModelTable | undefined;
 
-    if (
-        isBlockGroupOfType<ContentModelTableCell>(tableCell, 'TableCell') &&
-        (table = findFirstSelectedTable([selection])) &&
-        table.cells[0]
-    ) {
+    if (tableCell && (table = findFirstSelectedTable([selection])) && table.cells[0]) {
         let rowIndex = -1;
         let columnIndex = -1;
         const rowCount = table.cells.length;
@@ -203,4 +155,62 @@ function mergeTable(selection: MarkerSelection, newTable: ContentModelTable) {
     } else {
         insertBlock(selection, newTable);
     }
+}
+
+function mergeList(selection: MarkerSelection, newList: ContentModelListItem) {
+    splitParagraph(selection);
+
+    const listItem = getClosestAncestorBlockGroup<ContentModelListItem>(selection, ['ListItem']);
+    const index = listItem ? selection.path.indexOf(listItem) : -1;
+    const listParent = selection.path[index + 1]; // It is ok here when index is -1, that means there is no list and we just insert a new paragraph and use path[0] as its parent
+    const blockIndex = listParent.blocks.indexOf(listItem || selection.paragraph);
+
+    listParent.blocks.splice(blockIndex, 0, newList);
+
+    if (listItem) {
+        listItem?.levels.forEach((level, i) => {
+            newList.levels[i] = { ...level };
+        });
+    }
+}
+
+function splitParagraph(selection: MarkerSelection) {
+    const segmentIndex = selection.paragraph.segments.indexOf(selection.segments[0]);
+    const paraIndex = selection.path[0].blocks.indexOf(selection.paragraph);
+    const newParagraph = createParagraph(false /*isImplicit*/, selection.paragraph.format);
+
+    newParagraph.segments = selection.paragraph.segments.splice(segmentIndex);
+    selection.path[0].blocks.splice(paraIndex + 1, 0, newParagraph);
+
+    const listItem = getClosestAncestorBlockGroup<ContentModelListItem>(
+        selection,
+        ['ListItem'],
+        ['Quote', 'TableCell']
+    );
+
+    if (listItem) {
+        const index = selection.path.indexOf(listItem);
+        const listParent = index >= 0 ? selection.path[index + 1] : null;
+        const blockIndex = listParent ? listParent.blocks.indexOf(listItem) : -1;
+
+        if (blockIndex >= 0 && listParent) {
+            const newListItem = createListItem(listItem.levels, listItem.formatHolder.format);
+
+            newListItem.blocks = listItem.blocks.splice(paraIndex + 1);
+            listParent.blocks.splice(blockIndex + 1, 0, newListItem);
+
+            selection.path[index] = newListItem;
+        }
+    }
+
+    selection.paragraph = newParagraph;
+
+    return newParagraph;
+}
+
+function insertBlock(selection: MarkerSelection, block: ContentModelBlock) {
+    const newPara = splitParagraph(selection);
+    const blockIndex = selection.path[0].blocks.indexOf(newPara);
+
+    selection.path[0].blocks.splice(blockIndex, 0, block);
 }

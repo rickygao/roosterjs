@@ -1,6 +1,8 @@
+import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
 import { findListItemsInSameThread } from '../../modelApi/list/findListItemsInSameThread';
 import { formatWithContentModel } from '../utils/formatWithContentModel';
-import { getFirstFocusedListItem } from '../../modelApi/list/getFirstFocusedListItem';
+import { getClosestAncestorBlockGroup } from '../../modelApi/common/getOperationalBlocks';
+import { getSelections } from '../../modelApi/selection/getSelections';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 import { ListMetadataFormat } from '../../publicTypes/format/formatParts/ListMetadataFormat';
 
@@ -14,7 +16,10 @@ export default function setListStyle(
     style: ListMetadataFormat
 ) {
     formatWithContentModel(editor, 'setListStyle', model => {
-        const listItem = getFirstFocusedListItem(model);
+        const firstSelection = getSelections(model)[0];
+        const listItem = firstSelection
+            ? getClosestAncestorBlockGroup<ContentModelListItem>(firstSelection, ['ListItem'])
+            : null;
 
         if (listItem) {
             const listItems = findListItemsInSameThread(model, listItem);

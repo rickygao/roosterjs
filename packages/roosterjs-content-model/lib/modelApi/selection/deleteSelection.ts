@@ -1,6 +1,6 @@
 import { arrayPush } from 'roosterjs-editor-dom';
 import { ContentModelSelection } from './getSelections';
-import { getOperationalBlocks } from '../common/getOperationalBlocks';
+import { getClosestAncestorBlockGroup } from '../common/getOperationalBlocks';
 
 /**
  * @internal
@@ -16,14 +16,13 @@ export function deleteSelection(
             paragraph.segments.splice(paragraph.segments.indexOf(segment), 1)
         );
 
-        const tableCells = getOperationalBlocks([selection, firstSelection], ['TableCell']);
+        const cell1 = getClosestAncestorBlockGroup(selection, ['TableCell']);
+        const cell2 = getClosestAncestorBlockGroup(firstSelection, ['TableCell']);
 
         if (
             firstSelection.paragraph &&
             selection.paragraph != firstSelection.paragraph &&
-            tableCells[0] != selection &&
-            tableCells[1] != firstSelection &&
-            tableCells[0] == tableCells[1]
+            ((cell1 && cell2 && cell1 == cell2) || (!cell1 && !cell2))
         ) {
             arrayPush(firstSelection.paragraph.segments, paragraph.segments);
             paragraph.segments = [];

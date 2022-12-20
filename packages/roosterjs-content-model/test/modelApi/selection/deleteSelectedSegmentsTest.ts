@@ -3,9 +3,9 @@ import { createDivider } from '../../../lib/modelApi/creators/createDivider';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
 import { createSelectionMarker } from '../../../lib/modelApi/creators/createSelectionMarker';
 import { createText } from '../../../lib/modelApi/creators/createText';
-import { deleteSelectedSegments } from '../../../lib/modelApi/selection/deleteSelectedSegments';
+import { deleteSelection } from '../../../lib/modelApi/selection/deleteSelection';
 
-describe('deleteSelectedSegments', () => {
+describe('deleteSelection', () => {
     it('empty model', () => {
         const model = createContentModelDocument();
 
