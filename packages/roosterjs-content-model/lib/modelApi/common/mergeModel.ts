@@ -1,3 +1,4 @@
+import { addSegment } from './addSegment';
 import { applyTableFormat } from '../table/applyTableFormat';
 import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
@@ -119,6 +120,8 @@ function mergeTable(selection: MarkerSelection, newTable: ContentModelTable) {
 
         for (let i = 0; i < newTable.cells.length; i++) {
             for (let j = 0; j < newTable.cells[i].length; j++) {
+                const newCell = newTable.cells[i][j];
+
                 if (i == 0 && columnIndex + j >= columnCount) {
                     for (let k = 0; k < rowIndex; k++) {
                         const leftCell = table.cells[k]?.[columnIndex + j - 1];
@@ -146,7 +149,11 @@ function mergeTable(selection: MarkerSelection, newTable: ContentModelTable) {
                     }
                 }
 
-                table.cells[rowIndex + i][columnIndex + j] = newTable.cells[i][j];
+                table.cells[rowIndex + i][columnIndex + j] = newCell;
+
+                if (i == 0 && j == 0) {
+                    addSegment(newCell, createSelectionMarker());
+                }
             }
         }
 
