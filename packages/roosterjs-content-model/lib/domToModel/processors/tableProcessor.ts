@@ -2,6 +2,7 @@ import { addBlock } from '../../modelApi/common/addBlock';
 import { createTable } from '../../modelApi/creators/createTable';
 import { createTableCell } from '../../modelApi/creators/createTableCell';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
+import { getBoundingClientRect } from '../utils/getBoundingClientRect';
 import { normalizeTable } from '../../modelApi/table/normalizeTable';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
@@ -63,7 +64,7 @@ export const tableProcessor: ElementProcessor<HTMLTableElement> = (
                 const needCalcHeight = rowPositions[rowEnd] === undefined;
 
                 if (needCalcWidth || needCalcHeight) {
-                    const rect = td.getBoundingClientRect();
+                    const rect = getBoundingClientRect(td);
 
                     if (rect.width > 0 || rect.height > 0) {
                         if (needCalcWidth) {

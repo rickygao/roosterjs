@@ -1,5 +1,6 @@
 import { addBlock } from '../../modelApi/common/addBlock';
 import { createDivider } from '../../modelApi/creators/createDivider';
+import { createSelectionMarker } from 'roosterjs-content-model/lib/modelApi/creators/createSelectionMarker';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
@@ -19,7 +20,7 @@ export const hrProcessor: ElementProcessor<HTMLHRElement> = (group, element, con
             const hr = createDivider('hr', context.blockFormat);
 
             if (context.isInSelection) {
-                hr.isSelected = true;
+                hr.selectionMarker = createSelectionMarker();
             }
 
             addBlock(group, hr);

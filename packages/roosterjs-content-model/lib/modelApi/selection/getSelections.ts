@@ -1,6 +1,7 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
+// import { ContentModelBlock } from 'roosterjs-content-model/lib/publicTypes/block/ContentModelBlock';
 
 /**
  * @internal
@@ -163,6 +164,19 @@ function getSelectionsInternal(
                     });
                 }
 
+                break;
+
+            case 'Divider':
+                if (block.selectionMarker) {
+                    result.push({
+                        paragraph: null,
+                        segments: [block.selectionMarker],
+                        path: [...path],
+                    });
+                }
+                break;
+
+            case 'Entity':
                 break;
         }
     }

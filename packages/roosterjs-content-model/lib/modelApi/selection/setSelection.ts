@@ -2,6 +2,7 @@ import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelGeneralSegment } from '../../publicTypes/segment/ContentModelGeneralSegment';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
+import { createSelectionMarker } from '../creators/createSelectionMarker';
 import { Selectable } from '../../publicTypes/selection/Selectable';
 
 /**
@@ -56,9 +57,15 @@ export function setSelectionToBlock(
             return isInSelection;
 
         case 'Divider':
-            return handleSelection(isInSelection, block, start, end, isInSelection =>
-                setIsSelected(block, isInSelection)
-            );
+            return handleSelection(isInSelection, block, start, end, isInSelection => {
+                if (isInSelection && !block.selectionMarker) {
+                    block.selectionMarker = createSelectionMarker();
+                } else if (!isInSelection && block.selectionMarker) {
+                    delete block.selectionMarker;
+                }
+
+                return isInSelection;
+            });
 
         case 'Paragraph':
             const segmentsToDelete: number[] = [];

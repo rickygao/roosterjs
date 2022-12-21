@@ -1,4 +1,5 @@
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
+import { createDivider } from '../../../lib/modelApi/creators/createDivider';
 import { createGeneralSegment } from '../../../lib/modelApi/creators/createGeneralSegment';
 import { createListItem } from '../../../lib/modelApi/creators/createListItem';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
@@ -500,6 +501,25 @@ describe('getSelections', () => {
                 paragraph: para,
                 path: [generalSpan, group],
                 segments: [text1],
+            },
+        ]);
+    });
+
+    it('Divider selection', () => {
+        const group = createContentModelDocument();
+        const divider = createDivider('div');
+        const marker = createSelectionMarker();
+
+        divider.selectionMarker = marker;
+        group.blocks.push(divider);
+
+        const result = getSelections(group);
+
+        expect(result).toEqual([
+            {
+                paragraph: null,
+                segments: [marker],
+                path: [group],
             },
         ]);
     });
