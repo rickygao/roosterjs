@@ -32,7 +32,7 @@ export function setListType(model: ContentModelDocument, listType: 'OL' | 'UL') 
             } else if (item.blocks.length == 1) {
                 setParagraphNotImplicit(item.blocks[0]);
             }
-        } else if (item.paragraph) {
+        } else if (item.type == 'Segments') {
             const group = item.path[0];
             const index = group.blocks.indexOf(item.paragraph);
             const prevBlock = group.blocks[index - 1];

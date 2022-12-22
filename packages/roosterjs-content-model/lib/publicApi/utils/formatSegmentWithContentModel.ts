@@ -25,10 +25,24 @@ export function formatSegmentWithContentModel(
         apiName,
         model => {
             const selections = getSelections(model, {
-                includeFormatHolder: includingFormatHolder,
+                includeListFormatHolder: includingFormatHolder,
             });
 
-            selections.forEach(selection => arrayPush(segments, selection.segments));
+            selections.forEach(selection => {
+                switch (selection.type) {
+                    case 'Segments':
+                        arrayPush(segments, selection.segments);
+                        break;
+
+                    case 'ListNumber':
+                        segments.push(selection.formatHolder);
+                        break;
+
+                    case 'Marker':
+                        segments.push(selection.marker);
+                        break;
+                }
+            });
 
             const isTurningOff = segmentHasStyleCallback
                 ? segments.every(segmentHasStyleCallback)

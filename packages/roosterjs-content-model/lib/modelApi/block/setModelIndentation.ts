@@ -38,7 +38,7 @@ export function setModelIndentation(
             } else {
                 item.levels.pop();
             }
-        } else if (item.paragraph) {
+        } else if (item.type == 'Segments') {
             const { format } = item.paragraph;
             const { marginLeft, marginRight, direction } = format;
             const originalValue = parseValueWithUnit(direction == 'rtl' ? marginRight : marginLeft);

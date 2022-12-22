@@ -174,7 +174,7 @@ describe('mergeModel', () => {
         const text2 = createText('test2', { textColor: 'green' });
 
         const divider1 = createDivider('div');
-        divider1.selectionMarker = createSelectionMarker();
+        divider1.isSelected = true;
 
         const para2 = createParagraph();
         const text3 = createText('test3', { textColor: 'blue' });

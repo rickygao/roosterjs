@@ -31,7 +31,8 @@ describe('findParentGroup', () => {
         };
         const result = findParentGroup(quote, [
             {
-                paragraph: null,
+                type: 'Segments',
+                paragraph: null!,
                 segments: [],
                 path: [quote, doc],
             },
@@ -54,7 +55,8 @@ describe('findParentGroup', () => {
         };
         const result = findParentGroup(quote, [
             {
-                paragraph: null,
+                type: 'Segments',
+                paragraph: null!,
                 segments: [],
                 path: [doc],
             },
@@ -82,11 +84,13 @@ describe('findParentGroup', () => {
         };
         const result = findParentGroup(para, [
             {
-                paragraph: null,
+                type: 'Segments',
+                paragraph: null!,
                 segments: [],
                 path: [doc],
             },
             {
+                type: 'Segments',
                 paragraph: para,
                 segments: [],
                 path: [quote, doc],

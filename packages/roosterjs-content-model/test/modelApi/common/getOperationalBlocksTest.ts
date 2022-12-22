@@ -18,6 +18,7 @@ describe('getOperationalBlocks', () => {
         const result = getOperationalBlocks(
             [
                 {
+                    type: 'Segments',
                     paragraph: para,
                     path: [group],
                     segments: [],
@@ -27,11 +28,7 @@ describe('getOperationalBlocks', () => {
         );
 
         expect(result).toEqual([
-            {
-                paragraph: para,
-                path: [group],
-                segments: [],
-            },
+            { type: 'Segments', paragraph: para, path: [group], segments: [] },
         ]);
     });
 
@@ -43,27 +40,15 @@ describe('getOperationalBlocks', () => {
 
         const result = getOperationalBlocks(
             [
-                {
-                    paragraph: para1,
-                    path: [listItem, group],
-                    segments: [],
-                },
-                {
-                    paragraph: para2,
-                    path: [group],
-                    segments: [],
-                },
+                { type: 'Segments', paragraph: para1, path: [listItem, group], segments: [] },
+                { type: 'Segments', paragraph: para2, path: [group], segments: [] },
             ],
             ['ListItem']
         );
 
         expect(result).toEqual([
             listItem,
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [],
-            },
+            { type: 'Segments', paragraph: para2, path: [group], segments: [] },
         ]);
     });
 
@@ -76,32 +61,16 @@ describe('getOperationalBlocks', () => {
 
         const result = getOperationalBlocks(
             [
-                {
-                    paragraph: para1,
-                    path: [listItem, group],
-                    segments: [],
-                },
-                {
-                    paragraph: para2,
-                    path: [listItem, group],
-                    segments: [],
-                },
-                {
-                    paragraph: para3,
-                    path: [group],
-                    segments: [],
-                },
+                { type: 'Segments', paragraph: para1, path: [listItem, group], segments: [] },
+                { type: 'Segments', paragraph: para2, path: [listItem, group], segments: [] },
+                { type: 'Segments', paragraph: para3, path: [group], segments: [] },
             ],
             ['ListItem']
         );
 
         expect(result).toEqual([
             listItem,
-            {
-                paragraph: para3,
-                path: [group],
-                segments: [],
-            },
+            { type: 'Segments', paragraph: para3, path: [group], segments: [] },
         ]);
     });
 
@@ -115,12 +84,9 @@ describe('getOperationalBlocks', () => {
 
         const result = getOperationalBlocks(
             [
+                { type: 'Segments', paragraph: para1, path: [listItem1, group], segments: [] },
                 {
-                    paragraph: para1,
-                    path: [listItem1, group],
-                    segments: [],
-                },
-                {
+                    type: 'Segments',
                     paragraph: para2,
                     path: [quote, listItem2, group],
                     segments: [],
@@ -132,11 +98,7 @@ describe('getOperationalBlocks', () => {
 
         expect(result).toEqual([
             listItem1,
-            {
-                paragraph: para2,
-                path: [quote, listItem2, group],
-                segments: [],
-            },
+            { type: 'Segments', paragraph: para2, path: [quote, listItem2, group], segments: [] },
         ]);
     });
 
@@ -149,16 +111,8 @@ describe('getOperationalBlocks', () => {
 
         const result = getOperationalBlocks(
             [
-                {
-                    paragraph: para1,
-                    path: [listItem, group],
-                    segments: [],
-                },
-                {
-                    paragraph: para2,
-                    path: [quote, group],
-                    segments: [],
-                },
+                { type: 'Segments', paragraph: para1, path: [listItem, group], segments: [] },
+                { type: 'Segments', paragraph: para2, path: [quote, group], segments: [] },
             ],
             ['ListItem', 'Quote']
         );
@@ -177,15 +131,12 @@ describe('getOperationalBlocks', () => {
         const result = getOperationalBlocks(
             [
                 {
+                    type: 'Segments',
                     paragraph: para1,
                     path: [quote1, listItem, group],
                     segments: [],
                 },
-                {
-                    paragraph: para2,
-                    path: [quote2, group],
-                    segments: [],
-                },
+                { type: 'Segments', paragraph: para2, path: [quote2, group], segments: [] },
             ],
             ['ListItem', 'Quote']
         );
@@ -204,15 +155,12 @@ describe('getOperationalBlocks', () => {
         const result = getOperationalBlocks(
             [
                 {
+                    type: 'Segments',
                     paragraph: para1,
                     path: [quote1, listItem, group],
                     segments: [],
                 },
-                {
-                    paragraph: para2,
-                    path: [quote2, group],
-                    segments: [],
-                },
+                { type: 'Segments', paragraph: para2, path: [quote2, group], segments: [] },
             ],
             ['ListItem', 'Quote'],
             undefined,

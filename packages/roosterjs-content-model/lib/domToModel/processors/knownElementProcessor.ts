@@ -79,6 +79,10 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
                     block || createParagraph(false /*isImplicit*/, context.blockFormat, decorator);
 
                 if (topDivider) {
+                    if (context.isInSelection) {
+                        topDivider.isSelected = true;
+                    }
+
                     addBlock(group, topDivider);
                 }
 
@@ -90,6 +94,10 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
             context.elementProcessors.child(newParent, element, context);
 
             if (bottomDivider) {
+                if (context.isInSelection) {
+                    bottomDivider.isSelected = true;
+                }
+
                 addBlock(group, bottomDivider);
             }
         }

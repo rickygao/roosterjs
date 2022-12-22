@@ -4,7 +4,6 @@ import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
-import { ContentModelSelection, getSelections } from '../selection/getSelections';
 import { ContentModelSelectionMarker } from '../../publicTypes/segment/ContentModelSelectionMarker';
 import { ContentModelTable } from '../../publicTypes/block/ContentModelTable';
 import { ContentModelTableCell } from '../../publicTypes/group/ContentModelTableCell';
@@ -18,11 +17,11 @@ import { getClosestAncestorBlockGroup } from './getOperationalBlocks';
 import { normalizeModel } from './normalizeContentModel';
 import { normalizeTable } from '../table/normalizeTable';
 import { setSelection } from '../selection/setSelection';
-
-interface MarkerSelection extends ContentModelSelection {
-    paragraph: ContentModelParagraph;
-    segments: [ContentModelSelectionMarker];
-}
+import {
+    ContentModelMarkerSelection,
+    ContentModelSegmentsSelection,
+    getSelections,
+} from '../selection/getSelections';
 
 /**
  * @internal
@@ -65,41 +64,49 @@ export function mergeModel(target: ContentModelDocument, source: ContentModelDoc
     }
 }
 
-function replaceSelectionsWithSelectionMarker(model: ContentModelDocument): MarkerSelection | null {
+function replaceSelectionsWithSelectionMarker(
+    model: ContentModelDocument
+): ContentModelMarkerSelection | null {
     const selections = getSelections(model);
-    const firstPara = selections[0]?.paragraph;
-    const firstSegment = selections[0]?.segments[0];
+    const firstSegmentsSelection = selections.filter(
+        x => x.type == 'Segments'
+    )[0] as ContentModelSegmentsSelection;
+    let marker: ContentModelSelectionMarker | undefined;
 
-    if (!firstPara || !firstSegment) {
-        return null;
+    if (firstSegmentsSelection?.segments[0]) {
+        const paragraph = firstSegmentsSelection.paragraph;
+        const index = paragraph.segments.indexOf(firstSegmentsSelection.segments[0]);
+
+        marker = createSelectionMarker(firstSegmentsSelection.segments[0].format);
+        paragraph.segments.splice(index, 0, marker);
     }
 
-    const marker = createSelectionMarker(firstSegment.format);
-
-    firstPara.segments.splice(firstPara.segments.indexOf(firstSegment), 0, marker);
-    selections.forEach(selection => deleteSelection(selection, selections[0]));
+    selections.forEach(selection => deleteSelection(selection, firstSegmentsSelection));
 
     normalizeModel(model);
 
-    return {
-        paragraph: firstPara,
-        path: selections[0].path,
-        segments: [marker],
-    };
+    return marker
+        ? {
+              type: 'Marker',
+              paragraph: firstSegmentsSelection.paragraph,
+              marker: marker,
+              path: selections[0].path,
+          }
+        : null;
 }
 
 function mergeParagraph(
-    selection: MarkerSelection,
+    selection: ContentModelMarkerSelection,
     newPara: ContentModelParagraph,
     mergeToCurrentParagraph: boolean
 ) {
     const paragraph = mergeToCurrentParagraph ? selection.paragraph : splitParagraph(selection);
-    const segmentIndex = paragraph.segments.indexOf(selection.segments[0]);
+    const segmentIndex = paragraph.segments.indexOf(selection.marker);
 
     paragraph.segments.splice(segmentIndex, 0, ...newPara.segments);
 }
 
-function mergeTable(selection: MarkerSelection, newTable: ContentModelTable) {
+function mergeTable(selection: ContentModelMarkerSelection, newTable: ContentModelTable) {
     const tableCell = getClosestAncestorBlockGroup<ContentModelTableCell>(selection, ['TableCell']);
     let table: ContentModelTable | undefined;
 
@@ -164,7 +171,7 @@ function mergeTable(selection: MarkerSelection, newTable: ContentModelTable) {
     }
 }
 
-function mergeList(selection: MarkerSelection, newList: ContentModelListItem) {
+function mergeList(selection: ContentModelMarkerSelection, newList: ContentModelListItem) {
     splitParagraph(selection);
 
     const listItem = getClosestAncestorBlockGroup<ContentModelListItem>(selection, ['ListItem']);
@@ -181,8 +188,8 @@ function mergeList(selection: MarkerSelection, newList: ContentModelListItem) {
     }
 }
 
-function splitParagraph(selection: MarkerSelection) {
-    const segmentIndex = selection.paragraph.segments.indexOf(selection.segments[0]);
+function splitParagraph(selection: ContentModelMarkerSelection) {
+    const segmentIndex = selection.paragraph.segments.indexOf(selection.marker);
     const paraIndex = selection.path[0].blocks.indexOf(selection.paragraph);
     const newParagraph = createParagraph(false /*isImplicit*/, selection.paragraph.format);
 
@@ -215,7 +222,7 @@ function splitParagraph(selection: MarkerSelection) {
     return newParagraph;
 }
 
-function insertBlock(selection: MarkerSelection, block: ContentModelBlock) {
+function insertBlock(selection: ContentModelMarkerSelection, block: ContentModelBlock) {
     const newPara = splitParagraph(selection);
     const blockIndex = selection.path[0].blocks.indexOf(newPara);
 

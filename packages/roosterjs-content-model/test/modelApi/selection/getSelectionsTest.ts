@@ -54,6 +54,7 @@ describe('getSelections', () => {
 
         expect(result).toEqual([
             {
+                type: 'Segments',
                 paragraph: para1,
                 path: [group],
                 segments: [text1],
@@ -79,16 +80,8 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [text1],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text2],
-            },
+            { type: 'Segments', paragraph: para1, path: [group], segments: [text1] },
+            { type: 'Segments', paragraph: para2, path: [group], segments: [text2] },
         ]);
     });
 
@@ -113,11 +106,7 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [listItem, group],
-                segments: [text1],
-            },
+            { type: 'Segments', paragraph: para1, path: [listItem, group], segments: [text1] },
         ]);
     });
 
@@ -142,11 +131,7 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [quote, group],
-                segments: [text1],
-            },
+            { type: 'Segments', paragraph: para1, path: [quote, group], segments: [text1] },
         ]);
     });
 
@@ -173,11 +158,7 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [cell, group],
-                segments: [text1],
-            },
+            { type: 'Segments', paragraph: para1, path: [cell, group], segments: [text1] },
         ]);
     });
 
@@ -208,6 +189,7 @@ describe('getSelections', () => {
 
         expect(result).toEqual([
             {
+                type: 'Segments',
                 paragraph: para1,
                 path: [listItem, quote, cell, group],
                 segments: [text1],
@@ -239,16 +221,8 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [cell1, group],
-                segments: [text1],
-            },
-            {
-                paragraph: para2,
-                path: [cell1, group],
-                segments: [text2],
-            },
+            { type: 'Segments', paragraph: para1, path: [cell1, group], segments: [text1] },
+            { type: 'Segments', paragraph: para2, path: [cell1, group], segments: [text2] },
         ]);
     });
 
@@ -268,11 +242,7 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text],
-            },
+            { type: 'Segments', paragraph: para2, path: [group], segments: [text] },
         ]);
     });
 
@@ -292,11 +262,7 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [text],
-            },
+            { type: 'Segments', paragraph: para1, path: [group], segments: [text] },
         ]);
     });
 
@@ -316,16 +282,8 @@ describe('getSelections', () => {
         const result = getSelections(group, { includeUnmeaningfulSelectedParagraph: true });
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [marker],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text],
-            },
+            { type: 'Segments', paragraph: para1, path: [group], segments: [marker] },
+            { type: 'Segments', paragraph: para2, path: [group], segments: [text] },
         ]);
     });
 
@@ -345,16 +303,8 @@ describe('getSelections', () => {
         const result = getSelections(group, { includeUnmeaningfulSelectedParagraph: true });
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [text],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [marker],
-            },
+            { type: 'Segments', paragraph: para1, path: [group], segments: [text] },
+            { type: 'Segments', paragraph: para2, path: [group], segments: [marker] },
         ]);
     });
 
@@ -378,11 +328,7 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text],
-            },
+            { type: 'Segments', paragraph: para2, path: [group], segments: [text] },
         ]);
     });
 
@@ -412,21 +358,9 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [marker1, text1],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text2],
-            },
-            {
-                paragraph: para3,
-                path: [group],
-                segments: [text3, marker2],
-            },
+            { type: 'Segments', paragraph: para1, path: [group], segments: [marker1, text1] },
+            { type: 'Segments', paragraph: para2, path: [group], segments: [text2] },
+            { type: 'Segments', paragraph: para3, path: [group], segments: [text3, marker2] },
         ]);
     });
 
@@ -441,19 +375,15 @@ describe('getSelections', () => {
         listItem.blocks.push(para);
         group.blocks.push(listItem);
 
-        const result = getSelections(group, { includeFormatHolder: true });
+        const result = getSelections(group, { includeListFormatHolder: true });
 
         expect(result).toEqual([
             {
-                paragraph: null,
+                type: 'ListNumber',
                 path: [listItem, group],
-                segments: [listItem.formatHolder],
+                formatHolder: listItem.formatHolder,
             },
-            {
-                paragraph: para,
-                path: [listItem, group],
-                segments: [text],
-            },
+            { type: 'Segments', paragraph: para, path: [listItem, group], segments: [text] },
         ]);
     });
 
@@ -470,14 +400,10 @@ describe('getSelections', () => {
         listItem.blocks.push(para);
         group.blocks.push(listItem);
 
-        const result = getSelections(group, { includeFormatHolder: true });
+        const result = getSelections(group, { includeListFormatHolder: true });
 
         expect(result).toEqual([
-            {
-                paragraph: para,
-                path: [listItem, group],
-                segments: [text1],
-            },
+            { type: 'Segments', paragraph: para, path: [listItem, group], segments: [text1] },
         ]);
     });
 
@@ -497,28 +423,23 @@ describe('getSelections', () => {
         const result = getSelections(group);
 
         expect(result).toEqual([
-            {
-                paragraph: para,
-                path: [generalSpan, group],
-                segments: [text1],
-            },
+            { type: 'Segments', paragraph: para, path: [generalSpan, group], segments: [text1] },
         ]);
     });
 
     it('Divider selection', () => {
         const group = createContentModelDocument();
         const divider = createDivider('div');
-        const marker = createSelectionMarker();
 
-        divider.selectionMarker = marker;
+        divider.isSelected = true;
         group.blocks.push(divider);
 
         const result = getSelections(group);
 
         expect(result).toEqual([
             {
-                paragraph: null,
-                segments: [marker],
+                type: 'Block',
+                block: divider,
                 path: [group],
             },
         ]);

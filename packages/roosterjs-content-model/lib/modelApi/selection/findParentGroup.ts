@@ -12,7 +12,7 @@ export function findParentGroup(
     for (let i = 0; i < selections.length; i++) {
         const selection = selections[i];
 
-        if (selection.paragraph == block) {
+        if (selection.type == 'Segments' && selection.paragraph == block) {
             return selection.path[0] || null;
         } else if (isBlockGroup(block)) {
             const index = selection.path.indexOf(block);

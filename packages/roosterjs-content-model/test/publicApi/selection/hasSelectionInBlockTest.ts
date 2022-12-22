@@ -3,7 +3,6 @@ import hasSelectionInBlockGroup from '../../../lib/publicApi/selection/hasSelect
 import { ContentModelBlock } from '../../../lib/publicTypes/block/ContentModelBlock';
 import { ContentModelDivider } from '../../../lib/publicTypes/block/ContentModelDivider';
 import { ContentModelTableCell } from '../../../lib/publicTypes/group/ContentModelTableCell';
-import { createSelectionMarker } from '../../../lib/modelApi/creators/createSelectionMarker';
 
 describe('hasSelectionInBlock', () => {
     it('Empty paragraph block', () => {
@@ -226,7 +225,7 @@ describe('hasSelectionInBlock', () => {
             blockType: 'Divider',
             tagName: 'hr',
             format: {},
-            selectionMarker: createSelectionMarker(),
+            isSelected: true,
         };
 
         const result = hasSelectionInBlock(block);

@@ -5,14 +5,17 @@ import { createSelectionMarker } from '../../../lib/modelApi/creators/createSele
 import { createText } from '../../../lib/modelApi/creators/createText';
 import { deleteSelection } from '../../../lib/modelApi/selection/deleteSelection';
 import {
+    ContentModelSegmentsSelection,
     ContentModelSelection,
     getSelections,
 } from '../../../lib/modelApi/selection/getSelections';
 
 describe('deleteSelection', () => {
     it('empty selection', () => {
+        const para = createParagraph();
         const selection: ContentModelSelection = {
-            paragraph: null,
+            type: 'Segments',
+            paragraph: para,
             path: [],
             segments: [],
         };
@@ -20,7 +23,8 @@ describe('deleteSelection', () => {
         deleteSelection(selection);
 
         expect(selection).toEqual({
-            paragraph: null,
+            type: 'Segments',
+            paragraph: para,
             path: [],
             segments: [],
         });
@@ -90,7 +94,7 @@ describe('deleteSelection', () => {
         model.blocks.push(para2);
 
         const selections = getSelections(model);
-        selections.forEach(s => deleteSelection(s, selections[0]));
+        selections.forEach(s => deleteSelection(s, selections[0] as ContentModelSegmentsSelection));
 
         expect(model).toEqual({
             blockGroupType: 'Document',
@@ -119,11 +123,11 @@ describe('deleteSelection', () => {
         const model = createContentModelDocument();
         const divider = createDivider('div');
 
-        divider.selectionMarker = createSelectionMarker();
+        divider.isSelected = true;
         model.blocks.push(divider);
 
         const selections = getSelections(model);
-        selections.forEach(s => deleteSelection(s, selections[0]));
+        selections.forEach(s => deleteSelection(s));
 
         expect(model).toEqual({
             blockGroupType: 'Document',

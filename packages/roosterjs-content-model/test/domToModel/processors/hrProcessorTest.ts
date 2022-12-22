@@ -67,11 +67,7 @@ describe('hrProcessor', () => {
                     blockType: 'Divider',
                     tagName: 'hr',
                     format: {},
-                    selectionMarker: {
-                        segmentType: 'SelectionMarker',
-                        format: {},
-                        isSelected: true,
-                    },
+                    isSelected: true,
                 },
             ],
         });

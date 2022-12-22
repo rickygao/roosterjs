@@ -77,9 +77,10 @@ describe('areAllOperationalBlocksOfGroupType', () => {
                     blocks: [],
                 },
                 {
-                    paragraph: null,
-                    path: [],
+                    type: 'Segments',
                     segments: [],
+                    paragraph: null!,
+                    path: [],
                 },
             ],
             'Document'

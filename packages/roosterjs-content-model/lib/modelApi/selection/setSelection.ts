@@ -2,7 +2,6 @@ import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelGeneralSegment } from '../../publicTypes/segment/ContentModelGeneralSegment';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
-import { createSelectionMarker } from '../creators/createSelectionMarker';
 import { Selectable } from '../../publicTypes/selection/Selectable';
 
 /**
@@ -57,11 +56,12 @@ export function setSelectionToBlock(
             return isInSelection;
 
         case 'Divider':
+        case 'Entity':
             return handleSelection(isInSelection, block, start, end, isInSelection => {
-                if (isInSelection && !block.selectionMarker) {
-                    block.selectionMarker = createSelectionMarker();
-                } else if (!isInSelection && block.selectionMarker) {
-                    delete block.selectionMarker;
+                if (isInSelection) {
+                    block.isSelected = true;
+                } else {
+                    delete block.isSelected;
                 }
 
                 return isInSelection;

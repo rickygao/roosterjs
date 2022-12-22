@@ -61,7 +61,7 @@ export function toggleModelBlockQuote(
                 const parentGroup = findParentGroup(item, selections);
 
                 wrapBlockStep1(step1Results, parentGroup, item, creator, canMerge);
-            } else if (item.paragraph) {
+            } else if (item.type == 'Segments') {
                 wrapBlockStep1(step1Results, item.path[0], item.paragraph, creator, canMerge);
             }
         });

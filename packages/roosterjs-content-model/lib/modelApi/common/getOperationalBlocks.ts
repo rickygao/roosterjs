@@ -51,12 +51,12 @@ export function getOperationalBlocks<T extends ContentModelBlockGroup>(
  * @internal
  */
 export function getClosestAncestorBlockGroup<T extends ContentModelBlockGroup>(
-    selections: ContentModelSelection,
+    selection: ContentModelSelection,
     blockGroupTypes: TypeOfBlockGroup<T>[],
     stopTypes: ContentModelBlockGroupType[] = []
 ): T | null {
-    for (let i = 0; i < selections.path.length; i++) {
-        const group = selections.path[i];
+    for (let i = 0; i < selection.path.length; i++) {
+        const group = selection.path[i];
 
         if ((blockGroupTypes as string[]).indexOf(group.blockGroupType) >= 0) {
             return group as T;

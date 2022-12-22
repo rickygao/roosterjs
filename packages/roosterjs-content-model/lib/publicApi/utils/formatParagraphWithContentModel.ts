@@ -15,10 +15,12 @@ export function formatParagraphWithContentModel(
         const selections = getSelections(model);
 
         selections.forEach(selection => {
-            const para = selection.paragraph;
+            if (selection.type == 'Segments') {
+                const para = selection.paragraph;
 
-            if (para) {
-                setStyleCallback(para);
+                if (para) {
+                    setStyleCallback(para);
+                }
             }
         });
 

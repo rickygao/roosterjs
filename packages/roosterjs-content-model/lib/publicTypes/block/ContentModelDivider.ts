@@ -1,17 +1,12 @@
 import { ContentModelBlockBase } from './ContentModelBlockBase';
-import { ContentModelSelectionMarker } from '../segment/ContentModelSelectionMarker';
+import { Selectable } from '../selection/Selectable';
 
 /**
  * Content Model of horizontal divider
  */
-export interface ContentModelDivider extends ContentModelBlockBase<'Divider'> {
+export interface ContentModelDivider extends ContentModelBlockBase<'Divider'>, Selectable {
     /**
      * Tag name of this element, either HR or DIV
      */
     tagName: 'hr' | 'div';
-
-    /**
-     * Set this marker when this divider is in selection
-     */
-    selectionMarker?: ContentModelSelectionMarker;
 }
