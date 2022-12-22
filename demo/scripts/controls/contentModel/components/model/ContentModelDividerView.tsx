@@ -36,7 +36,7 @@ export function ContentModelDividerView(props: { divider: ContentModelDivider })
         <ContentModelView
             title="Divider"
             className={styles.modelDivider}
-            isSelected={divider.isSelected}
+            isSelected={!!divider.selectionMarker}
             jsonSource={divider}
             getContent={getContent}
             getFormat={getFormat}
