@@ -1,7 +1,6 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
-// import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 
 /**
  * @internal
@@ -63,7 +62,15 @@ export function getSelections(
     const result: ContentModelSelection[] = [];
 
     getSelectionsInternal([group], result, options);
+    handleUnmeaningfulSelections(options, result);
 
+    return result;
+}
+
+function handleUnmeaningfulSelections(
+    options: GetSelectionOptions | undefined,
+    result: ContentModelSelection[]
+) {
     if (!options || !options.includeUnmeaningfulSelectedParagraph) {
         // Remove tail paragraph if first selection marker is the only selection
         if (
@@ -81,8 +88,6 @@ export function getSelections(
             result.shift();
         }
     }
-
-    return result;
 }
 
 function isOnlySelectionMarkerSelected(
