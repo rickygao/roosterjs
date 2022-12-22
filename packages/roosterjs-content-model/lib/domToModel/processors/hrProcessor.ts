@@ -1,6 +1,6 @@
 import { addBlock } from '../../modelApi/common/addBlock';
 import { createDivider } from '../../modelApi/creators/createDivider';
-import { createSelectionMarker } from 'roosterjs-content-model/lib/modelApi/creators/createSelectionMarker';
+import { createSelectionMarker } from '../../modelApi/creators/createSelectionMarker';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
