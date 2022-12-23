@@ -379,7 +379,7 @@ describe('getSelections', () => {
 
         expect(result).toEqual([
             {
-                type: 'ListNumber',
+                type: 'FormatHolder',
                 path: [listItem, group],
                 formatHolder: listItem.formatHolder,
             },

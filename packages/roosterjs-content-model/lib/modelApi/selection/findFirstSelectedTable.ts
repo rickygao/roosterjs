@@ -1,5 +1,5 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
-import { ContentModelSelection } from '../selection/getSelections';
+import { ContentModelSelection } from '../../publicTypes/selection/ContentModelSelection';
 import { ContentModelTable } from '../../publicTypes/block/ContentModelTable';
 import { ContentModelTableCell } from '../../publicTypes/group/ContentModelTableCell';
 

@@ -34,7 +34,7 @@ export function formatSegmentWithContentModel(
                         arrayPush(segments, selection.segments);
                         break;
 
-                    case 'ListNumber':
+                    case 'FormatHolder':
                         segments.push(selection.formatHolder);
                         break;
 

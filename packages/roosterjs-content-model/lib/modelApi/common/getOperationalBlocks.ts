@@ -1,7 +1,7 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelBlockGroupBase } from '../../publicTypes/group/ContentModelBlockGroupBase';
 import { ContentModelBlockGroupType } from '../../publicTypes/enum/BlockGroupType';
-import { ContentModelSelection } from '../selection/getSelections';
+import { ContentModelSelection } from '../../publicTypes/selection/ContentModelSelection';
 
 /**
  * @internal

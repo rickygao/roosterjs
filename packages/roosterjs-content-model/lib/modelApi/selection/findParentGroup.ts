@@ -1,6 +1,6 @@
 import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
-import { ContentModelSelection } from './getSelections';
+import { ContentModelSelection } from '../../publicTypes/selection/ContentModelSelection';
 
 /**
  * @internal

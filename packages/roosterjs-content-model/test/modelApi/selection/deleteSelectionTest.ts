@@ -4,11 +4,11 @@ import { createParagraph } from '../../../lib/modelApi/creators/createParagraph'
 import { createSelectionMarker } from '../../../lib/modelApi/creators/createSelectionMarker';
 import { createText } from '../../../lib/modelApi/creators/createText';
 import { deleteSelection } from '../../../lib/modelApi/selection/deleteSelection';
+import { getSelections } from '../../../lib/modelApi/selection/getSelections';
 import {
     ContentModelSegmentsSelection,
     ContentModelSelection,
-    getSelections,
-} from '../../../lib/modelApi/selection/getSelections';
+} from '../../../lib/publicTypes/selection/ContentModelSelection';
 
 describe('deleteSelection', () => {
     it('empty selection', () => {

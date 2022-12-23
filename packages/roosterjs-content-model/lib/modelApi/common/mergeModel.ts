@@ -14,14 +14,14 @@ import { createTableCell } from '../creators/createTableCell';
 import { deleteSelection } from '../selection/deleteSelection';
 import { findFirstSelectedTable } from '../selection/findFirstSelectedTable';
 import { getClosestAncestorBlockGroup } from './getOperationalBlocks';
+import { getSelections } from '../selection/getSelections';
 import { normalizeModel } from './normalizeContentModel';
 import { normalizeTable } from '../table/normalizeTable';
 import { setSelection } from '../selection/setSelection';
 import {
     ContentModelMarkerSelection,
     ContentModelSegmentsSelection,
-    getSelections,
-} from '../selection/getSelections';
+} from '../../publicTypes/selection/ContentModelSelection';
 
 /**
  * @internal

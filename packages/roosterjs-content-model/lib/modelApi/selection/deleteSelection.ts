@@ -1,6 +1,9 @@
 import { arrayPush } from 'roosterjs-editor-dom';
-import { ContentModelSegmentsSelection, ContentModelSelection } from './getSelections';
 import { getClosestAncestorBlockGroup } from '../common/getOperationalBlocks';
+import {
+    ContentModelSegmentsSelection,
+    ContentModelSelection,
+} from '../../publicTypes/selection/ContentModelSelection';
 
 /**
  * @internal
