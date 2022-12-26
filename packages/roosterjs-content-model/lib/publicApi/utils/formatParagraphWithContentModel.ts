@@ -12,18 +12,15 @@ export function formatParagraphWithContentModel(
     setStyleCallback: (paragraph: ContentModelParagraph) => void
 ) {
     formatWithContentModel(editor, apiName, model => {
-        const selections = getSelections(model);
+        let result = false;
 
-        selections.forEach(selection => {
-            if (selection.type == 'Segments') {
-                const para = selection.paragraph;
-
-                if (para) {
-                    setStyleCallback(para);
-                }
+        getSelections(model).forEach(({ block }) => {
+            if (block?.blockType == 'Paragraph') {
+                result = true;
+                setStyleCallback(block);
             }
         });
 
-        return selections.length > 0;
+        return result;
     });
 }

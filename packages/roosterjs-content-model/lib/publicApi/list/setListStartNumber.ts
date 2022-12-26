@@ -1,7 +1,5 @@
-import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
+import { findFirstSelectedListItem } from '../../modelApi/selection/findFirstSelectedListItem';
 import { formatWithContentModel } from '../utils/formatWithContentModel';
-import { getClosestAncestorBlockGroup } from '../../modelApi/common/getOperationalBlocks';
-import { getSelections } from '../../modelApi/selection/getSelections';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 
 /**
@@ -11,10 +9,7 @@ import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimental
  */
 export default function setListStartNumber(editor: IExperimentalContentModelEditor, value: number) {
     formatWithContentModel(editor, 'setListStartNumber', model => {
-        const firstSelection = getSelections(model)[0];
-        const listItem = firstSelection
-            ? getClosestAncestorBlockGroup<ContentModelListItem>(firstSelection, ['ListItem'])
-            : null;
+        const listItem = findFirstSelectedListItem(model);
         const level = listItem?.levels[listItem?.levels.length - 1];
 
         if (level) {

@@ -2,9 +2,11 @@ import { applyTableFormat } from '../../modelApi/table/applyTableFormat';
 import { createContentModelDocument } from '../../modelApi/creators/createContentModelDocument';
 import { createSelectionMarker } from '../../modelApi/creators/createSelectionMarker';
 import { createTableStructure } from '../../modelApi/table/createTableStructure';
+import { deleteSelection } from '../../modelApi/selection/deleteSelection';
 import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 import { mergeModel } from '../../modelApi/common/mergeModel';
+import { normalizeModel } from '../../modelApi/common/normalizeContentModel';
 import { normalizeTable } from '../../modelApi/table/normalizeTable';
 import { setSelection } from '../../modelApi/selection/setSelection';
 import { TableMetadataFormat } from '../../publicTypes/format/formatParts/TableMetadataFormat';
@@ -25,13 +27,17 @@ export default function insertTable(
     format?: TableMetadataFormat
 ) {
     formatWithContentModel(editor, 'insertTable', model => {
+        const markerPosition = deleteSelection(model);
         const doc = createContentModelDocument();
         const table = createTableStructure(doc, columns, rows);
 
+        normalizeModel(model);
         normalizeTable(table);
         applyTableFormat(table, format);
 
-        mergeModel(model, doc);
+        if (markerPosition) {
+            mergeModel(model, doc, markerPosition);
+        }
 
         const firstBlock = table.cells[0]?.[0]?.blocks[0];
 

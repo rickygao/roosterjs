@@ -1,35 +1,53 @@
+import * as getSelections from '../../../lib/modelApi/selection/getSelections';
+import { ContentModelBlockGroup } from '../../../lib/publicTypes/group/ContentModelBlockGroup';
+import { ContentModelBlockGroupType } from '../../../lib/publicTypes/enum/BlockGroupType';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
 import { createListItem } from '../../../lib/modelApi/creators/createListItem';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
 import { createQuote } from '../../../lib/modelApi/creators/createQuote';
-import { getOperationalBlocks } from '../../../lib/modelApi/common/getOperationalBlocks';
+
+import {
+    getOperationalBlocks,
+    OperationalBlocks,
+} from '../../../lib/modelApi/common/getOperationalBlocks';
 
 describe('getOperationalBlocks', () => {
     it('empty input', () => {
-        const result = getOperationalBlocks([], ['ListItem']);
+        const result = getOperationalBlocks(createContentModelDocument(), ['ListItem'], []);
 
         expect(result).toEqual([]);
     });
+
+    function runTest(
+        selections: getSelections.ContentModelSelectionInfo[],
+        blockGroupTypes: ContentModelBlockGroupType[],
+        stopTypes: ContentModelBlockGroupType[],
+        deepFirst: boolean,
+        expectedResult: OperationalBlocks<ContentModelBlockGroup>[]
+    ) {
+        spyOn(getSelections, 'getSelections').and.returnValue(selections);
+
+        const result = getOperationalBlocks(null!, blockGroupTypes, stopTypes, deepFirst);
+
+        expect(result).toEqual(expectedResult);
+    }
 
     it('selected paragraph without expect group type', () => {
         const group = createContentModelDocument();
         const para = createParagraph();
 
-        const result = getOperationalBlocks(
+        runTest(
             [
                 {
-                    type: 'Segments',
-                    paragraph: para,
                     path: [group],
-                    segments: [],
+                    block: para,
                 },
             ],
-            ['ListItem']
+            ['ListItem'],
+            ['TableCell'],
+            false,
+            [{ block: para, parent: group }]
         );
-
-        expect(result).toEqual([
-            { type: 'Segments', paragraph: para, path: [group], segments: [] },
-        ]);
     });
 
     it('selected paragraph with expect group type', () => {
@@ -38,18 +56,25 @@ describe('getOperationalBlocks', () => {
         const para2 = createParagraph();
         const listItem = createListItem([]);
 
-        const result = getOperationalBlocks(
+        runTest(
             [
-                { type: 'Segments', paragraph: para1, path: [listItem, group], segments: [] },
-                { type: 'Segments', paragraph: para2, path: [group], segments: [] },
+                { block: para1, path: [listItem, group] },
+                { block: para2, path: [group] },
             ],
-            ['ListItem']
+            ['ListItem'],
+            ['TableCell'],
+            false,
+            [
+                {
+                    block: listItem,
+                    parent: group,
+                },
+                {
+                    block: para2,
+                    parent: group,
+                },
+            ]
         );
-
-        expect(result).toEqual([
-            listItem,
-            { type: 'Segments', paragraph: para2, path: [group], segments: [] },
-        ]);
     });
 
     it('selected multiple paragraphs in same expect group type', () => {
@@ -59,19 +84,20 @@ describe('getOperationalBlocks', () => {
         const para3 = createParagraph();
         const listItem = createListItem([]);
 
-        const result = getOperationalBlocks(
+        runTest(
             [
-                { type: 'Segments', paragraph: para1, path: [listItem, group], segments: [] },
-                { type: 'Segments', paragraph: para2, path: [listItem, group], segments: [] },
-                { type: 'Segments', paragraph: para3, path: [group], segments: [] },
+                { block: para1, path: [listItem, group] },
+                { block: para2, path: [listItem, group] },
+                { block: para3, path: [group] },
             ],
-            ['ListItem']
+            ['ListItem'],
+            ['TableCell'],
+            false,
+            [
+                { block: listItem, parent: group },
+                { block: para3, parent: group },
+            ]
         );
-
-        expect(result).toEqual([
-            listItem,
-            { type: 'Segments', paragraph: para3, path: [group], segments: [] },
-        ]);
     });
 
     it('selected paragraph with stop type', () => {
@@ -82,24 +108,19 @@ describe('getOperationalBlocks', () => {
         const listItem2 = createListItem([]);
         const quote = createQuote();
 
-        const result = getOperationalBlocks(
+        runTest(
             [
-                { type: 'Segments', paragraph: para1, path: [listItem1, group], segments: [] },
-                {
-                    type: 'Segments',
-                    paragraph: para2,
-                    path: [quote, listItem2, group],
-                    segments: [],
-                },
+                { block: para1, path: [listItem1, group] },
+                { block: para2, path: [quote, listItem2, group] },
             ],
             ['ListItem'],
-            ['Quote']
+            ['Quote'],
+            false,
+            [
+                { block: listItem1, parent: group },
+                { block: para2, parent: quote },
+            ]
         );
-
-        expect(result).toEqual([
-            listItem1,
-            { type: 'Segments', paragraph: para2, path: [quote, listItem2, group], segments: [] },
-        ]);
     });
 
     it('selected paragraph with multiple group type', () => {
@@ -109,15 +130,22 @@ describe('getOperationalBlocks', () => {
         const listItem = createListItem([]);
         const quote = createQuote();
 
-        const result = getOperationalBlocks(
+        runTest(
             [
-                { type: 'Segments', paragraph: para1, path: [listItem, group], segments: [] },
-                { type: 'Segments', paragraph: para2, path: [quote, group], segments: [] },
+                { block: para1, path: [listItem, group] },
+                { block: para2, path: [quote, group] },
             ],
-            ['ListItem', 'Quote']
+            ['ListItem', 'Quote'],
+            ['TableCell'],
+            false,
+            [
+                {
+                    block: listItem,
+                    parent: group,
+                },
+                { block: quote, parent: group },
+            ]
         );
-
-        expect(result).toEqual([listItem, quote]);
     });
 
     it('multiple group type, width first', () => {
@@ -128,20 +156,19 @@ describe('getOperationalBlocks', () => {
         const quote1 = createQuote({ backgroundColor: 'blue' });
         const quote2 = createQuote({ backgroundColor: 'black' });
 
-        const result = getOperationalBlocks(
+        runTest(
             [
-                {
-                    type: 'Segments',
-                    paragraph: para1,
-                    path: [quote1, listItem, group],
-                    segments: [],
-                },
-                { type: 'Segments', paragraph: para2, path: [quote2, group], segments: [] },
+                { block: para1, path: [quote1, listItem, group] },
+                { block: para2, path: [quote2, group] },
             ],
-            ['ListItem', 'Quote']
+            ['ListItem', 'Quote'],
+            ['TableCell'],
+            false,
+            [
+                { block: quote1, parent: listItem },
+                { block: quote2, parent: group },
+            ]
         );
-
-        expect(result).toEqual([quote1, quote2]);
     });
 
     it('multiple group type, deep first', () => {
@@ -152,21 +179,18 @@ describe('getOperationalBlocks', () => {
         const quote1 = createQuote({ backgroundColor: 'blue' });
         const quote2 = createQuote({ backgroundColor: 'black' });
 
-        const result = getOperationalBlocks(
+        runTest(
             [
-                {
-                    type: 'Segments',
-                    paragraph: para1,
-                    path: [quote1, listItem, group],
-                    segments: [],
-                },
-                { type: 'Segments', paragraph: para2, path: [quote2, group], segments: [] },
+                { block: para1, path: [quote1, listItem, group] },
+                { block: para2, path: [quote2, group] },
             ],
             ['ListItem', 'Quote'],
-            undefined,
-            true
+            ['TableCell'],
+            true,
+            [
+                { block: listItem, parent: group },
+                { block: quote2, parent: group },
+            ]
         );
-
-        expect(result).toEqual([listItem, quote2]);
     });
 });

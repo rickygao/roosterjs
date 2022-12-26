@@ -1,12 +1,17 @@
+import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelBlockGroupBase } from '../../publicTypes/group/ContentModelBlockGroupBase';
 import { ContentModelBlockGroupType } from '../../publicTypes/enum/BlockGroupType';
-import { ContentModelSelection } from '../../publicTypes/selection/ContentModelSelection';
+import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
+import { getSelections } from '../selection/getSelections';
 
 /**
  * @internal
  */
-export type OperationalBlocks<T extends ContentModelBlockGroup> = T | ContentModelSelection;
+export type OperationalBlocks<T extends ContentModelBlockGroup> = {
+    parent: ContentModelBlockGroup;
+    block: ContentModelBlock | T;
+};
 
 /**
  * @internal
@@ -19,26 +24,31 @@ export type TypeOfBlockGroup<
  * @internal
  */
 export function getOperationalBlocks<T extends ContentModelBlockGroup>(
-    selections: ContentModelSelection[],
+    model: ContentModelDocument,
     blockGroupTypes: TypeOfBlockGroup<T>[],
-    stopTypes: ContentModelBlockGroupType[] = ['TableCell'],
+    stopTypes: ContentModelBlockGroupType[],
     deepFirst?: boolean
 ): OperationalBlocks<T>[] {
     const result: OperationalBlocks<T>[] = [];
+    const findSequence = deepFirst ? blockGroupTypes.map(type => [type]) : [blockGroupTypes];
 
-    selections.forEach(p => {
-        const findSequence = deepFirst ? blockGroupTypes.map(type => [type]) : [blockGroupTypes];
-
+    getSelections(model).forEach(({ path, block }) => {
         for (let i = 0; i < findSequence.length; i++) {
-            const group = getClosestAncestorBlockGroup(p, findSequence[i], stopTypes);
+            const groupIndex = getClosestAncestorBlockGroup(path, findSequence[i], stopTypes);
 
-            if (group) {
-                if (result.indexOf(group) < 0) {
-                    result.push(group);
+            if (groupIndex >= 0) {
+                if (result.filter(x => x.block == path[groupIndex]).length <= 0) {
+                    result.push({
+                        parent: path[groupIndex + 1],
+                        block: path[groupIndex] as T,
+                    });
                 }
                 break;
-            } else if (i == findSequence.length - 1) {
-                result.push(p);
+            } else if (i == findSequence.length - 1 && block) {
+                result.push({
+                    parent: path[0],
+                    block: block,
+                });
                 break;
             }
         }
@@ -51,23 +61,23 @@ export function getOperationalBlocks<T extends ContentModelBlockGroup>(
  * @internal
  */
 export function getClosestAncestorBlockGroup<T extends ContentModelBlockGroup>(
-    selection: ContentModelSelection,
+    path: ContentModelBlockGroup[],
     blockGroupTypes: TypeOfBlockGroup<T>[],
     stopTypes: ContentModelBlockGroupType[] = []
-): T | null {
-    for (let i = 0; i < selection.path.length; i++) {
-        const group = selection.path[i];
+): number {
+    for (let i = 0; i < path.length; i++) {
+        const group = path[i];
 
         if ((blockGroupTypes as string[]).indexOf(group.blockGroupType) >= 0) {
-            return group as T;
+            return i;
         } else if (stopTypes.indexOf(group.blockGroupType) >= 0) {
             // Do not go across boundary specified by stopTypes.
             // For example, in most case we will set table as the boundary,
             // in order to allow modify list item under a table when the table itself is in another list item
             // Although this is not very likely to happen in most case, but we still need to handle it
-            return null;
+            return -1;
         }
     }
 
-    return null;
+    return -1;
 }

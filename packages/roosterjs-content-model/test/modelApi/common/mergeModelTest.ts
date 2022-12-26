@@ -8,21 +8,10 @@ import { createSelectionMarker } from '../../../lib/modelApi/creators/createSele
 import { createTable } from '../../../lib/modelApi/creators/createTable';
 import { createTableCell } from '../../../lib/modelApi/creators/createTableCell';
 import { createText } from '../../../lib/modelApi/creators/createText';
+import { deleteSelection } from '../../../lib/modelApi/selection/deleteSelection';
 import { mergeModel } from '../../../lib/modelApi/common/mergeModel';
 
 describe('mergeModel', () => {
-    it('empty to empty', () => {
-        const majorModel = createContentModelDocument();
-        const sourceModel = createContentModelDocument();
-
-        mergeModel(majorModel, sourceModel);
-
-        expect(majorModel).toEqual({
-            blockGroupType: 'Document',
-            blocks: [],
-        });
-    });
-
     it('empty to single selection', () => {
         const majorModel = createContentModelDocument();
         const sourceModel = createContentModelDocument();
@@ -32,7 +21,10 @@ describe('mergeModel', () => {
         para.segments.push(marker);
         majorModel.blocks.push(para);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -72,7 +64,10 @@ describe('mergeModel', () => {
         para2.segments.push(text1, text2);
         sourceModel.blocks.push(para2);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -122,7 +117,10 @@ describe('mergeModel', () => {
         majorModel.blocks.push(para1);
         sourceModel.blocks.push(para2);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -201,7 +199,10 @@ describe('mergeModel', () => {
         sourceModel.blocks.push(newPara1);
         sourceModel.blocks.push(newPara2);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -296,7 +297,10 @@ describe('mergeModel', () => {
         sourceModel.blocks.push(newPara2);
         sourceModel.blocks.push(newPara3);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -437,7 +441,10 @@ describe('mergeModel', () => {
         sourceModel.blocks.push(newList1);
         sourceModel.blocks.push(newList2);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -579,7 +586,10 @@ describe('mergeModel', () => {
         sourceModel.blocks.push(newList1);
         sourceModel.blocks.push(newList2);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -742,7 +752,10 @@ describe('mergeModel', () => {
 
         sourceModel.blocks.push(newTable1);
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(majorModel).toEqual({
             blockGroupType: 'Document',
@@ -840,7 +853,10 @@ describe('mergeModel', () => {
         spyOn(applyTableFormat, 'applyTableFormat');
         spyOn(normalizeTable, 'normalizeTable');
 
-        mergeModel(majorModel, sourceModel);
+        const markerPosition = deleteSelection(majorModel);
+
+        expect(markerPosition).toBeTruthy();
+        mergeModel(majorModel, sourceModel, markerPosition!);
 
         expect(normalizeTable.normalizeTable).toHaveBeenCalledTimes(1);
         expect(majorModel).toEqual({

@@ -37,13 +37,6 @@ export { ContentModelSegmentType } from './publicTypes/enum/SegmentType';
 export { ContentModelSelectionType } from './publicTypes/enum/SelectionType';
 
 export { Selectable } from './publicTypes/selection/Selectable';
-export {
-    ContentModelSelection,
-    ContentModelSegmentsSelection,
-    ContentModelMarkerSelection,
-    ContentModelFormatHolderSelection,
-    ContentModelBlockSelection,
-} from './publicTypes/selection/ContentModelSelection';
 
 export { ContentModelBlockBase } from './publicTypes/block/ContentModelBlockBase';
 export { ContentModelTable } from './publicTypes/block/ContentModelTable';

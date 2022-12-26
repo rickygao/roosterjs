@@ -4,30 +4,27 @@ import { createParagraph } from '../../../lib/modelApi/creators/createParagraph'
 import { createSelectionMarker } from '../../../lib/modelApi/creators/createSelectionMarker';
 import { createText } from '../../../lib/modelApi/creators/createText';
 import { deleteSelection } from '../../../lib/modelApi/selection/deleteSelection';
-import { getSelections } from '../../../lib/modelApi/selection/getSelections';
-import {
-    ContentModelSegmentsSelection,
-    ContentModelSelection,
-} from '../../../lib/publicTypes/selection/ContentModelSelection';
 
 describe('deleteSelection', () => {
     it('empty selection', () => {
+        const model = createContentModelDocument();
         const para = createParagraph();
-        const selection: ContentModelSelection = {
-            type: 'Segments',
-            paragraph: para,
-            path: [],
-            segments: [],
-        };
 
-        deleteSelection(selection);
+        model.blocks.push(para);
 
-        expect(selection).toEqual({
-            type: 'Segments',
-            paragraph: para,
-            path: [],
-            segments: [],
+        const result = deleteSelection(model);
+
+        expect(model).toEqual({
+            blockGroupType: 'Document',
+            blocks: [
+                {
+                    blockType: 'Paragraph',
+                    format: {},
+                    segments: [],
+                },
+            ],
         });
+        expect(result).toBeNull();
     });
 
     it('Single selection marker', () => {
@@ -38,8 +35,9 @@ describe('deleteSelection', () => {
         para.segments.push(marker);
         model.blocks.push(para);
 
-        deleteSelection(getSelections(model)[0]);
+        const result = deleteSelection(model);
 
+        expect(result).toEqual(null);
         expect(model).toEqual({
             blockGroupType: 'Document',
             blocks: [
@@ -61,8 +59,9 @@ describe('deleteSelection', () => {
         para.segments.push(text);
         model.blocks.push(para);
 
-        deleteSelection(getSelections(model)[0]);
+        const result = deleteSelection(model);
 
+        expect(result).toEqual(null);
         expect(model).toEqual({
             blockGroupType: 'Document',
             blocks: [
@@ -93,9 +92,9 @@ describe('deleteSelection', () => {
         model.blocks.push(para1);
         model.blocks.push(para2);
 
-        const selections = getSelections(model);
-        selections.forEach(s => deleteSelection(s, selections[0] as ContentModelSegmentsSelection));
+        const result = deleteSelection(model);
 
+        expect(result).toEqual(null);
         expect(model).toEqual({
             blockGroupType: 'Document',
             blocks: [
@@ -126,9 +125,9 @@ describe('deleteSelection', () => {
         divider.isSelected = true;
         model.blocks.push(divider);
 
-        const selections = getSelections(model);
-        selections.forEach(s => deleteSelection(s));
+        const result = deleteSelection(model);
 
+        expect(result).toEqual(null);
         expect(model).toEqual({
             blockGroupType: 'Document',
             blocks: [],

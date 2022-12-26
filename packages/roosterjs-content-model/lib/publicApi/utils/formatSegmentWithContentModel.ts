@@ -1,4 +1,5 @@
 import { arrayPush } from 'roosterjs-editor-dom';
+import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 import { formatWithContentModel } from './formatWithContentModel';
 import { getSelections } from '../../modelApi/selection/getSelections';
@@ -18,31 +19,11 @@ export function formatSegmentWithContentModel(
     includingFormatHolder?: boolean,
     domToModelOptions?: DomToModelOption
 ) {
-    const segments: ContentModelSegment[] = [];
-
     formatWithContentModel(
         editor,
         apiName,
         model => {
-            const selections = getSelections(model, {
-                includeListFormatHolder: includingFormatHolder,
-            });
-
-            selections.forEach(selection => {
-                switch (selection.type) {
-                    case 'Segments':
-                        arrayPush(segments, selection.segments);
-                        break;
-
-                    case 'FormatHolder':
-                        segments.push(selection.formatHolder);
-                        break;
-
-                    case 'Marker':
-                        segments.push(selection.marker);
-                        break;
-                }
-            });
+            const segments = getSelectedSegments(model, includingFormatHolder);
 
             const isTurningOff = segmentHasStyleCallback
                 ? segments.every(segmentHasStyleCallback)
@@ -57,4 +38,21 @@ export function formatSegmentWithContentModel(
         },
         domToModelOptions
     );
+}
+
+function getSelectedSegments(
+    model: ContentModelDocument,
+    includingFormatHolder?: boolean
+): ContentModelSegment[] {
+    const result: ContentModelSegment[] = [];
+
+    getSelections(model, {
+        includeListFormatHolder: includingFormatHolder,
+    }).forEach(({ segments, block }) => {
+        if (segments && (includingFormatHolder || block?.blockType == 'Paragraph')) {
+            arrayPush(result, segments);
+        }
+    });
+
+    return result;
 }

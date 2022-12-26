@@ -1,7 +1,10 @@
 import domToContentModel from '../domToContentModel';
+import { deleteSelection } from '../../modelApi/selection/deleteSelection';
 import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 import { mergeModel } from '../../modelApi/common/mergeModel';
+import { normalizeModel } from '../../modelApi/common/normalizeContentModel';
+import { setSelection } from '../../modelApi/selection/setSelection';
 
 /**
  * Insert content
@@ -17,9 +20,17 @@ export default function insertContent(
         const trustedHtml = trustedHtmlHandler(htmlContent);
         const doc = new DOMParser().parseFromString(trustedHtml, 'text/html');
         const sourceModel = domToContentModel(doc.body, editor.createEditorContext(), {});
+        const markerPosition = deleteSelection(model);
 
-        mergeModel(model, sourceModel);
+        normalizeModel(model);
 
-        return sourceModel.blocks.length > 0;
+        if (markerPosition) {
+            setSelection(sourceModel);
+            mergeModel(model, sourceModel, markerPosition);
+
+            return true;
+        } else {
+            return false;
+        }
     });
 }
