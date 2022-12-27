@@ -14,7 +14,7 @@ describe('getFirstFocusedListItem', () => {
             blockGroupType: 'Document',
             blocks: [],
         });
-        expect(result).toBeNull();
+        expect(result).toBeUndefined();
     });
 
     it('Group without selection', () => {
@@ -25,7 +25,7 @@ describe('getFirstFocusedListItem', () => {
 
         const result = getFirstFocusedListItem(group);
 
-        expect(result).toBeNull();
+        expect(result).toBeUndefined();
     });
 
     it('Group with list selection', () => {
@@ -40,7 +40,7 @@ describe('getFirstFocusedListItem', () => {
 
         const result = getFirstFocusedListItem(group);
 
-        expect(result).toBeNull();
+        expect(result).toBeUndefined();
     });
 
     it('Group with list selection', () => {
@@ -102,6 +102,6 @@ describe('getFirstFocusedListItem', () => {
 
         const result = getFirstFocusedListItem(group);
 
-        expect(result).toBeNull();
+        expect(result).toEqual(listItem2);
     });
 });

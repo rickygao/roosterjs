@@ -1,10 +1,14 @@
 import { applyTableFormat } from '../../modelApi/table/applyTableFormat';
-import { ChangeSource } from 'roosterjs-editor-types';
 import { createContentModelDocument } from '../../modelApi/creators/createContentModelDocument';
 import { createSelectionMarker } from '../../modelApi/creators/createSelectionMarker';
 import { createTableStructure } from '../../modelApi/table/createTableStructure';
+import { deleteSelection } from '../../modelApi/selection/deleteSelection';
+import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
+import { mergeModel } from '../../modelApi/common/mergeModel';
+import { normalizeModel } from '../../modelApi/common/normalizeContentModel';
 import { normalizeTable } from '../../modelApi/table/normalizeTable';
+import { setSelection } from '../../modelApi/selection/setSelection';
 import { TableMetadataFormat } from '../../publicTypes/format/formatParts/TableMetadataFormat';
 
 /**
@@ -22,29 +26,27 @@ export default function insertTable(
     rows: number,
     format?: TableMetadataFormat
 ) {
-    const doc = createContentModelDocument();
-    const table = createTableStructure(doc, columns, rows);
+    formatWithContentModel(editor, 'insertTable', model => {
+        const markerPosition = deleteSelection(model);
+        const doc = createContentModelDocument();
+        const table = createTableStructure(doc, columns, rows);
 
-    normalizeTable(table);
-    applyTableFormat(table, format);
+        normalizeModel(model);
+        normalizeTable(table);
+        applyTableFormat(table, format);
 
-    const firstBlock = table.cells[0]?.[0]?.blocks[0];
+        if (markerPosition) {
+            mergeModel(model, doc, markerPosition);
+        }
 
-    if (firstBlock?.blockType == 'Paragraph') {
-        firstBlock.segments.unshift(createSelectionMarker());
-    }
+        const firstBlock = table.cells[0]?.[0]?.blocks[0];
 
-    editor.addUndoSnapshot(
-        () => {
-            editor.setContentModel(doc, {
-                doNotReuseEntityDom: true,
-                mergingCallback: fragment => {
-                    editor.insertNode(fragment);
-                },
-            });
-        },
-        ChangeSource.Format,
-        false /*canUndoByBackspace*/,
-        { formatApiName: 'insertTable' }
-    );
+        if (firstBlock?.blockType == 'Paragraph') {
+            const marker = createSelectionMarker(firstBlock.segments[0]?.format);
+            firstBlock.segments.unshift(marker);
+            setSelection(model, marker);
+        }
+
+        return true;
+    });
 }

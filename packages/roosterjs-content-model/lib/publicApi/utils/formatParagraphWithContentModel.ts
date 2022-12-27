@@ -13,15 +13,15 @@ export function formatParagraphWithContentModel(
 ) {
     formatWithContentModel(editor, apiName, model => {
         const selections = getSelections(model);
+        let result = false;
 
-        selections.forEach(selection => {
-            const para = selection.paragraph;
-
-            if (para) {
-                setStyleCallback(para);
+        selections.forEach(({ block }) => {
+            if (block?.blockType == 'Paragraph') {
+                result = true;
+                setStyleCallback(block);
             }
         });
 
-        return selections.length > 0;
+        return result;
     });
 }

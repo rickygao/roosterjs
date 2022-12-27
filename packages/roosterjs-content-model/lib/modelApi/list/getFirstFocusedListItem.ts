@@ -1,17 +1,21 @@
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
 import { getOperationalBlocks } from '../common/getOperationalBlocks';
-import { getSelections } from '../selection/getSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
 
 /**
  * @internal
  */
-export function getFirstFocusedListItem(model: ContentModelDocument): ContentModelListItem | null {
-    const paragraphs = getSelections(model);
-    const currentListItem = getOperationalBlocks<ContentModelListItem>(paragraphs, ['ListItem'])[0];
+export function getFirstFocusedListItem(
+    model: ContentModelDocument
+): ContentModelListItem | undefined {
+    let listItem: ContentModelListItem | undefined;
 
-    return currentListItem && isBlockGroupOfType(currentListItem, 'ListItem')
-        ? currentListItem
-        : null;
+    getOperationalBlocks(model, ['ListItem'], ['TableCell']).forEach(r => {
+        if (!listItem && isBlockGroupOfType<ContentModelListItem>(r.block, 'ListItem')) {
+            listItem = r.block;
+        }
+    });
+
+    return listItem;
 }

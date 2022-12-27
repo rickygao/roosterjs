@@ -1,39 +1,26 @@
+import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
-import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
+import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
+import { ContentModelTable } from '../../publicTypes/block/ContentModelTable';
 
 /**
  * @internal
  */
-export interface ContentModelSelection {
-    /**
-     * Paragraph that contains selection.
-     *
-     * When GetSelectionOptions.includeFormatHolder is passed into getSelections(), it is possible paragraph is null when there are
-     * selections that are not directly under a paragraph, in that case the segments will contains formatHolder segment.
-     */
-    paragraph: ContentModelParagraph | null;
+export interface TableSelectionContext {
+    table: ContentModelTable;
+    rowIndex: number;
+    colIndex: number;
+}
 
-    /**
-     * Selected segments
-     *
-     * When GetSelectionOptions.includeFormatHolder is passed into getSelections(), it is possible paragraph is null when there are
-     * selections that are not directly under a paragraph, in that case the segments will contains formatHolder segment.
-     */
-    segments: ContentModelSegment[];
-
-    /**
-     * A path that combines all parents of ContentModelBlockGroup of this paragraph. First element is the direct parent group, then next
-     * one is first one's parent group, until last one, the root document group.
-     * e.g. A table contains a list with a paragraph, like:
-     * ContentModelDocument
-     *   \ ContentModelTable
-     *       \ ContentModelListItem
-     *           \ ContentModelParagraph
-     * Then the path will be:
-     * [ContentModelListItem, ContentModelDocument]
-     */
+/**
+ * @internal
+ */
+export interface ContentModelSelectionInfo {
     path: ContentModelBlockGroup[];
+    segments?: ContentModelSegment[];
+    block?: ContentModelBlock;
+    tableContext?: TableSelectionContext;
 }
 
 /**
@@ -43,124 +30,128 @@ export interface GetSelectionOptions {
     /**
      * When pass true, format holder (e.g. ContentModelListItem.formatHolder) is also included in selected segment in result.
      */
-    includeFormatHolder?: boolean;
+    includeListFormatHolder?: boolean;
 
     /**
      * When pass true, if selection is started from the end of a paragraph, or ended at the beginning of a paragraph,
      * those paragraphs are also included in result
      */
-    includeUnmeaningfulSelectedParagraph?: boolean;
+    includeUnmeaningfulSelection?: boolean;
+
+    /**
+     * When set to true, and a table cell is marked as selected, all content under this table cell will not be included in result
+     */
+    ignoreContentUnderSelectedTableCell?: boolean;
 }
 
 /**
  * @internal
  */
 export function getSelections(
-    group: ContentModelBlockGroup,
-    options?: GetSelectionOptions
-): ContentModelSelection[] {
-    const result: ContentModelSelection[] = [];
+    group: ContentModelDocument,
+    option?: GetSelectionOptions
+): ContentModelSelectionInfo[] {
+    const result: ContentModelSelectionInfo[] = [];
 
-    getSelectionsInternal([group], result, options);
+    getSelectionsInternal([group], result, option);
 
-    if (!options || !options.includeUnmeaningfulSelectedParagraph) {
-        // Remove tail paragraph if first selection marker is the only selection
-        if (
-            result.length > 1 &&
-            isOnlySelectionMarkerSelected(result, false /*checkFirstParagraph*/)
-        ) {
-            result.pop();
-        }
-
-        // Remove head paragraph if first selection marker is the only selection
-        if (
-            result.length > 1 &&
-            isOnlySelectionMarkerSelected(result, true /*checkFirstParagraph*/)
-        ) {
-            result.shift();
-        }
+    if (!option?.includeUnmeaningfulSelection) {
+        handleUnmeaningfulSelections(result);
     }
 
     return result;
 }
 
-function isOnlySelectionMarkerSelected(
-    paragraphs: ContentModelSelection[],
-    checkFirstParagraph: boolean
-): boolean {
-    const paragraph = paragraphs[checkFirstParagraph ? 0 : paragraphs.length - 1].paragraph;
-
-    if (!paragraph) {
-        return false;
-    } else {
-        const selectedSegments = paragraph.segments.filter(s => s.isSelected);
-
-        return (
-            selectedSegments.length == 1 &&
-            selectedSegments[0].segmentType == 'SelectionMarker' &&
-            selectedSegments[0] ==
-                paragraph.segments[checkFirstParagraph ? paragraph.segments.length - 1 : 0]
-        );
-    }
-}
-
 function getSelectionsInternal(
     path: ContentModelBlockGroup[],
-    result: ContentModelSelection[],
-    options?: GetSelectionOptions,
+    result: ContentModelSelectionInfo[],
+    option?: GetSelectionOptions,
+    tableContext?: TableSelectionContext,
     treatAllAsSelect?: boolean
 ) {
     const parent = path[0];
     let hasUnselectedSegment = false;
-    let startingLength = result.length;
 
     for (let i = 0; i < parent.blocks.length; i++) {
         const block = parent.blocks[i];
 
         switch (block.blockType) {
             case 'BlockGroup':
-                getSelectedParagraphFromBlockGroup(block, path, result, options, treatAllAsSelect);
+                getSelectionsFromBlockGroup(
+                    block,
+                    path,
+                    result,
+                    option,
+                    tableContext,
+                    treatAllAsSelect
+                );
                 break;
 
             case 'Table':
-                block.cells.forEach(row => {
-                    row.forEach(cell => {
-                        getSelectedParagraphFromBlockGroup(
-                            cell,
-                            path,
-                            result,
-                            options,
-                            treatAllAsSelect || cell.isSelected
-                        );
+                if (
+                    option?.ignoreContentUnderSelectedTableCell &&
+                    block.cells.every(row => row.every(cell => cell.isSelected))
+                ) {
+                    addResult(result, { path, block, tableContext });
+                } else {
+                    block.cells.forEach((row, rowIndex) => {
+                        row.forEach((cell, colIndex) => {
+                            const newTableContext: TableSelectionContext = {
+                                table: block,
+                                rowIndex,
+                                colIndex,
+                            };
+
+                            if (cell.isSelected) {
+                                addResult(result, { path, tableContext: newTableContext });
+                            }
+
+                            if (!cell.isSelected || !option?.ignoreContentUnderSelectedTableCell) {
+                                getSelectionsFromBlockGroup(
+                                    cell,
+                                    path,
+                                    result,
+                                    option,
+                                    newTableContext,
+                                    treatAllAsSelect || cell.isSelected
+                                );
+                            }
+                        });
                     });
-                });
+                }
+
                 break;
 
             case 'Paragraph':
-                const selectedSegments: ContentModelSegment[] = [];
+                const segments: ContentModelSegment[] = [];
 
                 block.segments.forEach(segment => {
                     if (segment.segmentType == 'General') {
-                        getSelectedParagraphFromBlockGroup(
+                        getSelectionsFromBlockGroup(
                             segment,
                             path,
                             result,
-                            options,
+                            option,
+                            tableContext,
                             treatAllAsSelect
                         );
                     } else if (treatAllAsSelect || segment.isSelected) {
-                        selectedSegments.push(segment);
+                        segments.push(segment);
                     } else {
                         hasUnselectedSegment = true;
                     }
                 });
 
-                if (selectedSegments.length > 0) {
-                    result.push({
-                        paragraph: block,
-                        segments: selectedSegments,
-                        path: [...path],
-                    });
+                if (segments.length > 0) {
+                    addResult(result, { path, segments, block, tableContext });
+                }
+
+                break;
+
+            case 'Divider':
+            case 'Entity':
+                if (block.isSelected) {
+                    addResult(result, { path, block, tableContext });
                 }
 
                 break;
@@ -168,26 +159,84 @@ function getSelectionsInternal(
     }
 
     if (
+        option?.includeListFormatHolder &&
         parent.blockGroupType == 'ListItem' &&
-        !hasUnselectedSegment &&
-        options?.includeFormatHolder
+        !hasUnselectedSegment
     ) {
-        result.splice(startingLength, 0 /*deleteCount*/, {
-            paragraph: null,
+        addResult(result, {
+            path: path.splice(1),
             segments: [parent.formatHolder],
-            path: [...path],
+            block: parent,
+            tableContext,
         });
     }
 }
 
-function getSelectedParagraphFromBlockGroup(
+function addResult(result: ContentModelSelectionInfo[], source: ContentModelSelectionInfo) {
+    const selection: ContentModelSelectionInfo = {
+        path: [...source.path],
+    };
+
+    if (source.block) {
+        selection.block = source.block;
+    }
+
+    if (source.segments) {
+        selection.segments = source.segments;
+    }
+
+    if (source.tableContext) {
+        selection.tableContext = source.tableContext;
+    }
+
+    result.push(selection);
+}
+
+function getSelectionsFromBlockGroup(
     group: ContentModelBlockGroup,
     path: ContentModelBlockGroup[],
-    result: ContentModelSelection[],
-    options?: GetSelectionOptions,
+    result: ContentModelSelectionInfo[],
+    option?: GetSelectionOptions,
+    tableContext?: TableSelectionContext,
     treatAllAsSelect?: boolean
 ) {
     path.unshift(group);
-    getSelectionsInternal(path, result, options, treatAllAsSelect);
+    getSelectionsInternal(path, result, option, tableContext, treatAllAsSelect);
     path.shift();
+}
+
+function handleUnmeaningfulSelections(result: ContentModelSelectionInfo[]) {
+    // Remove tail paragraph if first selection marker is the only selection
+    if (result.length > 1 && isOnlySelectionMarkerSelected(result, false /*checkFirstParagraph*/)) {
+        result.pop();
+    }
+
+    // Remove head paragraph if first selection marker is the only selection
+    if (result.length > 1 && isOnlySelectionMarkerSelected(result, true /*checkFirstParagraph*/)) {
+        result.shift();
+    }
+}
+
+function isOnlySelectionMarkerSelected(
+    selections: ContentModelSelectionInfo[],
+    checkFirstParagraph: boolean
+): boolean {
+    const selection = selections[checkFirstParagraph ? 0 : selections.length - 1];
+
+    if (
+        selection.block?.blockType == 'Paragraph' &&
+        selection.segments &&
+        selection.segments.length! > 0
+    ) {
+        const allSegments = selection.block.segments;
+        const segment = selection.segments[0];
+
+        return (
+            selection.segments.length == 1 &&
+            segment.segmentType == 'SelectionMarker' &&
+            segment == allSegments[checkFirstParagraph ? allSegments.length - 1 : 0]
+        );
+    } else {
+        return false;
+    }
 }
