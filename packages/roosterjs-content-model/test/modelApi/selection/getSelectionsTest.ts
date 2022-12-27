@@ -176,6 +176,11 @@ describe('getSelections', () => {
                 path: [cell, group],
                 segments: [text1],
                 block: para1,
+                tableContext: {
+                    table,
+                    rowIndex: 0,
+                    colIndex: 0,
+                },
             },
         ]);
     });
@@ -210,6 +215,11 @@ describe('getSelections', () => {
                 path: [listItem, quote, cell, group],
                 segments: [text1],
                 block: para1,
+                tableContext: {
+                    table,
+                    colIndex: 0,
+                    rowIndex: 0,
+                },
             },
         ]);
     });
@@ -239,14 +249,32 @@ describe('getSelections', () => {
 
         expect(result).toEqual([
             {
+                path: [group],
+                tableContext: {
+                    table,
+                    colIndex: 0,
+                    rowIndex: 0,
+                },
+            },
+            {
                 path: [cell1, group],
                 segments: [text1],
                 block: para1,
+                tableContext: {
+                    table,
+                    colIndex: 0,
+                    rowIndex: 0,
+                },
             },
             {
-                path: [cell2, group],
+                path: [cell1, group],
                 segments: [text2],
                 block: para2,
+                tableContext: {
+                    table,
+                    colIndex: 0,
+                    rowIndex: 0,
+                },
             },
         ]);
     });
@@ -312,7 +340,7 @@ describe('getSelections', () => {
         group.blocks.push(para1);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        const result = getSelections(group, { includeUnmeaningfulSelection: true });
 
         expect(result).toEqual([
             {
@@ -411,17 +439,18 @@ describe('getSelections', () => {
         listItem.blocks.push(para);
         group.blocks.push(listItem);
 
-        const result = getSelections(group);
+        const result = getSelections(group, { includeListFormatHolder: true });
 
         expect(result).toEqual([
-            {
-                path: [group],
-                segments: [listItem.formatHolder],
-            },
             {
                 path: [listItem, group],
                 segments: [text],
                 block: para,
+            },
+            {
+                path: [group],
+                segments: [listItem.formatHolder],
+                block: listItem,
             },
         ]);
     });

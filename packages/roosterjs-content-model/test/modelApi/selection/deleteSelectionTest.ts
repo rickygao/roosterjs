@@ -37,14 +37,28 @@ describe('deleteSelection', () => {
 
         const result = deleteSelection(model);
 
-        expect(result).toEqual(null);
+        expect(result).toEqual({
+            marker: {
+                segmentType: 'SelectionMarker',
+                format: { fontSize: '10px' },
+                isSelected: true,
+            },
+            paragraph: para,
+            path: [model],
+        });
         expect(model).toEqual({
             blockGroupType: 'Document',
             blocks: [
                 {
                     blockType: 'Paragraph',
                     format: {},
-                    segments: [],
+                    segments: [
+                        {
+                            segmentType: 'SelectionMarker',
+                            format: { fontSize: '10px' },
+                            isSelected: true,
+                        },
+                    ],
                 },
             ],
         });
@@ -61,14 +75,28 @@ describe('deleteSelection', () => {
 
         const result = deleteSelection(model);
 
-        expect(result).toEqual(null);
+        expect(result).toEqual({
+            marker: {
+                segmentType: 'SelectionMarker',
+                format: { fontSize: '10px' },
+                isSelected: true,
+            },
+            paragraph: para,
+            path: [model],
+        });
         expect(model).toEqual({
             blockGroupType: 'Document',
             blocks: [
                 {
                     blockType: 'Paragraph',
                     format: {},
-                    segments: [],
+                    segments: [
+                        {
+                            segmentType: 'SelectionMarker',
+                            format: { fontSize: '10px' },
+                            isSelected: true,
+                        },
+                    ],
                 },
             ],
         });
@@ -94,7 +122,15 @@ describe('deleteSelection', () => {
 
         const result = deleteSelection(model);
 
-        expect(result).toEqual(null);
+        expect(result).toEqual({
+            marker: {
+                segmentType: 'SelectionMarker',
+                format: { fontSize: '11px' },
+                isSelected: true,
+            },
+            paragraph: para1,
+            path: [model],
+        });
         expect(model).toEqual({
             blockGroupType: 'Document',
             blocks: [
@@ -107,12 +143,12 @@ describe('deleteSelection', () => {
                             text: 'test0',
                             format: { fontSize: '10px' },
                         },
+                        {
+                            segmentType: 'SelectionMarker',
+                            format: { fontSize: '11px' },
+                            isSelected: true,
+                        },
                     ],
-                },
-                {
-                    blockType: 'Paragraph',
-                    format: {},
-                    segments: [],
                 },
             ],
         });
@@ -127,10 +163,42 @@ describe('deleteSelection', () => {
 
         const result = deleteSelection(model);
 
-        expect(result).toEqual(null);
+        expect(result).toEqual({
+            marker: {
+                segmentType: 'SelectionMarker',
+                format: {},
+                isSelected: true,
+            },
+            paragraph: {
+                blockType: 'Paragraph',
+                isImplicit: true,
+                segments: [
+                    {
+                        segmentType: 'SelectionMarker',
+                        format: {},
+                        isSelected: true,
+                    },
+                ],
+                format: {},
+            },
+            path: [model],
+        });
         expect(model).toEqual({
             blockGroupType: 'Document',
-            blocks: [],
+            blocks: [
+                {
+                    blockType: 'Paragraph',
+                    format: {},
+                    segments: [
+                        {
+                            segmentType: 'SelectionMarker',
+                            format: {},
+                            isSelected: true,
+                        },
+                    ],
+                    isImplicit: true,
+                },
+            ],
         });
     });
 });

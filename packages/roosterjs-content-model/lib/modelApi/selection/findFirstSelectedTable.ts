@@ -8,9 +8,13 @@ import { getSelections } from './getSelections';
 export function findFirstSelectedTable(model: ContentModelDocument): ContentModelTable | undefined {
     let table: ContentModelTable | undefined;
 
-    getSelections(model).forEach(({ tableContext }) => {
-        if (!table && tableContext) {
-            table = tableContext.table;
+    getSelections(model).forEach(({ block, tableContext }) => {
+        if (!table) {
+            if (block?.blockType == 'Table') {
+                table = block;
+            } else if (tableContext) {
+                table = tableContext.table;
+            }
         }
     });
 

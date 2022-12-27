@@ -1,4 +1,3 @@
-import { arrayPush } from 'roosterjs-editor-dom';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
@@ -21,9 +20,10 @@ export interface SelectionMarkerPosition {
  */
 export function deleteSelection(model: ContentModelDocument): SelectionMarkerPosition | null {
     let result: SelectionMarkerPosition | null = null;
-    let lastParagraph: ContentModelParagraph | null = null;
-    let lastPath: ContentModelBlockGroup[] | null = null;
-    const selections = getSelections(model, { includeUnmeaningfulSelection: true });
+    const selections = getSelections(model, {
+        includeUnmeaningfulSelection: true,
+        ignoreContentUnderSelectedTableCell: true,
+    });
 
     for (let i = 0; i < selections.length; i++) {
         const { path, segments, block, tableContext } = selections[i];
@@ -46,8 +46,26 @@ export function deleteSelection(model: ContentModelDocument): SelectionMarkerPos
                     block.segments.splice(block.segments.indexOf(segment), 1)
                 );
 
-                lastParagraph = block;
-                lastPath = path;
+                const blockIndex = path[0].blocks.indexOf(block);
+
+                if (result && result.paragraph != block) {
+                    const cell1 =
+                        result.path[getClosestAncestorBlockGroup(result.path, ['TableCell'])];
+                    const cell2 = path[getClosestAncestorBlockGroup(path, ['TableCell'])];
+
+                    if (cell1 === cell2) {
+                        result.paragraph.segments.splice(
+                            result.paragraph.segments.indexOf(result.marker) + 1,
+                            0,
+                            ...block.segments
+                        );
+                        block.segments = [];
+                    }
+                }
+
+                if (block.segments.length == 0) {
+                    path[0].blocks.splice(blockIndex, 1);
+                }
             }
         } else if (block) {
             const blocks = path[0].blocks;
@@ -83,16 +101,6 @@ export function deleteSelection(model: ContentModelDocument): SelectionMarkerPos
         }
     }
 
-    if (
-        result &&
-        lastParagraph &&
-        lastPath &&
-        canMergeParagraphs(result.paragraph, result.path, lastParagraph, lastPath)
-    ) {
-        arrayPush(result.paragraph.segments, lastParagraph.segments);
-        lastParagraph.segments = [];
-    }
-
     return result;
 }
 function insertMarker(
@@ -113,24 +121,15 @@ function insertMarker(
 
     paragraph.segments.splice(segmentIndex, 0, marker);
 
-    return {
+    const result: SelectionMarkerPosition = {
         marker,
         paragraph,
         path,
-        tableContext,
     };
-}
 
-function canMergeParagraphs(
-    para1: ContentModelParagraph,
-    path1: ContentModelBlockGroup[],
-    para2: ContentModelParagraph,
-    path2: ContentModelBlockGroup[]
-) {
-    const tableCell1Index = getClosestAncestorBlockGroup(path1, ['TableCell']);
-    const tableCell1 = path1[tableCell1Index];
-    const tableCell2Index = getClosestAncestorBlockGroup(path2, ['TableCell']);
-    const tableCell2 = path2[tableCell2Index];
+    if (tableContext) {
+        result.tableContext = tableContext;
+    }
 
-    return para1 != para2 && tableCell1 == tableCell2;
+    return result;
 }

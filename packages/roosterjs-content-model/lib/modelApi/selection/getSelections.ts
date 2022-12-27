@@ -37,6 +37,11 @@ export interface GetSelectionOptions {
      * those paragraphs are also included in result
      */
     includeUnmeaningfulSelection?: boolean;
+
+    /**
+     * When set to true, and a table cell is marked as selected, all content under this table cell will not be included in result
+     */
+    ignoreContentUnderSelectedTableCell?: boolean;
 }
 
 /**
@@ -48,7 +53,7 @@ export function getSelections(
 ): ContentModelSelectionInfo[] {
     const result: ContentModelSelectionInfo[] = [];
 
-    getSelectionsInternal([group], result);
+    getSelectionsInternal([group], result, option);
 
     if (!option?.includeUnmeaningfulSelection) {
         handleUnmeaningfulSelections(result);
@@ -83,26 +88,38 @@ function getSelectionsInternal(
                 break;
 
             case 'Table':
-                block.cells.forEach((row, rowIndex) => {
-                    row.forEach((cell, colIndex) => {
-                        if (cell.isSelected) {
-                            addResult(result, { path, tableContext });
-                        }
-
-                        getSelectionsFromBlockGroup(
-                            cell,
-                            path,
-                            result,
-                            option,
-                            {
+                if (
+                    option?.ignoreContentUnderSelectedTableCell &&
+                    block.cells.every(row => row.every(cell => cell.isSelected))
+                ) {
+                    addResult(result, { path, block, tableContext });
+                } else {
+                    block.cells.forEach((row, rowIndex) => {
+                        row.forEach((cell, colIndex) => {
+                            const newTableContext: TableSelectionContext = {
                                 table: block,
                                 rowIndex,
                                 colIndex,
-                            },
-                            treatAllAsSelect || cell.isSelected
-                        );
+                            };
+
+                            if (cell.isSelected) {
+                                addResult(result, { path, tableContext: newTableContext });
+                            }
+
+                            if (!cell.isSelected || !option?.ignoreContentUnderSelectedTableCell) {
+                                getSelectionsFromBlockGroup(
+                                    cell,
+                                    path,
+                                    result,
+                                    option,
+                                    newTableContext,
+                                    treatAllAsSelect || cell.isSelected
+                                );
+                            }
+                        });
                     });
-                });
+                }
+
                 break;
 
             case 'Paragraph':
@@ -146,15 +163,33 @@ function getSelectionsInternal(
         parent.blockGroupType == 'ListItem' &&
         !hasUnselectedSegment
     ) {
-        addResult(result, { path, segments: [parent.formatHolder], block: parent, tableContext });
+        addResult(result, {
+            path: path.splice(1),
+            segments: [parent.formatHolder],
+            block: parent,
+            tableContext,
+        });
     }
 }
 
 function addResult(result: ContentModelSelectionInfo[], source: ContentModelSelectionInfo) {
-    result.push({
-        ...source,
+    const selection: ContentModelSelectionInfo = {
         path: [...source.path],
-    });
+    };
+
+    if (source.block) {
+        selection.block = source.block;
+    }
+
+    if (source.segments) {
+        selection.segments = source.segments;
+    }
+
+    if (source.tableContext) {
+        selection.tableContext = source.tableContext;
+    }
+
+    result.push(selection);
 }
 
 function getSelectionsFromBlockGroup(

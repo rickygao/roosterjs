@@ -1,6 +1,6 @@
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
-import { getSelections } from './getSelections';
+import { getOperationalBlocks } from '../common/getOperationalBlocks';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
 
 /**
@@ -11,9 +11,9 @@ export function findFirstSelectedListItem(
 ): ContentModelListItem | undefined {
     let listItem: ContentModelListItem | undefined;
 
-    getSelections(model).forEach(({ block }) => {
-        if (!listItem && isBlockGroupOfType<ContentModelListItem>(block, 'ListItem')) {
-            listItem = block;
+    getOperationalBlocks(model, ['ListItem'], ['TableCell']).forEach(r => {
+        if (!listItem && isBlockGroupOfType<ContentModelListItem>(r.block, 'ListItem')) {
+            listItem = r.block;
         }
     });
 
