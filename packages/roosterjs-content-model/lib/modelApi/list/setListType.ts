@@ -1,7 +1,7 @@
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
 import { createListItem } from '../creators/createListItem';
-import { getOperationalBlocks } from '../common/getOperationalBlocks';
+import { getOperationalBlocks } from '../selection/collectSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
 import { setParagraphNotImplicit } from '../block/setParagraphNotImplicit';
 
@@ -32,30 +32,33 @@ export function setListType(model: ContentModelDocument, listType: 'OL' | 'UL') 
             }
         } else if (block.blockType == 'Paragraph') {
             const index = parent.blocks.indexOf(block);
-            const prevBlock = parent.blocks[index - 1];
-            const newListItem = createListItem(
-                [
-                    {
-                        listType,
-                        startNumberOverride:
-                            itemIndex > 0 ||
-                            (prevBlock?.blockType == 'BlockGroup' &&
-                                prevBlock.blockGroupType == 'ListItem' &&
-                                prevBlock.levels[0]?.listType == 'OL')
-                                ? undefined
-                                : 1,
-                    },
-                ],
-                block.segments[0]?.format
-            );
 
-            // Since there is only one paragraph under the list item, no need to keep its paragraph element (DIV).
-            // TODO: Do we need to keep the CSS styles applied to original DIV?
-            block.isImplicit = true;
+            if (index >= 0) {
+                const prevBlock = parent.blocks[index - 1];
+                const newListItem = createListItem(
+                    [
+                        {
+                            listType,
+                            startNumberOverride:
+                                itemIndex > 0 ||
+                                (prevBlock?.blockType == 'BlockGroup' &&
+                                    prevBlock.blockGroupType == 'ListItem' &&
+                                    prevBlock.levels[0]?.listType == 'OL')
+                                    ? undefined
+                                    : 1,
+                        },
+                    ],
+                    block.segments[0]?.format
+                );
 
-            newListItem.blocks.push(block);
+                // Since there is only one paragraph under the list item, no need to keep its paragraph element (DIV).
+                // TODO: Do we need to keep the CSS styles applied to original DIV?
+                block.isImplicit = true;
 
-            parent.blocks.splice(index, 1, newListItem);
+                newListItem.blocks.push(block);
+
+                parent.blocks.splice(index, 1, newListItem);
+            }
         }
     });
 

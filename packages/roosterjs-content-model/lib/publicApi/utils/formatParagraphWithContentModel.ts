@@ -1,6 +1,6 @@
 import { ContentModelParagraph } from '../../publicTypes/block/ContentModelParagraph';
 import { formatWithContentModel } from './formatWithContentModel';
-import { getSelections } from '../../modelApi/selection/getSelections';
+import { getSelectedParagraphs } from '../../modelApi/selection/collectSelections';
 import { IExperimentalContentModelEditor } from '../../publicTypes/IExperimentalContentModelEditor';
 
 /**
@@ -12,16 +12,10 @@ export function formatParagraphWithContentModel(
     setStyleCallback: (paragraph: ContentModelParagraph) => void
 ) {
     formatWithContentModel(editor, apiName, model => {
-        const selections = getSelections(model);
-        let result = false;
+        const paragraphs = getSelectedParagraphs(model);
 
-        selections.forEach(({ block }) => {
-            if (block?.blockType == 'Paragraph') {
-                result = true;
-                setStyleCallback(block);
-            }
-        });
+        paragraphs.forEach(setStyleCallback);
 
-        return result;
+        return paragraphs.length > 0;
     });
 }

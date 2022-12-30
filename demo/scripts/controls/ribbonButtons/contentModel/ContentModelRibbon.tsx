@@ -28,6 +28,7 @@ import { setTableHeaderButton } from './setTableHeaderButton';
 import { strikethroughButton } from './strikethroughButton';
 import { subscriptButton } from './subscriptButton';
 import { superscriptButton } from './superscriptButton';
+import { tempInsertButton } from './tempInsertButton';
 import { textColorButton } from './textColorButton';
 import { underlineButton } from './underlineButton';
 import {
@@ -76,6 +77,7 @@ const buttons = [
     tableSplitButton,
     tableAlignCellButton,
     tableAlignTableButton,
+    tempInsertButton,
 ];
 
 export default function ContentModelRibbon(props: { ribbonPlugin: RibbonPlugin; isRtl: boolean }) {

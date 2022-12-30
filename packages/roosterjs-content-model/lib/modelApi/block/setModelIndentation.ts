@@ -1,7 +1,7 @@
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
 import { ContentModelListItemLevelFormat } from '../../publicTypes/format/ContentModelListItemLevelFormat';
-import { getOperationalBlocks } from '../common/getOperationalBlocks';
+import { getOperationalBlocks } from '../selection/collectSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
 import { parseValueWithUnit } from '../../formatHandlers/utils/parseValueWithUnit';
 

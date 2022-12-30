@@ -1,8 +1,6 @@
-import { arrayPush } from 'roosterjs-editor-dom';
-import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 import { formatWithContentModel } from './formatWithContentModel';
-import { getSelections } from '../../modelApi/selection/getSelections';
+import { getSelectedSegments } from '../../modelApi/selection/collectSelections';
 import {
     DomToModelOption,
     IExperimentalContentModelEditor,
@@ -23,7 +21,7 @@ export function formatSegmentWithContentModel(
         editor,
         apiName,
         model => {
-            const segments = getSelectedSegments(model, includingFormatHolder);
+            const segments = getSelectedSegments(model, !!includingFormatHolder);
 
             const isTurningOff = segmentHasStyleCallback
                 ? segments.every(segmentHasStyleCallback)
@@ -38,21 +36,4 @@ export function formatSegmentWithContentModel(
         },
         domToModelOptions
     );
-}
-
-function getSelectedSegments(
-    model: ContentModelDocument,
-    includingFormatHolder?: boolean
-): ContentModelSegment[] {
-    const result: ContentModelSegment[] = [];
-
-    getSelections(model, {
-        includeListFormatHolder: includingFormatHolder,
-    }).forEach(({ segments, block }) => {
-        if (segments && (includingFormatHolder || block?.blockType == 'Paragraph')) {
-            arrayPush(result, segments);
-        }
-    });
-
-    return result;
 }

@@ -7,14 +7,11 @@ import { ContentModelQuote } from '../../publicTypes/group/ContentModelQuote';
 import { ContentModelQuoteFormat } from '../../publicTypes/format/ContentModelQuoteFormat';
 import { ContentModelSegmentFormat } from '../../publicTypes/format/ContentModelSegmentFormat';
 import { createQuote } from '../creators/createQuote';
+import { getOperationalBlocks, OperationalBlocks } from '../selection/collectSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
+import { TypeOfBlockGroup } from '../common/getClosestAncestorBlockGroupIndex';
 import { unwrapBlock } from '../common/unwrapBlock';
 import { wrapBlockStep1, WrapBlockStep1Result, wrapBlockStep2 } from '../common/wrapBlock';
-import {
-    getOperationalBlocks,
-    OperationalBlocks,
-    TypeOfBlockGroup,
-} from '../common/getOperationalBlocks';
 
 /**
  * @internal

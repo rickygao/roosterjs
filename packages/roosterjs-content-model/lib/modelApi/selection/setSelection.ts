@@ -91,7 +91,10 @@ export function setSelectionToBlock(
 
             while (segmentsToDelete.length > 0) {
                 const index = segmentsToDelete.pop()!;
-                block.segments.splice(index, 1);
+
+                if (index >= 0) {
+                    block.segments.splice(index, 1);
+                }
             }
 
             return isInSelection;

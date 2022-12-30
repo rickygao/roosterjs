@@ -1,6 +1,6 @@
 import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
-import { TypeOfBlockGroup } from './getOperationalBlocks';
+import { TypeOfBlockGroup } from './getClosestAncestorBlockGroupIndex';
 
 /**
  * @internal
