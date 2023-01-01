@@ -1,4 +1,5 @@
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
+import { createDivider } from '../../../lib/modelApi/creators/createDivider';
 import { createGeneralSegment } from '../../../lib/modelApi/creators/createGeneralSegment';
 import { createListItem } from '../../../lib/modelApi/creators/createListItem';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
@@ -7,15 +8,23 @@ import { createSelectionMarker } from '../../../lib/modelApi/creators/createSele
 import { createTable } from '../../../lib/modelApi/creators/createTable';
 import { createTableCell } from '../../../lib/modelApi/creators/createTableCell';
 import { createText } from '../../../lib/modelApi/creators/createText';
-import { getSelections } from '../../../lib/modelApi/selection/getSelections';
+import {
+    iterateSelections,
+    IterateSelectionsCallback,
+} from '../../../lib/modelApi/selection/iterateSelections';
 
-describe('getSelections', () => {
+describe('iterateSelections', () => {
+    let callback: jasmine.Spy<IterateSelectionsCallback>;
+
+    beforeEach(() => {
+        callback = jasmine.createSpy<IterateSelectionsCallback>();
+    });
+
     it('empty group', () => {
         const group = createContentModelDocument();
+        iterateSelections([group], callback);
 
-        const result = getSelections(group);
-
-        expect(result).toEqual([]);
+        expect(callback).not.toHaveBeenCalled();
     });
 
     it('Group without selection', () => {
@@ -30,9 +39,9 @@ describe('getSelections', () => {
         group.blocks.push(para1);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([]);
+        expect(callback).not.toHaveBeenCalled();
     });
 
     it('Group with single selection', () => {
@@ -49,15 +58,10 @@ describe('getSelections', () => {
         group.blocks.push(para1);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [text1],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [text1]);
     });
 
     it('Group with multiple selection', () => {
@@ -75,20 +79,11 @@ describe('getSelections', () => {
         group.blocks.push(para1);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [text1],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text2],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(2);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [text1]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para2, [text2]);
     });
 
     it('Group with selection inside list', () => {
@@ -109,14 +104,12 @@ describe('getSelections', () => {
         group.blocks.push(listItem);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [listItem, group],
-                segments: [text1],
-            },
+        expect(callback).toHaveBeenCalledTimes(2);
+        expect(callback).toHaveBeenCalledWith([listItem, group], undefined, para1, [text1]);
+        expect(callback).toHaveBeenCalledWith([listItem, group], undefined, undefined, [
+            listItem.formatHolder,
         ]);
     });
 
@@ -138,15 +131,10 @@ describe('getSelections', () => {
         group.blocks.push(quote);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [quote, group],
-                segments: [text1],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([quote, group], undefined, para1, [text1]);
     });
 
     it('Group with selection inside table', () => {
@@ -169,15 +157,19 @@ describe('getSelections', () => {
         group.blocks.push(table);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith(
+            [cell, group],
             {
-                paragraph: para1,
-                path: [cell, group],
-                segments: [text1],
+                table: table,
+                rowIndex: 0,
+                colIndex: 0,
             },
-        ]);
+            para1,
+            [text1]
+        );
     });
 
     it('Group with selection inside table, list and quote', () => {
@@ -203,15 +195,29 @@ describe('getSelections', () => {
         group.blocks.push(table);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
+        expect(callback).toHaveBeenCalledTimes(2);
+        expect(callback).toHaveBeenCalledWith(
+            [listItem, quote, cell, group],
             {
-                paragraph: para1,
-                path: [listItem, quote, cell, group],
-                segments: [text1],
+                table: table,
+                colIndex: 0,
+                rowIndex: 0,
             },
-        ]);
+            para1,
+            [text1]
+        );
+        expect(callback).toHaveBeenCalledWith(
+            [listItem, quote, cell, group],
+            {
+                table: table,
+                colIndex: 0,
+                rowIndex: 0,
+            },
+            undefined,
+            [listItem.formatHolder]
+        );
     });
 
     it('Group with table selection', () => {
@@ -235,26 +241,99 @@ describe('getSelections', () => {
 
         group.blocks.push(table);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
+        expect(callback).toHaveBeenCalledTimes(3);
+        expect(callback).toHaveBeenCalledWith([group], {
+            table: table,
+            colIndex: 0,
+            rowIndex: 0,
+        });
+        expect(callback).toHaveBeenCalledWith(
+            [cell1, group],
             {
-                paragraph: para1,
-                path: [cell1, group],
-                segments: [text1],
+                table: table,
+                colIndex: 0,
+                rowIndex: 0,
             },
+            para1,
+            [text1]
+        );
+        expect(callback).toHaveBeenCalledWith(
+            [cell1, group],
             {
-                paragraph: para2,
-                path: [cell1, group],
-                segments: [text2],
+                table: table,
+                colIndex: 0,
+                rowIndex: 0,
             },
-        ]);
+            para2,
+            [text2]
+        );
+    });
+
+    it('Group with table selection and ignore selected table cell content', () => {
+        const group = createContentModelDocument();
+        const table = createTable(1);
+        const cell1 = createTableCell();
+        const cell2 = createTableCell();
+        const para1 = createParagraph();
+        const para2 = createParagraph();
+        const text1 = createText('text1');
+        const text2 = createText('text2');
+
+        cell1.isSelected = true;
+
+        para1.segments.push(text1);
+        para2.segments.push(text2);
+
+        cell1.blocks.push(para1);
+        cell1.blocks.push(para2);
+        table.cells = [[cell1, cell2]];
+
+        group.blocks.push(table);
+
+        iterateSelections([group], callback, { ignoreContentUnderSelectedTableCell: true });
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([group], {
+            table: table,
+            colIndex: 0,
+            rowIndex: 0,
+        });
+    });
+
+    it('Group with whole table selection and ignore selected table cell content', () => {
+        const group = createContentModelDocument();
+        const table = createTable(1);
+        const cell1 = createTableCell();
+        const cell2 = createTableCell();
+        const para1 = createParagraph();
+        const para2 = createParagraph();
+        const text1 = createText('text1');
+        const text2 = createText('text2');
+
+        cell1.isSelected = true;
+        cell2.isSelected = true;
+
+        para1.segments.push(text1);
+        para2.segments.push(text2);
+
+        cell1.blocks.push(para1);
+        cell2.blocks.push(para2);
+        table.cells = [[cell1, cell2]];
+
+        group.blocks.push(table);
+
+        iterateSelections([group], callback, { ignoreContentUnderSelectedTableCell: true });
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([group], undefined, table);
     });
 
     it('Select from the end of paragraph', () => {
         const group = createContentModelDocument();
-        const para1 = createParagraph();
-        const para2 = createParagraph();
+        const para1 = createParagraph(false, { lineHeight: '20px' });
+        const para2 = createParagraph(false, { lineHeight: '30px' });
         const marker = createSelectionMarker();
         const text = createText('test');
 
@@ -264,21 +343,17 @@ describe('getSelections', () => {
         group.blocks.push(para1);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(2);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [marker]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para2, [text]);
     });
 
     it('Select to the start of paragraph', () => {
         const group = createContentModelDocument();
-        const para1 = createParagraph();
-        const para2 = createParagraph();
+        const para1 = createParagraph(false, { lineHeight: '20px' });
+        const para2 = createParagraph(false, { lineHeight: '30px' });
         const marker = createSelectionMarker();
         const text = createText('test');
 
@@ -288,15 +363,11 @@ describe('getSelections', () => {
         group.blocks.push(para1);
         group.blocks.push(para2);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [text],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(2);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [text]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para2, [marker]);
     });
 
     it('Select from the end of paragraph and allow unmeaningful paragraph', () => {
@@ -312,56 +383,18 @@ describe('getSelections', () => {
         group.blocks.push(para1);
         group.blocks.push(para2);
 
-        const result = getSelections(group, { includeUnmeaningfulSelectedParagraph: true });
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [marker],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text],
-            },
-        ]);
-    });
-
-    it('Select to the start of paragraph and allow unmeaningful paragraph', () => {
-        const group = createContentModelDocument();
-        const para1 = createParagraph();
-        const para2 = createParagraph();
-        const marker = createSelectionMarker();
-        const text = createText('test');
-
-        text.isSelected = true;
-        para1.segments.push(text);
-        para2.segments.push(marker);
-        group.blocks.push(para1);
-        group.blocks.push(para2);
-
-        const result = getSelections(group, { includeUnmeaningfulSelectedParagraph: true });
-
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [text],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [marker],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(2);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [marker]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para2, [text]);
     });
 
     it('Select from the end to the start of paragraph', () => {
         const group = createContentModelDocument();
-        const para1 = createParagraph();
-        const para2 = createParagraph();
-        const para3 = createParagraph();
+        const para1 = createParagraph(false, { lineHeight: '20px' });
+        const para2 = createParagraph(false, { lineHeight: '30px' });
+        const para3 = createParagraph(false, { lineHeight: '40px' });
         const marker1 = createSelectionMarker();
         const marker2 = createSelectionMarker();
         const text = createText('test');
@@ -374,15 +407,12 @@ describe('getSelections', () => {
         group.blocks.push(para2);
         group.blocks.push(para3);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(3);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [marker1]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para2, [text]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para3, [marker2]);
     });
 
     it('Select not from the end, and not to the start of paragraph', () => {
@@ -408,25 +438,12 @@ describe('getSelections', () => {
         group.blocks.push(para2);
         group.blocks.push(para3);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para1,
-                path: [group],
-                segments: [marker1, text1],
-            },
-            {
-                paragraph: para2,
-                path: [group],
-                segments: [text2],
-            },
-            {
-                paragraph: para3,
-                path: [group],
-                segments: [text3, marker2],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(3);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [marker1, text1]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para2, [text2]);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para3, [text3, marker2]);
     });
 
     it('Selection includes format holder from a list item', () => {
@@ -440,19 +457,12 @@ describe('getSelections', () => {
         listItem.blocks.push(para);
         group.blocks.push(listItem);
 
-        const result = getSelections(group, { includeFormatHolder: true });
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: null,
-                path: [listItem, group],
-                segments: [listItem.formatHolder],
-            },
-            {
-                paragraph: para,
-                path: [listItem, group],
-                segments: [text],
-            },
+        expect(callback).toHaveBeenCalledTimes(2);
+        expect(callback).toHaveBeenCalledWith([listItem, group], undefined, para, [text]);
+        expect(callback).toHaveBeenCalledWith([listItem, group], undefined, undefined, [
+            listItem.formatHolder,
         ]);
     });
 
@@ -469,15 +479,10 @@ describe('getSelections', () => {
         listItem.blocks.push(para);
         group.blocks.push(listItem);
 
-        const result = getSelections(group, { includeFormatHolder: true });
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para,
-                path: [listItem, group],
-                segments: [text1],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([listItem, group], undefined, para, [text1]);
     });
 
     it('Get Selection from model that contains general node', () => {
@@ -493,14 +498,22 @@ describe('getSelections', () => {
         generalSpan.blocks.push(para);
         group.blocks.push(generalSpan);
 
-        const result = getSelections(group);
+        iterateSelections([group], callback);
 
-        expect(result).toEqual([
-            {
-                paragraph: para,
-                path: [generalSpan, group],
-                segments: [text1],
-            },
-        ]);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([generalSpan, group], undefined, para, [text1]);
+    });
+
+    it('Divider selection', () => {
+        const group = createContentModelDocument();
+        const divider = createDivider('div');
+
+        divider.isSelected = true;
+        group.blocks.push(divider);
+
+        iterateSelections([group], callback);
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([group], undefined, divider);
     });
 });
