@@ -3,7 +3,7 @@ import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBloc
 import { ContentModelGeneralSegment } from '../../publicTypes/segment/ContentModelGeneralSegment';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
 import { ContentModelTable } from '../../publicTypes/block/ContentModelTable';
-import { Coordinates } from 'roosterjs-editor-types/lib';
+import { Coordinates } from 'roosterjs-editor-types';
 import { Selectable } from '../../publicTypes/selection/Selectable';
 
 /**
