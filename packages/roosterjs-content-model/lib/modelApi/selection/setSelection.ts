@@ -2,7 +2,7 @@ import { ContentModelBlock } from '../../publicTypes/block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelGeneralSegment } from '../../publicTypes/segment/ContentModelGeneralSegment';
 import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegment';
-import { ContentModelTable } from 'roosterjs-content-model/lib/publicTypes/block/ContentModelTable';
+import { ContentModelTable } from '../../publicTypes/block/ContentModelTable';
 import { Coordinates } from 'roosterjs-editor-types/lib';
 import { Selectable } from '../../publicTypes/selection/Selectable';
 
