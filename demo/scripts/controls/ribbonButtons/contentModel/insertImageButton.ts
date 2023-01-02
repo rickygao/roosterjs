@@ -1,7 +1,7 @@
 import isContentModelEditor from '../../editor/isContentModelEditor';
-import { createElement, readFile } from 'roosterjs-editor-dom';
+import { createElement } from 'roosterjs-editor-dom';
 import { CreateElementData } from 'roosterjs-editor-types';
-import { insertContent } from 'roosterjs-content-model';
+import { insertImage } from 'roosterjs-editor-api';
 import { InsertImageButtonStringKey, RibbonButton } from 'roosterjs-react';
 
 const FileInput: CreateElementData = {
@@ -30,14 +30,7 @@ export const insertImageButton: RibbonButton<InsertImageButtonStringKey> = {
             fileInput.addEventListener('change', () => {
                 if (fileInput.files) {
                     for (let i = 0; i < fileInput.files.length; i++) {
-                        readFile(fileInput.files[i], dataUrl => {
-                            if (dataUrl && !editor.isDisposed()) {
-                                const image = document.createElement('img');
-
-                                image.src = dataUrl;
-                                insertContent(editor, image);
-                            }
-                        });
+                        insertImage(editor, fileInput.files[i]);
                     }
                 }
             });
