@@ -504,6 +504,46 @@ describe('iterateSelections', () => {
         expect(callback).toHaveBeenCalledWith([generalSpan, group], undefined, para, [text1]);
     });
 
+    it('Get Selection from model that contains general segment', () => {
+        const group = createContentModelDocument();
+        const generalSpan = createGeneralSegment(document.createElement('span'));
+        const para1 = createParagraph(true /*implicit*/);
+        const para2 = createParagraph(true /*implicit*/);
+        const text1 = createText('test1');
+        const text2 = createText('test1');
+
+        text1.isSelected = true;
+        para1.segments.push(generalSpan);
+        generalSpan.blocks.push(para2);
+        para2.segments.push(text1, text2);
+        group.blocks.push(para1);
+
+        iterateSelections([group], callback);
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([generalSpan, group], undefined, para2, [text1]);
+    });
+
+    it('Get Selection from model that contains selected general segment', () => {
+        const group = createContentModelDocument();
+        const generalSpan = createGeneralSegment(document.createElement('span'));
+        const para1 = createParagraph(true /*implicit*/);
+        const para2 = createParagraph(true /*implicit*/);
+        const text1 = createText('test1');
+        const text2 = createText('test1');
+
+        generalSpan.isSelected = true;
+        para1.segments.push(generalSpan);
+        generalSpan.blocks.push(para2);
+        para2.segments.push(text1, text2);
+        group.blocks.push(para1);
+
+        iterateSelections([group], callback);
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith([group], undefined, para1, [generalSpan]);
+    });
+
     it('Divider selection', () => {
         const group = createContentModelDocument();
         const divider = createDivider('div');

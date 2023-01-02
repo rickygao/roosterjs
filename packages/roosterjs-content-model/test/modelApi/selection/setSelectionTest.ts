@@ -1,5 +1,6 @@
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
 import { createDivider } from '../../../lib/modelApi/creators/createDivider';
+import { createGeneralSegment } from '../../../lib/modelApi/creators/createGeneralSegment';
 import { createImage } from '../../../lib/modelApi/creators/createImage';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
 import { createSelectionMarker } from '../../../lib/modelApi/creators/createSelectionMarker';
@@ -589,6 +590,120 @@ describe('setSelection', () => {
                             format: {},
                             text: 'test',
                             isSelected: true,
+                        },
+                    ],
+                },
+            ],
+        });
+    });
+
+    it('Set selection to general segment', () => {
+        const model = createContentModelDocument();
+        const para = createParagraph();
+        const span = document.createElement('span');
+        const generalSpan = createGeneralSegment(span);
+
+        para.segments.push(generalSpan);
+        model.blocks.push(para);
+        setSelection(model, generalSpan);
+        expect(model).toEqual({
+            blockGroupType: 'Document',
+            blocks: [
+                {
+                    blockType: 'Paragraph',
+                    format: {},
+                    segments: [
+                        {
+                            blockGroupType: 'General',
+                            blockType: 'BlockGroup',
+                            segmentType: 'General',
+                            element: span,
+                            format: {},
+                            isSelected: true,
+                            blocks: [],
+                        },
+                    ],
+                },
+            ],
+        });
+    });
+
+    it('Set selection to model under general segment', () => {
+        const model = createContentModelDocument();
+        const para = createParagraph();
+        const span = document.createElement('span');
+        const generalSpan = createGeneralSegment(span);
+        const divider = createDivider('div');
+
+        generalSpan.blocks.push(divider);
+        para.segments.push(generalSpan);
+        model.blocks.push(para);
+
+        setSelection(model, divider);
+
+        expect(model).toEqual({
+            blockGroupType: 'Document',
+            blocks: [
+                {
+                    blockType: 'Paragraph',
+                    format: {},
+                    segments: [
+                        {
+                            blockGroupType: 'General',
+                            blockType: 'BlockGroup',
+                            segmentType: 'General',
+                            element: span,
+                            format: {},
+                            blocks: [
+                                {
+                                    blockType: 'Divider',
+                                    tagName: 'div',
+                                    format: {},
+                                    isSelected: true,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+    });
+
+    it('Clear selection under general segment', () => {
+        const model = createContentModelDocument();
+        const para = createParagraph();
+        const span = document.createElement('span');
+        const generalSpan = createGeneralSegment(span);
+        const divider = createDivider('div');
+
+        divider.isSelected = true;
+
+        generalSpan.blocks.push(divider);
+        para.segments.push(generalSpan);
+        model.blocks.push(para);
+
+        setSelection(model);
+
+        expect(model).toEqual({
+            blockGroupType: 'Document',
+            blocks: [
+                {
+                    blockType: 'Paragraph',
+                    format: {},
+                    segments: [
+                        {
+                            blockGroupType: 'General',
+                            blockType: 'BlockGroup',
+                            segmentType: 'General',
+                            element: span,
+                            format: {},
+                            blocks: [
+                                {
+                                    blockType: 'Divider',
+                                    tagName: 'div',
+                                    format: {},
+                                },
+                            ],
                         },
                     ],
                 },

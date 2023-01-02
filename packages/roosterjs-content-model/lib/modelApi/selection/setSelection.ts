@@ -161,7 +161,10 @@ function setSelectionToSegment(
 
         case 'General':
             setIsSelected(segment, isInSelection);
-            return setSelectionToBlockGroup(segment, isInSelection, start, end);
+
+            return segment != start && segment != end
+                ? setSelectionToBlockGroup(segment, isInSelection, start, end)
+                : isInSelection;
 
         case 'Image':
             setIsSelected(segment, isInSelection);

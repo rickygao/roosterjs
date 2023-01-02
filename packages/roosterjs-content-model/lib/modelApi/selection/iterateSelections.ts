@@ -90,13 +90,13 @@ export function iterateSelections(
                 const segments: ContentModelSegment[] = [];
 
                 block.segments.forEach(segment => {
-                    if (segment.segmentType == 'General') {
+                    if (treatAllAsSelect || segment.isSelected) {
+                        segments.push(segment);
+                        hasSelectedSegment = true;
+                    } else if (segment.segmentType == 'General') {
                         const newPath = [segment, ...path];
 
                         iterateSelections(newPath, callback, option, table, treatAllAsSelect);
-                    } else if (treatAllAsSelect || segment.isSelected) {
-                        segments.push(segment);
-                        hasSelectedSegment = true;
                     } else {
                         hasUnselectedSegment = true;
                     }
