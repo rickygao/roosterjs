@@ -1,33 +1,6 @@
 import { arrayPush, safeInstanceOf, toArray } from 'roosterjs-editor-dom';
-import {
-    ColorTransformDirection,
-    DarkModeDatasetNames,
-    EditorCore,
-    TransformColor,
-} from 'roosterjs-editor-types';
+import { ColorTransformDirection, EditorCore, TransformColor } from 'roosterjs-editor-types';
 import type { CompatibleColorTransformDirection } from 'roosterjs-editor-types/lib/compatibleTypes';
-
-const enum ColorAttributeEnum {
-    CssColor = 0,
-    HtmlColor = 1,
-    CssDataSet = 2,
-    HtmlDataSet = 3,
-}
-
-const ColorAttributeName: { [key in ColorAttributeEnum]: string }[] = [
-    {
-        [ColorAttributeEnum.CssColor]: 'color',
-        [ColorAttributeEnum.HtmlColor]: 'color',
-        [ColorAttributeEnum.CssDataSet]: DarkModeDatasetNames.OriginalStyleColor,
-        [ColorAttributeEnum.HtmlDataSet]: DarkModeDatasetNames.OriginalAttributeColor,
-    },
-    {
-        [ColorAttributeEnum.CssColor]: 'background-color',
-        [ColorAttributeEnum.HtmlColor]: 'bgcolor',
-        [ColorAttributeEnum.CssDataSet]: DarkModeDatasetNames.OriginalStyleBackgroundColor,
-        [ColorAttributeEnum.HtmlDataSet]: DarkModeDatasetNames.OriginalAttributeBackgroundColor,
-    },
-];
 
 /**
  * @internal
@@ -60,92 +33,75 @@ export const transformColor: TransformColor = (
     } else if (core.lifecycle.onExternalContentTransform) {
         elements.forEach(element => core.lifecycle.onExternalContentTransform!(element));
     } else {
-        transformToDarkMode(elements, core.lifecycle.getDarkColor);
+        transformToDarkMode(elements, core.lifecycle.getDarkColor, core.contentDiv);
     }
 };
 
+const ColorNamePrefix = '--darkColor_';
+const DarkColorRegex = /^\s*var\(\s*(\-\-[a-zA-Z0-9\-_]+)\s*(?:,\s*(.*))?\)\s*$/;
+
 function transformToLightMode(elements: HTMLElement[]) {
     elements.forEach(element => {
-        ColorAttributeName.forEach(names => {
-            // Reset color styles based on the content of the ogsc/ogsb data element.
-            // If those data properties are empty or do not exist, set them anyway to clear the content.
-            element.style.setProperty(
-                names[ColorAttributeEnum.CssColor],
-                getValueOrDefault(element.dataset[names[ColorAttributeEnum.CssDataSet]], '')
-            );
-            delete element.dataset[names[ColorAttributeEnum.CssDataSet]];
+        internalTransformToLightMode(element, 'color');
+        internalTransformToLightMode(element, 'background-color');
+    });
+}
 
-            // Some elements might have set attribute colors. We need to reset these as well.
-            let value = getValueOrDefault(
-                element.dataset[names[ColorAttributeEnum.HtmlDataSet]],
-                null
-            );
-
-            if (value) {
-                element.setAttribute(names[ColorAttributeEnum.HtmlColor], value);
-            } else {
-                element.removeAttribute(names[ColorAttributeEnum.HtmlColor]);
+function transformToDarkMode(
+    elements: HTMLElement[],
+    getDarkColor: (color: string) => string,
+    contentDiv: HTMLElement
+) {
+    const knownColorKeys: string[] = [];
+    elements.forEach(element => {
+        [
+            internalTransformToDarkColor(element, 'color', 'color'),
+            internalTransformToDarkColor(element, 'background-color', 'bgcolor'),
+        ].forEach(keyAndValue => {
+            if (keyAndValue && knownColorKeys.indexOf(keyAndValue[0]) < 0) {
+                contentDiv.style.setProperty(keyAndValue[0], getDarkColor(keyAndValue[1]));
+                knownColorKeys.push(keyAndValue[0]);
             }
-
-            delete element.dataset[names[ColorAttributeEnum.HtmlDataSet]];
         });
     });
 }
 
-function transformToDarkMode(elements: HTMLElement[], getDarkColor: (color: string) => string) {
-    ColorAttributeName.forEach(names => {
-        elements
-            .map(element => {
-                const styleColor = element.style.getPropertyValue(
-                    names[ColorAttributeEnum.CssColor]
-                );
-                const attrColor = element.getAttribute(names[ColorAttributeEnum.HtmlColor]);
-                const existingDataSetCssValue =
-                    element.dataset[names[ColorAttributeEnum.CssDataSet]];
-                const existingDataSetHtmlValue =
-                    element.dataset[names[ColorAttributeEnum.HtmlDataSet]];
-                const needProcess =
-                    (!existingDataSetCssValue || existingDataSetCssValue == styleColor) &&
-                    (!existingDataSetHtmlValue || existingDataSetHtmlValue == attrColor) &&
-                    (styleColor || attrColor) &&
-                    styleColor != 'inherit'; // For inherit style, no need to change it and let it keep inherit from parent element
+function internalTransformToLightMode(element: HTMLElement, cssName: string) {
+    const color = element.style.getPropertyValue(cssName);
 
-                return needProcess
-                    ? {
-                          element,
-                          styleColor,
-                          attrColor,
-                          newColor:
-                              styleColor || attrColor
-                                  ? getDarkColor((styleColor || attrColor)!)
-                                  : null,
-                      }
-                    : null;
-            })
-            .filter(x => !!x)
-            .forEach(entry => {
-                if (!entry) {
-                    return;
-                }
+    if (color && color != 'inherit') {
+        const matches = DarkColorRegex.exec(color);
+        let lightColor = matches ? matches[2] : color;
 
-                const { element, styleColor, attrColor, newColor } = entry;
-                element.style.setProperty(
-                    names[ColorAttributeEnum.CssColor],
-                    newColor,
-                    'important'
-                );
-                element.dataset[names[ColorAttributeEnum.CssDataSet]] = styleColor || '';
-
-                if (attrColor && newColor) {
-                    element.setAttribute(names[ColorAttributeEnum.HtmlColor], newColor);
-                    element.dataset[names[ColorAttributeEnum.HtmlDataSet]] = attrColor;
-                }
-            });
-    });
+        if (lightColor) {
+            element.style.setProperty(cssName, lightColor);
+        } else {
+            element.style.removeProperty(cssName);
+        }
+    }
 }
 
-function getValueOrDefault(value: string | undefined, defaultValue: string | null) {
-    return value && value != 'undefined' && value != 'null' ? value : defaultValue;
+function internalTransformToDarkColor(
+    element: HTMLElement,
+    cssName: string,
+    attrName: string
+): [string, string] | void {
+    let color = element.style.getPropertyValue(cssName) || element.getAttribute(attrName);
+
+    if (color && color != 'inherit') {
+        const matches = DarkColorRegex.exec(color);
+
+        if (matches) {
+            color = matches[2];
+        }
+
+        if (color) {
+            const colorKey = ColorNamePrefix + color.replace(/[^\d\w]/g, '_');
+            element.style.setProperty(cssName, `var(${colorKey},${color})`, 'important');
+
+            return [colorKey, color];
+        }
+    }
 }
 
 function getAll(rootNode: Node, includeSelf: boolean): HTMLElement[] {

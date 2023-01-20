@@ -1,4 +1,4 @@
-const VARIABLE_REGEX = /^\s*var\(\s*[a-zA-Z0-9-_]+\s*(,\s*(.*))?\)\s*$/;
+const VARIABLE_REGEX = /^\s*var\(\s*\-\-[a-zA-Z0-9-_]+\s*(,\s*(.*))?\)\s*$/;
 const VARIABLE_PREFIX = 'var(';
 
 /**
