@@ -12,6 +12,7 @@ import {
 } from 'roosterjs-content-model';
 import {
     getComputedStyles,
+    getObjectKeys,
     Position,
     restoreContentWithEntityPlaceholder,
 } from 'roosterjs-editor-dom';
@@ -70,7 +71,7 @@ export default class ExperimentalContentModelEditor extends Editor
      * @param option Additional options to customize the behavior of Content Model to DOM conversion
      */
     setContentModel(model: ContentModelDocument, option?: ModelToDomOption) {
-        const [fragment, range, entityPairs] = contentModelToDom(
+        const [fragment, range, entityPairs, newDarkColors] = contentModelToDom(
             this.getDocument(),
             model,
             this.createEditorContext(),
@@ -88,6 +89,23 @@ export default class ExperimentalContentModelEditor extends Editor
         } else {
             mergingCallback(fragment, this.contentDiv, entityPairs);
             this.select(range);
+        }
+
+        if (this.isDarkMode()) {
+            const {
+                contentDiv,
+                lifecycle: { knownDarkColors, getDarkColor },
+            } = this.core;
+
+            getObjectKeys(newDarkColors).forEach(key => {
+                if (!knownDarkColors[key]) {
+                    const lightModeColor = newDarkColors[key];
+                    const darkModeColor = getDarkColor(lightModeColor);
+
+                    contentDiv.style.setProperty(key, darkModeColor);
+                    knownDarkColors[key] = { lightModeColor, darkModeColor };
+                }
+            });
         }
     }
 

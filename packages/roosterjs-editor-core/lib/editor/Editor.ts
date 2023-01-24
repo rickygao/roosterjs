@@ -20,6 +20,7 @@ import {
     IEditor,
     InsertOption,
     IPositionContentSearcher,
+    ModeIndependentColor,
     NodePosition,
     PendableFormatState,
     PluginEvent,
@@ -77,7 +78,7 @@ import type {
  * RoosterJs core editor class
  */
 export default class Editor implements IEditor {
-    private core: EditorCore | null = null;
+    protected core: EditorCore | null = null;
 
     //#region Lifecycle
 
@@ -1132,6 +1133,22 @@ export default class Editor implements IEditor {
      */
     getVisibleViewport(): Rect | null {
         return this.getCore().getVisibleViewport();
+    }
+
+    /**
+     * Set color to an element. When editor is in dark mode, it will also adjust the color for dark mode
+     * @param element The element to set color to
+     * @param color The color to set
+     * @param cssName Name of Css property name to set
+     */
+    setColorToElement(
+        element: HTMLElement,
+        color: string | ModeIndependentColor,
+        cssName: 'background-color' | 'color'
+    ) {
+        const core = this.getCore();
+
+        core.api.setColorToElement(core, element, color, cssName, core.lifecycle.isDarkMode);
     }
 
     /**

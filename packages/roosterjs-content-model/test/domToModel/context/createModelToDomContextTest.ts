@@ -35,6 +35,7 @@ describe('createModelToDomContext', () => {
         defaultModelHandlers: defaultContentModelHandlers,
         defaultFormatAppliers: defaultFormatAppliers,
         doNotReuseEntityDom: false,
+        newDarkColors: {},
     };
     it('no param', () => {
         const context = createModelToDomContext();

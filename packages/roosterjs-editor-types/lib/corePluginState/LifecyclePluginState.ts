@@ -1,5 +1,6 @@
 import CustomData from '../interface/CustomData';
 import DefaultFormat from '../interface/DefaultFormat';
+import ModeIndependentColor from '../interface/ModeIndependentColor';
 import SelectionPath from '../interface/SelectionPath';
 import { ExperimentalFeatures } from '../enum/ExperimentalFeatures';
 import type { CompatibleExperimentalFeatures } from '../compatibleEnum/ExperimentalFeatures';
@@ -62,4 +63,9 @@ export default interface LifecyclePluginState {
      * Cached image selection path for original content
      */
     shadowEditImageSelectionPath: SelectionPath[] | null;
+
+    /**
+     * Map from known dark color key to dark color value
+     */
+    knownDarkColors: Record<string, ModeIndependentColor>;
 }

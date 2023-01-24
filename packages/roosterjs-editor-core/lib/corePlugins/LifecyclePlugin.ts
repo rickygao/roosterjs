@@ -1,4 +1,4 @@
-import { Browser, getComputedStyles, getObjectKeys, setColor } from 'roosterjs-editor-dom';
+import { Browser, getComputedStyles, getObjectKeys } from 'roosterjs-editor-dom';
 import {
     DefaultFormat,
     DocumentCommand,
@@ -57,6 +57,7 @@ export default class LifecyclePlugin implements PluginWithState<LifecyclePluginS
     private initializer: (() => void) | null = null;
     private disposer: (() => void) | null = null;
     private adjustColor: () => void;
+    private cleanUpDarkColor: () => void;
 
     /**
      * Construct a new instance of LifecyclePlugin
@@ -84,10 +85,15 @@ export default class LifecyclePlugin implements PluginWithState<LifecyclePluginS
             ? () => {}
             : () => {
                   const { textColors, backgroundColors } = DARK_MODE_DEFAULT_FORMAT;
-                  const { isDarkMode } = this.state;
-                  setColor(contentDiv, textColors, false /*isBackground*/, isDarkMode);
-                  setColor(contentDiv, backgroundColors, true /*isBackground*/, isDarkMode);
+                  this.editor?.setColorToElement(contentDiv, textColors, 'color');
+                  this.editor?.setColorToElement(contentDiv, backgroundColors, 'background-color');
               };
+        this.cleanUpDarkColor = () => {
+            getObjectKeys(this.state.knownDarkColors).forEach(key => {
+                contentDiv.style.removeProperty(key);
+            });
+            this.state.knownDarkColors = {};
+        };
 
         this.state = {
             customData: {},
@@ -101,6 +107,7 @@ export default class LifecyclePlugin implements PluginWithState<LifecyclePluginS
             shadowEditSelectionPath: null,
             shadowEditTableSelectionPath: null,
             shadowEditImageSelectionPath: null,
+            knownDarkColors: {},
         };
     }
 
@@ -182,6 +189,8 @@ export default class LifecyclePlugin implements PluginWithState<LifecyclePluginS
             this.state.isDarkMode = event.source == ChangeSource.SwitchToDarkMode;
             this.recalculateDefaultFormat();
             this.adjustColor();
+        } else if (event.eventType == PluginEventType.BeforeDispose) {
+            this.cleanUpDarkColor();
         }
     }
 

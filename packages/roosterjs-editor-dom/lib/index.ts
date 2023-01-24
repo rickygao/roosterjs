@@ -44,7 +44,7 @@ export { default as normalizeRect } from './utils/normalizeRect';
 export { default as safeInstanceOf } from './utils/safeInstanceOf';
 export { default as readFile } from './utils/readFile';
 export { default as getInnerHTML } from './utils/getInnerHTML';
-export { default as setColor } from './utils/setColor';
+export { default as setColor, getTextColorForBackground } from './utils/setColor';
 export { default as matchesSelector } from './utils/matchesSelector';
 export { default as createElement, KnownCreateElementData } from './utils/createElement';
 export { default as moveChildNodes } from './utils/moveChildNodes';
@@ -119,6 +119,11 @@ export { default as setStyles } from './style/setStyles';
 export { default as removeImportantStyleRule } from './style/removeImportantStyleRule';
 export { default as setGlobalCssStyles } from './style/setGlobalCssStyles';
 export { default as removeGlobalCssStyle } from './style/removeGlobalCssStyle';
+export {
+    processCssVariable,
+    createCssVariable,
+    createCssVariableName,
+} from './style/processCssVariable';
 
 export { default as adjustInsertPosition } from './edit/adjustInsertPosition';
 export { default as deleteSelectedContent } from './edit/deleteSelectedContent';
