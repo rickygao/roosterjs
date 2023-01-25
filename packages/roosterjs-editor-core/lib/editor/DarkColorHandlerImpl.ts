@@ -5,14 +5,34 @@ const VARIABLE_REGEX = /^\s*var\(\s*(\-\-[a-zA-Z0-9\-_]+)\s*(?:,\s*(.*))?\)\s*$/
 const VARIABLE_PREFIX = 'var(';
 const COLOR_VAR_PREFIX = 'darkColor';
 
+/**
+ * @internal
+ */
 export default class DarkColorHandlerImpl implements DarkColorHandler {
     private knownColors: Record<string, ModeIndependentColor> = {};
 
     constructor(private contentDiv: HTMLElement, private getDarkColor: (color: string) => string) {}
 
+    /**
+     * Given a light mode color value and an optional dark mode color value, register this color
+     * so that editor can handle it, then return the CSS color value for current color mode.
+     * @param lightModeColor Light mode color value
+     * @param isDarkMode Whether current color mode is dark mode
+     * @param darkModeColor Optional dark mode color value. If not passed, we will calculate one.
+     */
     registerColor(lightModeColor: string, isDarkMode: boolean, darkModeColor?: string): string {
+        const parsedColor = this.parseColorValue(lightModeColor);
+        let colorKey: string | undefined;
+
+        if (parsedColor) {
+            lightModeColor = parsedColor.lightModeColor;
+            darkModeColor = parsedColor.darkModeColor;
+            colorKey = parsedColor.key;
+        }
+
         if (isDarkMode) {
-            const colorKey = `--${COLOR_VAR_PREFIX}_${lightModeColor.replace(/[^\d\w]/g, '_')}`;
+            colorKey =
+                colorKey || `--${COLOR_VAR_PREFIX}_${lightModeColor.replace(/[^\d\w]/g, '_')}`;
 
             if (!this.knownColors[colorKey]) {
                 darkModeColor = darkModeColor || this.getDarkColor(lightModeColor);
@@ -27,11 +47,19 @@ export default class DarkColorHandlerImpl implements DarkColorHandler {
         }
     }
 
+    /**
+     * Reset known color record, clean up registered color variables.
+     */
     reset(): void {
         getObjectKeys(this.knownColors).forEach(key => this.contentDiv.style.removeProperty(key));
         this.knownColors = {};
     }
 
+    /**
+     * Parse an existing color value, if it is in variable-based color format, extract color key,
+     * light color and query related dark color if any
+     * @param color The color string to parse
+     */
     parseColorValue(color: string | undefined | null): ColorKeyAndValue {
         let key: string | undefined;
         let lightModeColor = color || '';

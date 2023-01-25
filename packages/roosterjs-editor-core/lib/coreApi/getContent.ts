@@ -37,7 +37,7 @@ export const getContent: GetContent = (
         content = root.textContent;
     } else if (mode == GetContentMode.PlainText) {
         content = getTextContent(root);
-    } else if (triggerExtractContentEvent || core.lifecycle.isDarkMode) {
+    } else if (triggerExtractContentEvent || core.lifecycle.isDarkMode || core.darkColorHandler) {
         const clonedRoot = cloneNode(root);
         clonedRoot.normalize();
 
