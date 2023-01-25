@@ -15,10 +15,10 @@ describe('getColor', () => {
         expectedDarkTextColor: string | undefined,
         expectedDarkBackColor: string | undefined
     ) {
-        const lightTextColor = getColor(div, false, false);
-        const lightBackColor = getColor(div, true, false);
-        const darkTextColor = getColor(div, false, true);
-        const darkBackColor = getColor(div, true, true);
+        const lightTextColor = getColor(div, false, false, null);
+        const lightBackColor = getColor(div, true, false, null);
+        const darkTextColor = getColor(div, false, true, null);
+        const darkBackColor = getColor(div, true, true, null);
 
         expect(lightTextColor).toBe(expectedLightTextColor);
         expect(lightBackColor).toBe(expectedLightBackColor);

@@ -5,7 +5,7 @@ export interface ColorKeyAndValue {
 }
 
 export default interface DarkColorHandler {
-    registerDarkColor(key: string, lightModeColor: string, darkModeColor?: string): void;
+    registerColor(lightModeColor: string, isDarkMode: boolean, darkModeColor?: string): string;
     reset(): void;
     parseColorValue(color: string | null | undefined): ColorKeyAndValue;
 }

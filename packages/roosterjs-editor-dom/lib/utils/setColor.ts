@@ -20,8 +20,6 @@ const DARK_COLORS_LIGHTNESS = 20;
 const BRIGHT_COLORS_LIGHTNESS = 80;
 const TRANSPARENT_COLOR = 'transparent';
 
-const COLOR_VAR_PREFIX = 'darkColor';
-
 /**
  * Set text color or background color to the given element
  * @param element The element to set color to
@@ -45,16 +43,13 @@ export default function setColor(
 
     if (colorString || modeIndependentColor) {
         if (darkColorHandler) {
-            const lightModeColor = modeIndependentColor?.lightModeColor || colorString;
-            const darkModeColor = modeIndependentColor?.darkModeColor;
-            const colorKey = `--${COLOR_VAR_PREFIX}_${lightModeColor.replace(/[^\d\w]/g, '_')}`;
-
-            element.style.setProperty(
-                cssName,
-                isDarkMode ? `var(${colorKey}, ${lightModeColor})` : lightModeColor
+            const colorValue = darkColorHandler.registerColor(
+                modeIndependentColor?.lightModeColor || colorString,
+                !!isDarkMode,
+                modeIndependentColor?.darkModeColor
             );
 
-            darkColorHandler.registerDarkColor(colorKey, lightModeColor, darkModeColor);
+            element.style.setProperty(cssName, colorValue);
         } else {
             element.style.setProperty(
                 cssName,
