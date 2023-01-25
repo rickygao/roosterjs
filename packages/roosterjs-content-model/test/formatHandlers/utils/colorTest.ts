@@ -1,6 +1,5 @@
 import { getColor, setColor } from '../../../lib/formatHandlers/utils/color';
 import { itChromeOnly } from 'roosterjs-editor-dom/test/DomTestHelper';
-import { ModeIndependentColor } from 'roosterjs-editor-types';
 
 describe('getColor', () => {
     let div: HTMLElement;
@@ -15,10 +14,10 @@ describe('getColor', () => {
         expectedDarkTextColor: string | undefined,
         expectedDarkBackColor: string | undefined
     ) {
-        const lightTextColor = getColor(div, false, false, null);
-        const lightBackColor = getColor(div, true, false, null);
-        const darkTextColor = getColor(div, false, true, null);
-        const darkBackColor = getColor(div, true, true, null);
+        const lightTextColor = getColor(div, false, null, false);
+        const lightBackColor = getColor(div, true, null, false);
+        const darkTextColor = getColor(div, false, null, true);
+        const darkBackColor = getColor(div, true, null, true);
 
         expect(lightTextColor).toBe(expectedLightTextColor);
         expect(lightBackColor).toBe(expectedLightBackColor);
@@ -88,18 +87,18 @@ describe('setColor', () => {
     }
 
     function runTest(
-        textColor: string | ModeIndependentColor,
-        backColor: string | ModeIndependentColor,
+        textColor: string,
+        backColor: string,
         expectedLightHtml: string,
         expectedDarkHtml: string
     ) {
         const lightDiv = document.createElement('div');
         const darkDiv = document.createElement('div');
 
-        setColor(lightDiv, textColor, false, false, getDarkColor);
-        setColor(lightDiv, backColor, true, false, getDarkColor);
-        setColor(darkDiv, textColor, false, true, getDarkColor);
-        setColor(darkDiv, backColor, true, true, getDarkColor);
+        setColor(lightDiv, textColor, false, null, false, getDarkColor);
+        setColor(lightDiv, backColor, true, null, false, getDarkColor);
+        setColor(darkDiv, textColor, false, null, true, getDarkColor);
+        setColor(darkDiv, backColor, true, null, true, getDarkColor);
 
         expect(lightDiv.outerHTML).toBe(expectedLightHtml);
         expect(darkDiv.outerHTML).toBe(expectedDarkHtml);
@@ -115,21 +114,6 @@ describe('setColor', () => {
             'blue',
             '<div style="color: red; background-color: blue;"></div>',
             '<div data-ogsc="red" data-ogsb="blue" style="color: var(--red); background-color: var(--blue);"></div>'
-        );
-    });
-
-    itChromeOnly('Mode independent color', () => {
-        runTest(
-            {
-                lightModeColor: '#aaa',
-                darkModeColor: '#bbb',
-            },
-            {
-                lightModeColor: '#ccc',
-                darkModeColor: '#ddd',
-            },
-            '<div style="color: rgb(170, 170, 170); background-color: rgb(204, 204, 204);"></div>',
-            '<div data-ogsc="#aaa" data-ogsb="#ccc" style="color: rgb(187, 187, 187); background-color: rgb(221, 221, 221);"></div>'
         );
     });
 });
