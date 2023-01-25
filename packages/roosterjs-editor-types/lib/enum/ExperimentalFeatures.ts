@@ -126,4 +126,6 @@ export const enum ExperimentalFeatures {
      * the block element (In most case, the DIV element) so keep the block element clean.
      */
     DefaultFormatInSpan = 'DefaultFormatInSpan',
+
+    VariableBasedDarkColor = 'VariableBasedDarkColor',
 }
