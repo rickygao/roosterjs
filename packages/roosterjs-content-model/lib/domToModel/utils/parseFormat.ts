@@ -1,6 +1,6 @@
 import { ContentModelFormatBase } from '../../publicTypes/format/ContentModelFormatBase';
+import { DefaultStyleMap, FormatParser } from '../../publicTypes/context/DomToModelSettings';
 import { DomToModelContext } from '../../publicTypes/context/DomToModelContext';
-import { FormatParser } from '../../publicTypes/context/DomToModelSettings';
 import { getDefaultStyle } from './getDefaultStyle';
 
 /**
@@ -10,9 +10,10 @@ export function parseFormat<T extends ContentModelFormatBase>(
     element: HTMLElement,
     parsers: (FormatParser<T> | null)[],
     format: T,
-    context: DomToModelContext
+    context: DomToModelContext,
+    tagNameOverride?: keyof DefaultStyleMap
 ) {
-    const defaultStyle = getDefaultStyle(element, context);
+    const defaultStyle = getDefaultStyle(element, context, tagNameOverride);
 
     parsers.forEach(parser => {
         parser?.(format, element, context, defaultStyle);

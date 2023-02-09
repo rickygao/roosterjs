@@ -1,6 +1,5 @@
 import { DefaultImplicitFormatMap } from '../../publicTypes/context/ModelToDomSettings';
 import { DefaultStyleMap } from '../../publicTypes/context/DomToModelSettings';
-import { HyperLinkColorPlaceholder } from '../../domUtils/constant';
 
 const blockElement: Partial<CSSStyleDeclaration> = {
     display: 'block',
@@ -10,9 +9,8 @@ const blockElement: Partial<CSSStyleDeclaration> = {
  * @internal
  */
 export const defaultStyleMap: DefaultStyleMap = {
-    a: {
+    ['a[href]']: {
         textDecoration: 'underline',
-        color: HyperLinkColorPlaceholder,
     },
     address: blockElement,
     article: blockElement,
@@ -134,7 +132,6 @@ export const defaultStyleMap: DefaultStyleMap = {
 export const defaultImplicitFormatMap: DefaultImplicitFormatMap = {
     a: {
         underline: true,
-        textColor: HyperLinkColorPlaceholder,
     },
     blockquote: {
         marginTop: '1em',

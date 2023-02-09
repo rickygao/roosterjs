@@ -16,7 +16,7 @@ import { stackFormat } from '../utils/stackFormat';
  */
 export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, element, context) => {
     const isBlock = isBlockElement(element, context);
-    const isLink = element.tagName == 'A';
+    const isLink = element.tagName == 'A' && element.hasAttribute('href');
 
     stackFormat(
         context,
@@ -30,7 +30,13 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
             let bottomDivider: ContentModelDivider | undefined;
 
             if (isLink) {
-                parseFormat(element, context.formatParsers.link, context.link.format, context);
+                parseFormat(
+                    element,
+                    context.formatParsers.link,
+                    context.link.format,
+                    context,
+                    'a[href]'
+                );
                 parseFormat(element, context.formatParsers.dataset, context.link.dataset, context);
             }
 

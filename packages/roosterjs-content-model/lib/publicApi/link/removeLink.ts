@@ -2,7 +2,6 @@ import { adjustSegmentSelection } from '../../modelApi/selection/adjustSegmentSe
 import { areSameFormats } from '../../domToModel/utils/areSameFormats';
 import { formatWithContentModel } from '../utils/formatWithContentModel';
 import { getSelectedSegments } from '../../modelApi/selection/collectSelections';
-import { HyperLinkColorPlaceholder } from '../../domUtils/constant';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 
 /**
@@ -27,10 +26,6 @@ export default function removeLink(editor: IContentModelEditor) {
         segments.forEach(segment => {
             if (segment.link) {
                 isChanged = true;
-
-                if (segment.format.textColor == HyperLinkColorPlaceholder) {
-                    delete segment.format.textColor;
-                }
 
                 segment.format.underline = false;
                 delete segment.link;

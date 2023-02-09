@@ -132,7 +132,8 @@ class MainPane extends MainPaneBase {
     private mainWindowButtons: RibbonButton<RibbonStringKeys>[];
     private popoutWindowButtons: RibbonButton<RibbonStringKeys>[];
 
-    private content: string = '';
+    private content: string =
+        '<span style="color:blue">test 1 <a style="color:red; text-decoration: none" href="https://www.bing.com/">link</a> test 2</span>';
 
     private sidePane = React.createRef<SidePane>();
 

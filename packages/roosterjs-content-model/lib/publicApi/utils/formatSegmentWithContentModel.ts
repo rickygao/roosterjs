@@ -52,6 +52,16 @@ export function formatSegmentWithContentModel(
                   )
                 : false;
 
+            if (!pendingFormat) {
+                // If selection also has link, put link into the list as well so we can format the link.
+                // Do this after we check "isTurningOff" so that link format won't impact this check result
+                segments.forEach(segment => {
+                    if (segment.link) {
+                        formatsAndSegments.push([segment.link.format, null]);
+                    }
+                });
+            }
+
             formatsAndSegments.forEach(([format, segment]) =>
                 toggleStyleCallback(format, !isTurningOff, segment)
             );

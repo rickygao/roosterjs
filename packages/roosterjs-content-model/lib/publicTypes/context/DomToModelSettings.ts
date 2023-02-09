@@ -13,6 +13,10 @@ export type DefaultStyleMap = {
     {
         [key in keyof HTMLElementTagNameMap]?: Readonly<Partial<CSSStyleDeclaration>>;
     } & {
+        // Special handle a tag with href attribute.
+        // We only need to apply the default style to the link decorator but not its owner segment
+        ['a[href]']?: Partial<CSSStyleDeclaration>;
+
         // Workaround typescript 4.4.4 which does not have these elements in its declaration file
         center?: Partial<CSSStyleDeclaration>;
         strike?: Partial<CSSStyleDeclaration>;
