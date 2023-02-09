@@ -1,4 +1,4 @@
-import * as pendingFormat from '../../../lib/publicApi/format/pendingFormat';
+import * as pendingFormat from '../../../lib/modelApi/format/pendingFormat';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
 import { ContentModelSegmentFormat } from '../../../lib/publicTypes/format/ContentModelSegmentFormat';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
@@ -7,6 +7,7 @@ import { createSelectionMarker } from '../../../lib/modelApi/creators/createSele
 import { createText } from '../../../lib/modelApi/creators/createText';
 import { formatSegmentWithContentModel } from '../../../lib/publicApi/utils/formatSegmentWithContentModel';
 import { IContentModelEditor } from '../../../lib/publicTypes/IContentModelEditor';
+import { NodePosition } from 'roosterjs-editor-types';
 
 describe('formatSegmentWithContentModel', () => {
     let editor: IContentModelEditor;
@@ -32,6 +33,7 @@ describe('formatSegmentWithContentModel', () => {
             addUndoSnapshot,
             createContentModel: () => model,
             setContentModel,
+            getFocusedPosition: () => null as NodePosition,
         } as any) as IContentModelEditor;
     });
 

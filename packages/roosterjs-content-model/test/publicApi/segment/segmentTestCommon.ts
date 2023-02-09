@@ -1,4 +1,4 @@
-import * as pendingFormat from '../../../lib/publicApi/format/pendingFormat';
+import * as pendingFormat from '../../../lib/modelApi/format/pendingFormat';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
 import { IContentModelEditor } from '../../../lib/publicTypes/IContentModelEditor';
 
