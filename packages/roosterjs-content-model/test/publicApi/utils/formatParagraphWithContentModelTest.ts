@@ -2,7 +2,7 @@ import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentMode
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
 import { createText } from '../../../lib/modelApi/creators/createText';
-import { formatParagraphWithContentModel } from '../../../lib/publicApi/utils/formatParagraphWithContentModel';
+import { formatParagraphWithContentModel } from '../../../lib/editor/extendedApi/formatParagraphWithContentModel';
 import { IContentModelEditor } from '../../../lib/publicTypes/IContentModelEditor';
 
 describe('formatParagraphWithContentModel', () => {
@@ -24,6 +24,7 @@ describe('formatParagraphWithContentModel', () => {
             addUndoSnapshot,
             createContentModel: () => model,
             setContentModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
     });
 

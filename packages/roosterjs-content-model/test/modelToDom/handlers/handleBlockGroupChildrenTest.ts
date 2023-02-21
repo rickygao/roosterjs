@@ -25,7 +25,7 @@ describe('handleBlockGroupChildren', () => {
     it('Empty block group', () => {
         const group = createContentModelDocument();
 
-        handleBlockGroupChildren(document, parent, group, context);
+        handleBlockGroupChildren(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(context.listFormat.nodeStack).toEqual([]);
@@ -38,12 +38,12 @@ describe('handleBlockGroupChildren', () => {
 
         group.blocks.push(paragraph);
 
-        handleBlockGroupChildren(document, parent, group, context);
+        handleBlockGroupChildren(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(context.listFormat.nodeStack).toEqual([]);
         expect(handleBlock).toHaveBeenCalledTimes(1);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context, null);
     });
 
     it('Multiple child block group', () => {
@@ -54,13 +54,13 @@ describe('handleBlockGroupChildren', () => {
         group.blocks.push(paragraph1);
         group.blocks.push(paragraph2);
 
-        handleBlockGroupChildren(document, parent, group, context);
+        handleBlockGroupChildren(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(context.listFormat.nodeStack).toEqual([]);
         expect(handleBlock).toHaveBeenCalledTimes(2);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context, null);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context, null);
     });
 
     it('Multiple child block group with nodeStack and no list', () => {
@@ -75,13 +75,13 @@ describe('handleBlockGroupChildren', () => {
             expect(context.listFormat.nodeStack).toEqual([]);
         });
 
-        handleBlockGroupChildren(document, parent, group, context);
+        handleBlockGroupChildren(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(nodeStack).toEqual([{ a: 'b' } as any]);
         expect(context.listFormat.nodeStack).toBe(nodeStack);
         expect(handleBlock).toHaveBeenCalledTimes(1);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context, null);
     });
 
     it('Multiple child block group with nodeStack and no list', () => {
@@ -109,14 +109,14 @@ describe('handleBlockGroupChildren', () => {
             }
         });
 
-        handleBlockGroupChildren(document, parent, group, context);
+        handleBlockGroupChildren(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(nodeStack).toEqual([{ a: 'b' } as any]);
         expect(context.listFormat.nodeStack).toBe(nodeStack);
         expect(handleBlock).toHaveBeenCalledTimes(3);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, list, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context, null);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context, null);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, list, context, null);
     });
 });

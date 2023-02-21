@@ -1,5 +1,5 @@
 import * as clearModelFormat from '../../../lib/modelApi/common/clearModelFormat';
-import * as formatWithContentModel from '../../../lib/publicApi/utils/formatWithContentModel';
+import * as formatWithContentModel from '../../../lib/editor/extendedApi/formatWithContentModel';
 import * as normalizeContentModel from '../../../lib/modelApi/common/normalizeContentModel';
 import clearFormat from '../../../lib/publicApi/format/clearFormat';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';

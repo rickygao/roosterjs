@@ -18,7 +18,7 @@ describe('handleSegment', () => {
             format: {},
         };
 
-        handleBr(document, parent, br, context);
+        handleBr(document, parent, br, context, null);
 
         expect(parent.innerHTML).toBe('<span><br></span>');
     });
@@ -29,7 +29,7 @@ describe('handleSegment', () => {
             format: { textColor: 'red' },
         };
 
-        handleBr(document, parent, br, context);
+        handleBr(document, parent, br, context, null);
 
         expect(parent.innerHTML).toBe('<span style="color: red;"><br></span>');
     });

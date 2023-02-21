@@ -1,6 +1,6 @@
 import { createParagraphDecorator } from '../../modelApi/creators/createParagraphDecorator';
+import { formatParagraphWithContentModel } from '../../editor/extendedApi/formatParagraphWithContentModel';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
-import { formatParagraphWithContentModel } from '../utils/formatParagraphWithContentModel';
 
 /**
  * Toggles the current block(s) margin properties.

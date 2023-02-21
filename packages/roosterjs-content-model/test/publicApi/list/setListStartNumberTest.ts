@@ -1,4 +1,4 @@
-import * as formatWithContentModel from '../../../lib/publicApi/utils/formatWithContentModel';
+import * as formatWithContentModel from '../../../lib/editor/extendedApi/formatWithContentModel';
 import setListStartNumber from '../../../lib/publicApi/list/setListStartNumber';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
 

@@ -1,4 +1,4 @@
-import * as formatWithContentModel from '../../../lib/publicApi/utils/formatWithContentModel';
+import * as formatWithContentModel from '../../../lib/editor/extendedApi/formatWithContentModel';
 import setListStyle from '../../../lib/publicApi/list/setListStyle';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
 import { ListMetadataFormat } from '../../../lib/publicTypes/format/formatParts/ListMetadataFormat';

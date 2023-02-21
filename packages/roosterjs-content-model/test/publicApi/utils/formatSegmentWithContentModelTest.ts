@@ -1,11 +1,11 @@
-import * as pendingFormat from '../../../lib/modelApi/format/pendingFormat';
+import * as pendingFormat from '../../../lib/editor/extendedApi/pendingFormat';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
 import { ContentModelSegmentFormat } from '../../../lib/publicTypes/format/ContentModelSegmentFormat';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
 import { createSelectionMarker } from '../../../lib/modelApi/creators/createSelectionMarker';
 import { createText } from '../../../lib/modelApi/creators/createText';
-import { formatSegmentWithContentModel } from '../../../lib/publicApi/utils/formatSegmentWithContentModel';
+import { formatSegmentWithContentModel } from '../../../lib/editor/extendedApi/formatSegmentWithContentModel';
 import { IContentModelEditor } from '../../../lib/publicTypes/IContentModelEditor';
 import { NodePosition } from 'roosterjs-editor-types';
 
@@ -34,6 +34,7 @@ describe('formatSegmentWithContentModel', () => {
             createContentModel: () => model,
             setContentModel,
             getFocusedPosition: () => null as NodePosition,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
     });
 

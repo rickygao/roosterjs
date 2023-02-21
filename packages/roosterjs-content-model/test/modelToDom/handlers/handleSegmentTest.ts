@@ -44,9 +44,9 @@ describe('handleSegment', () => {
             format: {},
         };
 
-        handleSegment(document, parent, text, context);
+        handleSegment(document, parent, text, context, null);
 
-        expect(handleText).toHaveBeenCalledWith(document, parent, text, context);
+        expect(handleText).toHaveBeenCalledWith(document, parent, text, context, null);
         expect(parent.innerHTML).toBe('');
     });
 
@@ -55,10 +55,10 @@ describe('handleSegment', () => {
             segmentType: 'Br',
             format: {},
         };
-        handleSegment(document, parent, br, context);
+        handleSegment(document, parent, br, context, null);
 
         expect(parent.innerHTML).toBe('');
-        expect(handleBr).toHaveBeenCalledWith(document, parent, br, context);
+        expect(handleBr).toHaveBeenCalledWith(document, parent, br, context, null);
     });
 
     it('general segment', () => {
@@ -71,9 +71,9 @@ describe('handleSegment', () => {
             format: {},
         };
 
-        handleSegment(document, parent, segment, context);
+        handleSegment(document, parent, segment, context, null);
         expect(parent.innerHTML).toBe('');
-        expect(handleGeneralModel).toHaveBeenCalledWith(document, parent, segment, context);
+        expect(handleGeneralModel).toHaveBeenCalledWith(document, parent, segment, context, null);
     });
 
     it('entity segment', () => {
@@ -88,9 +88,9 @@ describe('handleSegment', () => {
             isReadonly: true,
         };
 
-        handleSegment(document, parent, segment, context);
+        handleSegment(document, parent, segment, context, null);
         expect(parent.innerHTML).toBe('');
-        expect(handleEntity).toHaveBeenCalledWith(document, parent, segment, context);
+        expect(handleEntity).toHaveBeenCalledWith(document, parent, segment, context, null);
     });
 
     it('image segment', () => {
@@ -101,8 +101,8 @@ describe('handleSegment', () => {
             dataset: {},
         };
 
-        handleSegment(document, parent, segment, context);
+        handleSegment(document, parent, segment, context, null);
         expect(parent.innerHTML).toBe('');
-        expect(handleImage).toHaveBeenCalledWith(document, parent, segment, context);
+        expect(handleImage).toHaveBeenCalledWith(document, parent, segment, context, null);
     });
 });

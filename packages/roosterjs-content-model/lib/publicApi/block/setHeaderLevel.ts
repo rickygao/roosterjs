@@ -1,7 +1,7 @@
 import { ContentModelParagraphDecorator } from '../../publicTypes/decorator/ContentModelParagraphDecorator';
 import { ContentModelSegmentFormat } from '../../publicTypes/format/ContentModelSegmentFormat';
 import { defaultImplicitFormatMap } from '../../formatHandlers/utils/defaultStyles';
-import { formatParagraphWithContentModel } from '../utils/formatParagraphWithContentModel';
+import { formatParagraphWithContentModel } from '../../editor/extendedApi/formatParagraphWithContentModel';
 import { getObjectKeys } from 'roosterjs-editor-dom';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 

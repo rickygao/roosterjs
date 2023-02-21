@@ -6,6 +6,7 @@ import { isNodeOfType } from '../domUtils/isNodeOfType';
 import { ModelToDomBlockAndSegmentNode } from '../publicTypes/context/ModelToDomSelectionContext';
 import { ModelToDomContext } from '../publicTypes/context/ModelToDomContext';
 import { ModelToDomOption } from '../publicTypes/IContentModelEditor';
+import { normalizeContentModel } from '../modelApi/common/normalizeContentModel';
 import { optimize } from './optimizers/optimize';
 import {
     NodePosition,
@@ -30,18 +31,26 @@ export default function contentModelToDom(
     model: ContentModelDocument,
     editorContext: EditorContext,
     option?: ModelToDomOption
-): [DocumentFragment, SelectionRangeEx | null, Record<string, HTMLElement>] {
-    const fragment = doc.createDocumentFragment();
+): [Node, SelectionRangeEx | null, Record<string, HTMLElement>] {
+    const root = option?.existingRootNode || doc.createDocumentFragment();
     const modelToDomContext = createModelToDomContext(editorContext, option);
 
-    modelToDomContext.modelHandlers.blockGroup(doc, fragment, model, modelToDomContext);
-    optimize(fragment, 2 /*optimizeLevel*/);
+    normalizeContentModel(model);
+
+    modelToDomContext.modelHandlers.blockGroup(
+        doc,
+        root,
+        model,
+        modelToDomContext,
+        option?.existingRootNode ? root.firstChild : null
+    );
+    optimize(root, 2 /*optimizeLevel*/);
 
     const range = extractSelectionRange(modelToDomContext);
 
-    fragment.normalize();
+    root.normalize();
 
-    return [fragment, range, modelToDomContext.entities];
+    return [root, range, modelToDomContext.entities];
 }
 
 function extractSelectionRange(context: ModelToDomContext): SelectionRangeEx | null {

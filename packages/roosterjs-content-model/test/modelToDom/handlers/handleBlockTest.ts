@@ -33,7 +33,7 @@ describe('handleBlock', () => {
     function runTest(block: ContentModelBlock, expectedInnerHTML: string) {
         parent = document.createElement('div');
 
-        handleBlock(document, parent, block, context);
+        handleBlock(document, parent, block, context, null);
 
         expect(parent.innerHTML).toBe(expectedInnerHTML);
     }
@@ -48,7 +48,7 @@ describe('handleBlock', () => {
         runTest(paragraph, '');
 
         expect(handleParagraph).toHaveBeenCalledTimes(1);
-        expect(handleParagraph).toHaveBeenCalledWith(document, parent, paragraph, context);
+        expect(handleParagraph).toHaveBeenCalledWith(document, parent, paragraph, context, null);
     });
 
     it('General block without child', () => {
@@ -84,7 +84,7 @@ describe('handleBlock', () => {
         runTest(block, '<span></span>');
 
         expect(handleParagraph).toHaveBeenCalledTimes(1);
-        expect(handleParagraph).toHaveBeenCalledWith(document, element, paragraph, context);
+        expect(handleParagraph).toHaveBeenCalledWith(document, element, paragraph, context, null);
     });
 
     it('General block and segment', () => {
@@ -101,7 +101,7 @@ describe('handleBlock', () => {
         parent = document.createElement('div');
 
         spyOn(applyFormat, 'applyFormat');
-        handleBlock(document, parent, block, context);
+        handleBlock(document, parent, block, context, null);
 
         expect(parent.innerHTML).toBe('<span></span>');
         expect(parent.firstChild).not.toBe(element);
@@ -123,9 +123,9 @@ describe('handleBlock', () => {
 
         parent = document.createElement('div');
 
-        handleBlock(document, parent, block, context);
+        handleBlock(document, parent, block, context, null);
 
-        expect(handleEntity).toHaveBeenCalledWith(document, parent, block, context);
+        expect(handleEntity).toHaveBeenCalledWith(document, parent, block, context, null);
     });
 
     it('HR block', () => {
@@ -137,8 +137,8 @@ describe('handleBlock', () => {
 
         parent = document.createElement('div');
 
-        handleBlock(document, parent, block, context);
+        handleBlock(document, parent, block, context, null);
 
-        expect(handleDivider).toHaveBeenCalledWith(document, parent, block, context);
+        expect(handleDivider).toHaveBeenCalledWith(document, parent, block, context, null);
     });
 });

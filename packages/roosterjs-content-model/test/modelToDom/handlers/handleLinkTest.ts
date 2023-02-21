@@ -15,7 +15,7 @@ describe('handleLink', () => {
         parent = document.createElement('div');
         parent.innerHTML = 'test';
 
-        handleLink(document, parent.firstChild!, link, context);
+        handleLink(document, parent.firstChild!, link, context, null);
 
         expect(parent.innerHTML).toBe(expectedInnerHTML);
     }

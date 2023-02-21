@@ -4,7 +4,7 @@ import {
     clearPendingFormat,
     getPendingFormat,
     setPendingFormat,
-} from '../../../lib/modelApi/format/pendingFormat';
+} from '../../../lib/editor/extendedApi/pendingFormat';
 
 describe('pendingFormat.getPendingFormat', () => {
     it('no format', () => {

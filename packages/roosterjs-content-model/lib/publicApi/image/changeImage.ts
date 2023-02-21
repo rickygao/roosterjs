@@ -1,4 +1,4 @@
-import formatImageWithContentModel from '../utils/formatImageWithContentModel';
+import formatImageWithContentModel from '../../editor/extendedApi/formatImageWithContentModel';
 import { ContentModelImage } from '../../publicTypes/segment/ContentModelImage';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 import { readFile } from 'roosterjs-editor-dom';

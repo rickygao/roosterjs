@@ -1,6 +1,6 @@
 import { adjustSegmentSelection } from '../../modelApi/selection/adjustSegmentSelection';
 import { ContentModelImage } from '../../publicTypes/segment/ContentModelImage';
-import { formatWithContentModel } from '../utils/formatWithContentModel';
+import { formatWithContentModel } from '../../editor/extendedApi/formatWithContentModel';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 
 /**

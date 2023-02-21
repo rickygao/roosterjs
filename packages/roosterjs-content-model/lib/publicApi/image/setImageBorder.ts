@@ -1,5 +1,5 @@
 import applyImageBorderFormat from '../../modelApi/image/applyImageBorderFormat';
-import formatImageWithContentModel from '../utils/formatImageWithContentModel';
+import formatImageWithContentModel from '../../editor/extendedApi/formatImageWithContentModel';
 import { Border } from '../../publicTypes/interface/Border';
 import { ContentModelImage } from '../../publicTypes/segment/ContentModelImage';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';

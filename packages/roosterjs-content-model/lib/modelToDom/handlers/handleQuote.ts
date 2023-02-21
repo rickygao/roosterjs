@@ -14,11 +14,14 @@ export const handleQuote: ContentModelHandler<ContentModelQuote> = (
     doc: Document,
     parent: Node,
     quote: ContentModelQuote,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     if (!isBlockGroupEmpty(quote)) {
         const blockQuote = doc.createElement(QuoteTagName);
-        parent.appendChild(blockQuote);
+
+        quote.cachedElement = blockQuote;
+        parent.insertBefore(blockQuote, refNode);
 
         stackFormat(context, QuoteTagName, () => {
             applyFormat(blockQuote, context.formatAppliers.block, quote.format, context);
@@ -30,6 +33,6 @@ export const handleQuote: ContentModelHandler<ContentModelQuote> = (
             );
         });
 
-        context.modelHandlers.blockGroupChildren(doc, blockQuote, quote, context);
+        context.modelHandlers.blockGroupChildren(doc, blockQuote, quote, context, null);
     }
 };

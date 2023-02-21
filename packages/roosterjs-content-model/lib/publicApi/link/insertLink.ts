@@ -3,7 +3,7 @@ import { addSegment } from '../../modelApi/common/addSegment';
 import { ContentModelLink } from '../../publicTypes/decorator/ContentModelLink';
 import { createContentModelDocument } from '../../modelApi/creators/createContentModelDocument';
 import { createText } from '../../modelApi/creators/createText';
-import { formatWithContentModel } from '../utils/formatWithContentModel';
+import { formatWithContentModel } from '../../editor/extendedApi/formatWithContentModel';
 import { getSelectedSegments } from '../../modelApi/selection/collectSelections';
 import { HtmlSanitizer, matchLink } from 'roosterjs-editor-dom';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';

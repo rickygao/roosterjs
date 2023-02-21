@@ -15,7 +15,7 @@ describe('handleTable', () => {
 
     function runTest(model: ContentModelTable, expectedInnerHTML: string) {
         const div = document.createElement('div');
-        handleTable(document, div, model, context);
+        handleTable(document, div, model, context, null);
         expect(div.innerHTML).toBe(expectedInnerHTML);
     }
 
@@ -218,13 +218,14 @@ describe('handleTable', () => {
                 heights: [],
                 dataset: {},
             },
-            context
+            context,
+            null
         );
 
         expect(div.innerHTML).toBe('<table><tbody><tr><td></td></tr></tbody></table>');
 
         const table = div.firstChild as HTMLTableElement;
-        expect(datasetApplier).toHaveBeenCalledWith({}, table, context);
-        expect(datasetApplier).toHaveBeenCalledWith({}, table.rows[0].cells[0], context);
+        expect(datasetApplier).toHaveBeenCalledWith({}, table, context, null);
+        expect(datasetApplier).toHaveBeenCalledWith({}, table.rows[0].cells[0], context, null);
     });
 });

@@ -28,7 +28,7 @@ describe('handleSegment', () => {
     ) {
         parent = document.createElement('div');
 
-        handleImage(document, parent, segment, context);
+        handleImage(document, parent, segment, context, null);
 
         expect(parent.innerHTML).toBe(expectedInnerHTML);
         expect(handleBlock).toHaveBeenCalledTimes(expectedCreateBlockFromContentModelCalledTimes);

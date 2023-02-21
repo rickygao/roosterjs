@@ -1,4 +1,4 @@
-import { formatParagraphWithContentModel } from '../utils/formatParagraphWithContentModel';
+import { formatParagraphWithContentModel } from '../../editor/extendedApi/formatParagraphWithContentModel';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 
 const ResultMap: Record<

@@ -1,6 +1,6 @@
-import * as formatWithContentModel from '../../../lib/publicApi/utils/formatWithContentModel';
+import * as formatWithContentModel from '../../../lib/editor/extendedApi/formatWithContentModel';
 import * as iterateSelections from '../../../lib/modelApi/selection/iterateSelections';
-import * as pendingFormat from '../../../lib/modelApi/format/pendingFormat';
+import * as pendingFormat from '../../../lib/editor/extendedApi/pendingFormat';
 import applyPendingFormat from '../../../lib/publicApi/format/applyPendingFormat';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
 import { ContentModelParagraph } from '../../../lib/publicTypes/block/ContentModelParagraph';

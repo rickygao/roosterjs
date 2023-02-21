@@ -1,4 +1,4 @@
-import * as formatWithContentModel from '../../../lib/publicApi/utils/formatWithContentModel';
+import * as formatWithContentModel from '../../../lib/editor/extendedApi/formatWithContentModel';
 import * as toggleModelBlockQuote from '../../../lib/modelApi/block/toggleModelBlockQuote';
 import toggleBlockQuote from '../../../lib/publicApi/block/toggleBlockQuote';
 import { IContentModelEditor } from '../../../lib/publicTypes/IContentModelEditor';
@@ -10,6 +10,7 @@ describe('toggleBlockQuote', () => {
     beforeEach(() => {
         editor = ({
             createContentModel: () => fakeModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
     });
 

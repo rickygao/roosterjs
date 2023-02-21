@@ -1,4 +1,4 @@
-import * as pendingFormat from '../../lib/modelApi/format/pendingFormat';
+import * as pendingFormat from '../../lib/editor/extendedApi/pendingFormat';
 import ContentModelPlugin from '../../lib/editor/ContentModelPlugin';
 import { addSegment } from '../../lib/modelApi/common/addSegment';
 import { createContentModelDocument } from '../../lib/modelApi/creators/createContentModelDocument';
@@ -12,7 +12,10 @@ describe('ContentModelPlugin', () => {
         spyOn(pendingFormat, 'clearPendingFormat');
         spyOn(pendingFormat, 'getPendingFormat').and.returnValue(null);
 
-        const editor = ({} as any) as IContentModelEditor;
+        const editor = ({
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
+        } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
         plugin.initialize(editor);
@@ -39,6 +42,8 @@ describe('ContentModelPlugin', () => {
             createContentModel: () => model,
             setContentModel,
             isInIME: () => false,
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
         const model = createContentModelDocument();
@@ -71,6 +76,8 @@ describe('ContentModelPlugin', () => {
         const editor = ({
             createContentModel: () => model,
             setContentModel,
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
@@ -101,6 +108,8 @@ describe('ContentModelPlugin', () => {
             createContentModel: () => model,
             setContentModel,
             isInIME: () => false,
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
@@ -139,6 +148,8 @@ describe('ContentModelPlugin', () => {
             addUndoSnapshot: (callback: () => void) => {
                 callback();
             },
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
@@ -202,6 +213,8 @@ describe('ContentModelPlugin', () => {
             addUndoSnapshot: (callback: () => void) => {
                 callback();
             },
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
@@ -256,6 +269,8 @@ describe('ContentModelPlugin', () => {
         const editor = ({
             createContentModel: () => model,
             setContentModel,
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
@@ -287,6 +302,8 @@ describe('ContentModelPlugin', () => {
             addUndoSnapshot: (callback: () => void) => {
                 callback();
             },
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
@@ -316,6 +333,8 @@ describe('ContentModelPlugin', () => {
         const editor = ({
             createContentModel: () => model,
             setContentModel,
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 
@@ -345,6 +364,8 @@ describe('ContentModelPlugin', () => {
         const editor = ({
             createContentModel: () => model,
             setContentModel,
+            isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
         } as any) as IContentModelEditor;
         const plugin = new ContentModelPlugin();
 

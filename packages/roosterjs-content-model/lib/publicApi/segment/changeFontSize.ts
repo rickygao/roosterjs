@@ -1,5 +1,5 @@
 import { ContentModelSegmentFormat } from '../../publicTypes/format/ContentModelSegmentFormat';
-import { formatSegmentWithContentModel } from '../utils/formatSegmentWithContentModel';
+import { formatSegmentWithContentModel } from '../../editor/extendedApi/formatSegmentWithContentModel';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 import { parseValueWithUnit } from '../../formatHandlers/utils/parseValueWithUnit';
 

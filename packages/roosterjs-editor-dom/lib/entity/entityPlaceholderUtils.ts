@@ -1,6 +1,7 @@
 import getEntityFromElement from './getEntityFromElement';
 import getEntitySelector from './getEntitySelector';
 import getTagOfNode from '../utils/getTagOfNode';
+import removeUntil from '../utils/removeUntil';
 import safeInstanceOf from '../utils/safeInstanceOf';
 import { Entity } from 'roosterjs-editor-types';
 
@@ -73,12 +74,12 @@ export function moveContentWithEntityPlaceholders(
  * @param insertClonedNode When pass true, merge with a cloned copy of the nodes from source fragment rather than the nodes themselves @default false
  */
 export function restoreContentWithEntityPlaceholder(
-    source: DocumentFragment,
+    source: Node,
     target: HTMLElement,
     entities: Record<string, HTMLElement> | null,
     insertClonedNode?: boolean
 ) {
-    let anchor = target.firstChild;
+    let anchor: Node | null = target.firstChild;
     entities = entities || {};
 
     for (let current = source.firstChild; current; ) {
@@ -86,7 +87,7 @@ export function restoreContentWithEntityPlaceholder(
         const next = current.nextSibling;
         const id = tryGetIdFromEntityPlaceholder(current);
 
-        if (id && (wrapper = entities[(<HTMLElement>current).id])) {
+        if (id && (wrapper = entities[id])) {
             anchor = removeUntil(anchor, wrapper);
 
             if (anchor) {
@@ -113,15 +114,6 @@ export function restoreContentWithEntityPlaceholder(
     }
 
     removeUntil(anchor);
-}
-
-function removeUntil(anchor: ChildNode | null, nodeToStop?: HTMLElement) {
-    while (anchor && (!nodeToStop || anchor != nodeToStop)) {
-        const nodeToRemove = anchor;
-        anchor = anchor.nextSibling;
-        nodeToRemove.parentNode?.removeChild(nodeToRemove);
-    }
-    return anchor;
 }
 
 function tryGetIdFromEntityPlaceholder(node: Node): string | null {

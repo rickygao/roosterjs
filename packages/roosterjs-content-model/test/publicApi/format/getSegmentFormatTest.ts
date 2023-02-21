@@ -1,4 +1,4 @@
-import * as getPendingFormat from '../../../lib/modelApi/format/pendingFormat';
+import * as getPendingFormat from '../../../lib/editor/extendedApi/pendingFormat';
 import getSegmentFormat from '../../../lib/publicApi/format/getSegmentFormat';
 import { ContentModelSegmentFormat } from '../../../lib/publicTypes/format/ContentModelSegmentFormat';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
@@ -64,6 +64,7 @@ describe('getSegmentFormat', () => {
 
                 return model;
             },
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
         const result = getSegmentFormat(editor);
 

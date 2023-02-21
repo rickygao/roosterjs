@@ -1,6 +1,6 @@
 import { ChangeSource } from 'roosterjs-editor-types';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
-import { formatWithContentModel } from '../../../lib/publicApi/utils/formatWithContentModel';
+import { formatWithContentModel } from '../../../lib/editor/extendedApi/formatWithContentModel';
 import { IContentModelEditor } from '../../../lib/publicTypes/IContentModelEditor';
 
 describe('formatWithContentModel', () => {
@@ -26,6 +26,7 @@ describe('formatWithContentModel', () => {
             addUndoSnapshot,
             createContentModel,
             setContentModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
     });
 

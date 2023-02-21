@@ -3,7 +3,7 @@ import { ContentModelSegment } from '../../publicTypes/segment/ContentModelSegme
 import { ContentModelSegmentFormat } from '../../publicTypes/format/ContentModelSegmentFormat';
 import { DomToModelOption, IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 import { formatWithContentModel } from './formatWithContentModel';
-import { getPendingFormat, setPendingFormat } from '../../modelApi/format/pendingFormat';
+import { getPendingFormat, setPendingFormat } from './pendingFormat';
 import { getSelectedSegments } from '../../modelApi/selection/collectSelections';
 /**
  * @internal

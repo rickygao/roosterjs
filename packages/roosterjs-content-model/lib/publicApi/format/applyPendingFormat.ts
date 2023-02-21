@@ -1,6 +1,6 @@
 import { createText } from '../../modelApi/creators/createText';
-import { formatWithContentModel } from '../utils/formatWithContentModel';
-import { getPendingFormat } from '../../modelApi/format/pendingFormat';
+import { formatWithContentModel } from '../../editor/extendedApi/formatWithContentModel';
+import { getPendingFormat } from '../../editor/extendedApi/pendingFormat';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 import { iterateSelections } from '../../modelApi/selection/iterateSelections';
 

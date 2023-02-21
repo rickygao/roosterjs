@@ -1,4 +1,4 @@
-import * as pendingFormat from '../../../lib/modelApi/format/pendingFormat';
+import * as pendingFormat from '../../../lib/editor/extendedApi/pendingFormat';
 import changeFontSize from '../../../lib/publicApi/segment/changeFontSize';
 import domToContentModel from '../../../lib/domToModel/domToContentModel';
 import { ContentModelDocument } from '../../../lib/publicTypes/group/ContentModelDocument';
@@ -355,6 +355,7 @@ describe('changeFontSize', () => {
             addUndoSnapshot,
             focus: jasmine.createSpy(),
             setContentModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
 
         changeFontSize(editor, 'increase');
