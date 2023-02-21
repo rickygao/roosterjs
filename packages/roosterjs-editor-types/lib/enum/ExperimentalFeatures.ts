@@ -142,4 +142,9 @@ export const enum ExperimentalFeatures {
      * Reuse existing DOM structure if possible when convert Content Model back to DOM tree
      */
     ReusableContentModel = 'ReusableContentModel',
+
+    /**
+     * Delete table with Backspace key with the whole was selected with table selector
+     */
+    DeleteTableWithBackspace = 'DeleteTableWithBackspace',
 }
