@@ -60,6 +60,12 @@ export interface DomToModelOption {
  */
 export interface ModelToDomOption {
     /**
+     * Existing node to be used as root. If provided, Content Model will directly create DOM tree on this root node.
+     * If there are already child nodes under root, they will be reused if possible.
+     */
+    existingRootNode?: Node;
+
+    /**
      * Overrides default format appliers
      */
     formatApplierOverride?: Partial<FormatAppliers>;

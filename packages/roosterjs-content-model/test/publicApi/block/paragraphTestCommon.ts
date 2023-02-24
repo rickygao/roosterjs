@@ -23,6 +23,7 @@ export function paragraphTestCommon(
         addUndoSnapshot,
         focus: jasmine.createSpy(),
         setContentModel,
+        isFeatureEnabled: () => false,
     } as any) as IContentModelEditor;
 
     executionCallback(editor);

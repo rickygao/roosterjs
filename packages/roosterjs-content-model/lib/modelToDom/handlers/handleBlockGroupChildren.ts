@@ -1,6 +1,7 @@
 import { ContentModelBlockGroup } from '../../publicTypes/group/ContentModelBlockGroup';
 import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandler';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
+import { removeUntil } from 'roosterjs-editor-dom';
 
 /**
  * @internal
@@ -9,7 +10,8 @@ export const handleBlockGroupChildren: ContentModelHandler<ContentModelBlockGrou
     doc: Document,
     parent: Node,
     group: ContentModelBlockGroup,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const { listFormat } = context;
     const nodeStack = listFormat.nodeStack;
@@ -28,8 +30,33 @@ export const handleBlockGroupChildren: ContentModelHandler<ContentModelBlockGrou
                 listFormat.nodeStack = [];
             }
 
-            context.modelHandlers.block(doc, parent, childBlock, context);
+            const element =
+                childBlock.blockType == 'Entity' ? childBlock.wrapper : childBlock.cachedElement;
+
+            if (element && element.parentNode == parent) {
+                refNode = removeUntil(refNode, element);
+
+                if (refNode) {
+                    refNode = refNode.nextSibling;
+                } else {
+                    parent.appendChild(element);
+                }
+
+                if (childBlock.blockType == 'BlockGroup') {
+                    context.modelHandlers.blockGroupChildren(
+                        doc,
+                        element,
+                        childBlock,
+                        context,
+                        element.firstChild
+                    );
+                }
+            } else {
+                context.modelHandlers.block(doc, parent, childBlock, context, refNode);
+            }
         });
+
+        removeUntil(refNode);
     } finally {
         listFormat.nodeStack = nodeStack;
     }

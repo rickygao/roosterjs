@@ -13,4 +13,11 @@ export interface ContentModelBlockBase<
      * Type of this block
      */
     blockType: T;
+
+    /**
+     * HTML DOM element that was created from this model.
+     * If nothing has been changed in this model since this cached element was created,
+     * it can be reused next time when create DOM
+     */
+    cachedElement?: HTMLElement;
 }

@@ -12,7 +12,8 @@ export const handleEntity: ContentModelHandler<ContentModelEntity> = (
     doc: Document,
     parent: Node,
     entityModel: ContentModelEntity,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const { wrapper, id, type, isReadonly, format } = entityModel;
     const entity: Entity | null =
@@ -33,19 +34,19 @@ export const handleEntity: ContentModelHandler<ContentModelEntity> = (
     if (getObjectKeys(format).length > 0) {
         const span = doc.createElement('span');
 
-        parent.appendChild(span);
+        parent.insertBefore(span, refNode);
         applyFormat(span, context.formatAppliers.segment, format, context);
         parent = span;
     }
 
     if (!entity) {
-        parent.appendChild(wrapper);
+        parent.insertBefore(wrapper, refNode);
     } else {
         // Create a comment as placeholder and insert into DOM tree.
         // If the entity DOM can be reused, the original DOM node will be preserved without any change
         // so that in case there is something that is sensitive to its DOM path (e.g. IFRAME), no need to cause it reloaded.
         // For entity that is not directly under root, later we will replace the comment with its original DOM node
-        parent.appendChild(createEntityPlaceholder(entity));
+        parent.insertBefore(createEntityPlaceholder(entity), refNode);
 
         // Save the entity DOM wrapper node and its placeholder into context so that later we know how to handle it
         context.entities[entity.id] = wrapper;

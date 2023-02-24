@@ -11,12 +11,13 @@ export const handleImage: ContentModelHandler<ContentModelImage> = (
     doc: Document,
     parent: Node,
     imageModel: ContentModelImage,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const img = doc.createElement('img');
     const element = document.createElement('span');
 
-    parent.appendChild(element);
+    parent.insertBefore(element, refNode);
     element.appendChild(img);
 
     img.src = imageModel.src;
@@ -47,7 +48,7 @@ export const handleImage: ContentModelHandler<ContentModelImage> = (
     }
 
     if (imageModel.link) {
-        context.modelHandlers.link(doc, img, imageModel.link, context);
+        context.modelHandlers.link(doc, img, imageModel.link, context, null);
     }
 
     context.regularSelection.current.segment = img;

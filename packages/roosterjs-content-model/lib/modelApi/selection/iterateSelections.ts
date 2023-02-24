@@ -36,6 +36,8 @@ export interface IterateSelectionsOption {
      * @default allSegments
      */
     includeListFormatHolder?: 'anySegment' | 'allSegments' | 'never';
+
+    isReadonly?: boolean;
 }
 
 /**
@@ -59,6 +61,30 @@ export function iterateSelections(
     option?: IterateSelectionsOption,
     table?: TableSelectionContext,
     treatAllAsSelect?: boolean
+) {
+    const internalCallback: IterateSelectionsCallback = option?.isReadonly
+        ? callback
+        : (path, tableContext, block, segments) => {
+              if (block?.cachedElement) {
+                  delete block.cachedElement;
+              }
+
+              if (tableContext?.table?.cachedElement) {
+                  delete tableContext.table.cachedElement;
+              }
+
+              return callback(path, tableContext, block, segments);
+          };
+
+    internalIterateSelections(path, internalCallback, option, table, treatAllAsSelect);
+}
+
+function internalIterateSelections(
+    path: ContentModelBlockGroup[],
+    callback: IterateSelectionsCallback,
+    option?: IterateSelectionsOption,
+    table?: TableSelectionContext,
+    treatAllAsSelect?: boolean
 ): boolean {
     const parent = path[0];
     const includeListFormatHolder = option?.includeListFormatHolder || 'allSegments';
@@ -73,7 +99,7 @@ export function iterateSelections(
         switch (block.blockType) {
             case 'BlockGroup':
                 const newPath = [block, ...path];
-                if (iterateSelections(newPath, callback, option, table, treatAllAsSelect)) {
+                if (internalIterateSelections(newPath, callback, option, table, treatAllAsSelect)) {
                     return true;
                 }
                 break;
@@ -112,7 +138,7 @@ export function iterateSelections(
                                 const isSelected = treatAllAsSelect || cell.isSelected;
 
                                 if (
-                                    iterateSelections(
+                                    internalIterateSelections(
                                         newPath,
                                         callback,
                                         option,
@@ -141,7 +167,15 @@ export function iterateSelections(
                     } else if (segment.segmentType == 'General') {
                         const newPath = [segment, ...path];
 
-                        if (iterateSelections(newPath, callback, option, table, treatAllAsSelect)) {
+                        if (
+                            internalIterateSelections(
+                                newPath,
+                                callback,
+                                option,
+                                table,
+                                treatAllAsSelect
+                            )
+                        ) {
                             return true;
                         }
                     } else {

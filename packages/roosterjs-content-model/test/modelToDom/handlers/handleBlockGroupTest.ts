@@ -39,11 +39,17 @@ describe('handleBlockGroup', () => {
     it('Document', () => {
         const group = createContentModelDocument();
 
-        handleBlockGroup(document, parent, group, context);
+        handleBlockGroup(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(handleBlockGroupChildren).toHaveBeenCalledTimes(1);
-        expect(handleBlockGroupChildren).toHaveBeenCalledWith(document, parent, group, context);
+        expect(handleBlockGroupChildren).toHaveBeenCalledWith(
+            document,
+            parent,
+            group,
+            context,
+            null
+        );
     });
 
     it('General block', () => {
@@ -53,30 +59,30 @@ describe('handleBlockGroup', () => {
         } as any) as HTMLElement;
         const group = createGeneralBlock(childMock);
 
-        handleBlockGroup(document, parent, group, context);
+        handleBlockGroup(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(handleGeneralModel).toHaveBeenCalledTimes(1);
-        expect(handleGeneralModel).toHaveBeenCalledWith(document, parent, group, context);
+        expect(handleGeneralModel).toHaveBeenCalledWith(document, parent, group, context, null);
     });
 
     it('Quote', () => {
         const group = createQuote();
 
-        handleBlockGroup(document, parent, group, context);
+        handleBlockGroup(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(handleQuote).toHaveBeenCalledTimes(1);
-        expect(handleQuote).toHaveBeenCalledWith(document, parent, group, context);
+        expect(handleQuote).toHaveBeenCalledWith(document, parent, group, context, null);
     });
 
     it('ListItem', () => {
         const group = createListItem([]);
 
-        handleBlockGroup(document, parent, group, context);
+        handleBlockGroup(document, parent, group, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
         expect(handleListItem).toHaveBeenCalledTimes(1);
-        expect(handleListItem).toHaveBeenCalledWith(document, parent, group, context);
+        expect(handleListItem).toHaveBeenCalledWith(document, parent, group, context, null);
     });
 });

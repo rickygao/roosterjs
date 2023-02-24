@@ -30,6 +30,7 @@ export function segmentTestCommon(
         setContentModel,
         isDisposed: () => false,
         getFocusedPosition: () => null as NodePosition,
+        isFeatureEnabled: () => false,
     } as any) as IContentModelEditor;
 
     executionCallback(editor);

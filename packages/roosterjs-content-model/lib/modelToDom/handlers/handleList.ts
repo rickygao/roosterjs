@@ -13,7 +13,8 @@ export const handleList: ContentModelHandler<ContentModelListItem> = (
     doc: Document,
     parent: Node,
     listItem: ContentModelListItem,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     let layer = 0;
     const { nodeStack } = context.listFormat;
@@ -48,7 +49,8 @@ export const handleList: ContentModelHandler<ContentModelListItem> = (
         const newList = doc.createElement(level.listType || 'UL');
         const lastParent = nodeStack[nodeStack.length - 1].node;
 
-        lastParent.appendChild(newList);
+        lastParent.insertBefore(newList, layer == 0 ? refNode : null);
+
         applyFormat(newList, context.formatAppliers.listLevel, level, context);
 
         handleMetadata(level, newList, context);

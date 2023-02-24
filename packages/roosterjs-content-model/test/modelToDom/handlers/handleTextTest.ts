@@ -20,7 +20,7 @@ describe('handleSegment', () => {
             format: {},
         };
 
-        handleText(document, parent, text, context);
+        handleText(document, parent, text, context, null);
 
         expect(parent.innerHTML).toBe('<span>test</span>');
     });
@@ -32,7 +32,7 @@ describe('handleSegment', () => {
             format: { textColor: 'red' },
         };
 
-        handleText(document, parent, text, context);
+        handleText(document, parent, text, context, null);
 
         expect(parent.innerHTML).toBe('<span style="color: red;">test</span>');
     });
@@ -45,7 +45,7 @@ describe('handleSegment', () => {
             link: { format: { href: '/test', underline: true }, dataset: {} },
         };
 
-        handleText(document, parent, text, context);
+        handleText(document, parent, text, context, null);
 
         expect(parent.innerHTML).toBe('<span><a href="/test">test</a></span>');
     });
@@ -60,7 +60,7 @@ describe('handleSegment', () => {
 
         spyOn(stackFormat, 'stackFormat').and.callThrough();
 
-        handleText(document, parent, text, context);
+        handleText(document, parent, text, context, null);
 
         expect(parent.innerHTML).toBe('<span><a href="/test">test</a></span>');
         expect(stackFormat.stackFormat).toHaveBeenCalledTimes(1);

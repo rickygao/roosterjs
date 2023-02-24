@@ -11,7 +11,8 @@ export const handleTable: ContentModelHandler<ContentModelTable> = (
     doc: Document,
     parent: Node,
     table: ContentModelTable,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     if (isBlockEmpty(table)) {
         // Empty table, do not create TABLE element and just return
@@ -19,7 +20,10 @@ export const handleTable: ContentModelHandler<ContentModelTable> = (
     }
 
     const tableNode = doc.createElement('table');
-    parent.appendChild(tableNode);
+
+    parent.insertBefore(tableNode, refNode);
+    table.cachedElement = tableNode;
+
     applyFormat(tableNode, context.formatAppliers.table, table.format, context);
     applyFormat(tableNode, context.formatAppliers.dataset, table.dataset, context);
 
@@ -82,7 +86,7 @@ export const handleTable: ContentModelHandler<ContentModelTable> = (
                     td.colSpan = colSpan;
                 }
 
-                context.modelHandlers.blockGroup(doc, td, cell, context);
+                context.modelHandlers.blockGroup(doc, td, cell, context, null);
             }
         }
     }

@@ -1,5 +1,6 @@
 import applyPendingFormat from '../publicApi/format/applyPendingFormat';
 import { canApplyPendingFormat, clearPendingFormat } from '../modelApi/format/pendingFormat';
+import { clearCachedContentModel } from './extendedApi/cacheContentModel';
 import { EditorPlugin, IEditor, Keys, PluginEvent, PluginEventType } from 'roosterjs-editor-types';
 import { IContentModelEditor } from '../publicTypes/IContentModelEditor';
 
@@ -63,13 +64,18 @@ export default class ContentModelPlugin implements EditorPlugin {
                 break;
 
             case PluginEventType.KeyDown:
+                clearCachedContentModel(this.editor);
+
                 if (event.rawEvent.which >= Keys.PAGEUP && event.rawEvent.which <= Keys.DOWN) {
                     clearPendingFormat(this.editor);
                 }
+
                 break;
 
             case PluginEventType.MouseUp:
             case PluginEventType.ContentChanged:
+                clearCachedContentModel(this.editor);
+
                 if (!canApplyPendingFormat(this.editor)) {
                     clearPendingFormat(this.editor);
                 }

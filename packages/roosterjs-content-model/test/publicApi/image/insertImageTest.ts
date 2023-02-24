@@ -35,6 +35,7 @@ describe('insertImage', () => {
             setContentModel,
             isDisposed: () => false,
             getDocument: () => document,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
 
         executionCallback(editor);

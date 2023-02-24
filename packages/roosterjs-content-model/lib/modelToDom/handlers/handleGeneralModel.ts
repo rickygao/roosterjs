@@ -13,11 +13,12 @@ export const handleGeneralModel: ContentModelHandler<ContentModelGeneralBlock> =
     doc: Document,
     parent: Node,
     group: ContentModelGeneralBlock,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const element = group.element.cloneNode();
 
-    parent.appendChild(element);
+    parent.insertBefore(element, refNode);
 
     if (isGeneralSegment(group) && isNodeOfType(element, NodeType.Element)) {
         if (!group.element.firstChild) {
@@ -27,11 +28,11 @@ export const handleGeneralModel: ContentModelHandler<ContentModelGeneralBlock> =
         applyFormat(element, context.formatAppliers.segment, group.format, context);
 
         if (group.link) {
-            context.modelHandlers.link(doc, element, group.link, context);
+            context.modelHandlers.link(doc, element, group.link, context, null);
         }
     }
 
-    context.modelHandlers.blockGroupChildren(doc, element, group, context);
+    context.modelHandlers.blockGroupChildren(doc, element, group, context, null);
 };
 
 function isGeneralSegment(block: ContentModelGeneralBlock): block is ContentModelGeneralSegment {

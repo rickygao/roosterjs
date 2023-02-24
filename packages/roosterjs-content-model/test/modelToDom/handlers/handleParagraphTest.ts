@@ -27,7 +27,7 @@ describe('handleParagraph', () => {
         expectedInnerHTML: string,
         expectedCreateSegmentFromContentCalledTimes: number
     ) {
-        handleParagraph(document, parent, paragraph, context);
+        handleParagraph(document, parent, paragraph, context, null);
 
         expect(parent.innerHTML).toBe(expectedInnerHTML);
         expect(handleSegment).toHaveBeenCalledTimes(expectedCreateSegmentFromContentCalledTimes);
@@ -78,7 +78,8 @@ describe('handleParagraph', () => {
             document,
             parent.firstChild as HTMLElement,
             segment,
-            context
+            context,
+            null
         );
     });
 
@@ -99,7 +100,7 @@ describe('handleParagraph', () => {
             1
         );
 
-        expect(handleSegment).toHaveBeenCalledWith(document, parent, segment, context);
+        expect(handleSegment).toHaveBeenCalledWith(document, parent, segment, context, null);
     });
 
     it('Handle multiple segments', () => {
@@ -130,13 +131,15 @@ describe('handleParagraph', () => {
             document,
             parent.firstChild as HTMLElement,
             segment1,
-            context
+            context,
+            null
         );
         expect(handleSegment).toHaveBeenCalledWith(
             document,
             parent.firstChild as HTMLElement,
             segment2,
-            context
+            context,
+            null
         );
     });
 

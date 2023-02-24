@@ -24,6 +24,7 @@ describe('toggleBullet', () => {
             addUndoSnapshot,
             createContentModel,
             setContentModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
 
         spyOn(setListType, 'setListType').and.returnValue(true);

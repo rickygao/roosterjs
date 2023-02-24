@@ -24,6 +24,7 @@ describe('formatParagraphWithContentModel', () => {
             addUndoSnapshot,
             createContentModel: () => model,
             setContentModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
     });
 
