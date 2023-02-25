@@ -25,6 +25,8 @@ describe('toggleBullet', () => {
             createContentModel,
             setContentModel,
             isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
+            getFocusedPosition: () => ({}),
         } as any) as IContentModelEditor;
 
         spyOn(setListType, 'setListType').and.returnValue(true);

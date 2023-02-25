@@ -33,6 +33,7 @@ const initialState: BuildInPluginState = {
         ExperimentalFeatures.AutoFormatList,
         ExperimentalFeatures.VariableBasedDarkColor,
         ExperimentalFeatures.ReusableContentModel,
+        ExperimentalFeatures.InlineEntityReadOnlyDelimiters,
     ],
     isRtl: false,
 };

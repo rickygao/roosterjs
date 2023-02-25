@@ -24,6 +24,8 @@ export function paragraphTestCommon(
         focus: jasmine.createSpy(),
         setContentModel,
         isFeatureEnabled: () => false,
+        getCustomData: () => ({}),
+        getFocusedPosition: () => ({}),
     } as any) as IContentModelEditor;
 
     executionCallback(editor);

@@ -23,6 +23,8 @@ describe('insertLink', () => {
             setContentModel,
             createContentModel,
             isFeatureEnabled: () => false,
+            getCustomData: () => ({}),
+            getFocusedPosition: () => ({}),
         } as any) as IContentModelEditor;
     });
 
