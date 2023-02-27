@@ -59,6 +59,23 @@ export function iterateSelections(
     option?: IterateSelectionsOption,
     table?: TableSelectionContext,
     treatAllAsSelect?: boolean
+) {
+    const internalCallback: IterateSelectionsCallback = (path, tableContext, block, segments) => {
+        clearCache(block);
+        clearCache(tableContext?.table);
+
+        return callback(path, tableContext, block, segments);
+    };
+
+    internalIterateSelections(path, internalCallback, option, table, treatAllAsSelect);
+}
+
+function internalIterateSelections(
+    path: ContentModelBlockGroup[],
+    callback: IterateSelectionsCallback,
+    option?: IterateSelectionsOption,
+    table?: TableSelectionContext,
+    treatAllAsSelect?: boolean
 ): boolean {
     const parent = path[0];
     const includeListFormatHolder = option?.includeListFormatHolder || 'allSegments';
@@ -73,7 +90,7 @@ export function iterateSelections(
         switch (block.blockType) {
             case 'BlockGroup':
                 const newPath = [block, ...path];
-                if (iterateSelections(newPath, callback, option, table, treatAllAsSelect)) {
+                if (internalIterateSelections(newPath, callback, option, table, treatAllAsSelect)) {
                     return true;
                 }
                 break;
@@ -112,7 +129,7 @@ export function iterateSelections(
                                 const isSelected = treatAllAsSelect || cell.isSelected;
 
                                 if (
-                                    iterateSelections(
+                                    internalIterateSelections(
                                         newPath,
                                         callback,
                                         option,
@@ -141,7 +158,15 @@ export function iterateSelections(
                     } else if (segment.segmentType == 'General') {
                         const newPath = [segment, ...path];
 
-                        if (iterateSelections(newPath, callback, option, table, treatAllAsSelect)) {
+                        if (
+                            internalIterateSelections(
+                                newPath,
+                                callback,
+                                option,
+                                table,
+                                treatAllAsSelect
+                            )
+                        ) {
                             return true;
                         }
                     } else {
@@ -176,4 +201,14 @@ export function iterateSelections(
     }
 
     return false;
+}
+
+function clearCache(block: ContentModelBlock | undefined) {
+    if (
+        block?.element &&
+        block.blockType != 'Entity' &&
+        !(block.blockType == 'BlockGroup' && block.blockGroupType == 'General')
+    ) {
+        delete block.element;
+    }
 }

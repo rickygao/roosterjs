@@ -3,8 +3,6 @@ import domToContentModel from '../domToModel/domToContentModel';
 import { ContentModelDocument } from '../publicTypes/group/ContentModelDocument';
 import { Editor } from 'roosterjs-editor-core';
 import { EditorContext } from '../publicTypes/context/EditorContext';
-import { Position, restoreContentWithEntityPlaceholder } from 'roosterjs-editor-dom';
-import { SelectionRangeTypes } from 'roosterjs-editor-types';
 
 import {
     DomToModelOption,
@@ -37,25 +35,14 @@ export default class ContentModelEditor extends Editor implements IContentModelE
      * @param option Additional options to customize the behavior of Content Model to DOM conversion
      */
     setContentModel(model: ContentModelDocument, option?: ModelToDomOption) {
-        const [fragment, range, entityPairs] = contentModelToDom(
-            this.getDocument(),
+        const range = contentModelToDom(
+            this.getCore().contentDiv,
             model,
             this.createEditorContext(),
             option
         );
-        const core = this.getCore();
 
-        if (range?.type == SelectionRangeTypes.Normal) {
-            // Need to get start and end from range position before merge because range can be changed during merging
-            const start = Position.getStart(range.ranges[0]);
-            const end = Position.getEnd(range.ranges[0]);
-
-            restoreContentWithEntityPlaceholder(fragment, core.contentDiv, entityPairs);
-            this.select(start, end);
-        } else {
-            restoreContentWithEntityPlaceholder(fragment, core.contentDiv, entityPairs);
-            this.select(range);
-        }
+        this.select(range);
     }
 
     /**

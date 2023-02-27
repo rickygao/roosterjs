@@ -10,11 +10,13 @@ export const handleDivider: ContentModelHandler<ContentModelDivider> = (
     doc: Document,
     parent: Node,
     divider: ContentModelDivider,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const element = doc.createElement(divider.tagName);
 
+    divider.element = element;
     applyFormat(element, context.formatAppliers.divider, divider.format, context);
 
-    parent.appendChild(element);
+    parent.insertBefore(element, refNode);
 };

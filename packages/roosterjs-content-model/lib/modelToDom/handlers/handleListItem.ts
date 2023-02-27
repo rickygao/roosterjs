@@ -3,7 +3,6 @@ import { ContentModelHandler } from '../../publicTypes/context/ContentModelHandl
 import { ContentModelListItem } from '../../publicTypes/group/ContentModelListItem';
 import { getTagOfNode } from 'roosterjs-editor-dom';
 import { ModelToDomContext } from '../../publicTypes/context/ModelToDomContext';
-import { setParagraphNotImplicit } from '../../modelApi/block/setParagraphNotImplicit';
 
 /**
  * @internal
@@ -12,9 +11,10 @@ export const handleListItem: ContentModelHandler<ContentModelListItem> = (
     doc: Document,
     parent: Node,
     listItem: ContentModelListItem,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
-    context.modelHandlers.list(doc, parent, listItem, context);
+    context.modelHandlers.list(doc, parent, listItem, context, refNode);
 
     const { nodeStack } = context.listFormat;
 
@@ -33,11 +33,11 @@ export const handleListItem: ContentModelHandler<ContentModelListItem> = (
         if (level) {
             applyFormat(li, context.formatAppliers.listItem, level, context);
         }
-    } else {
-        // There is no level for this list item, that means it should be moved out of the list
-        // For each paragraph, make it not implicit so it will have a DIV around it, to avoid more paragraphs connected together
-        listItem.blocks.forEach(setParagraphNotImplicit);
+
+        context.modelHandlers.blockGroupChildren(doc, listParent, listItem, context, null);
     }
 
-    context.modelHandlers.blockGroupChildren(doc, listParent, listItem, context);
+    // Here we only handle the case when parent node is OL/UL.
+    // For the case that list level is empty and parent node is not OL/UL, it should already be handled
+    // when normalize the Content Model so that case should never happen here.
 };

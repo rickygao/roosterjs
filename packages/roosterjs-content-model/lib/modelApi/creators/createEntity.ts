@@ -5,7 +5,7 @@ import { ContentModelSegmentFormat } from '../../publicTypes/format/ContentModel
  * @internal
  */
 export function createEntity(
-    wrapper: HTMLElement,
+    element: HTMLElement,
     isReadonly: boolean,
     segmentFormat?: ContentModelSegmentFormat,
     id?: string,
@@ -20,6 +20,6 @@ export function createEntity(
         id,
         type,
         isReadonly,
-        wrapper,
+        element,
     };
 }

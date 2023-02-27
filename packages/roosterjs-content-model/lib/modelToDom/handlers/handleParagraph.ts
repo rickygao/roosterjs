@@ -12,17 +12,18 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
     doc: Document,
     parent: Node,
     paragraph: ContentModelParagraph,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     let container: HTMLElement;
 
     stackFormat(context, paragraph.decorator?.tagName || null, () => {
+        let childRef: Node | null = null;
+
         if (paragraph.decorator) {
             const { tagName, format } = paragraph.decorator;
 
-            container = doc.createElement(tagName);
-
-            parent.appendChild(container);
+            container = createParagraphElement(doc, parent, paragraph, tagName, refNode);
 
             applyFormat(container, context.formatAppliers.block, paragraph.format, context);
             applyFormat(container, context.formatAppliers.segmentOnBlock, format, context);
@@ -31,12 +32,12 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
             (getObjectKeys(paragraph.format).length > 0 &&
                 paragraph.segments.some(segment => segment.segmentType != 'SelectionMarker'))
         ) {
-            container = doc.createElement('div');
-            parent.appendChild(container);
+            container = createParagraphElement(doc, parent, paragraph, 'div', refNode);
 
             applyFormat(container, context.formatAppliers.block, paragraph.format, context);
         } else {
             container = parent as HTMLElement;
+            childRef = refNode;
         }
 
         context.regularSelection.current = {
@@ -45,7 +46,21 @@ export const handleParagraph: ContentModelHandler<ContentModelParagraph> = (
         };
 
         paragraph.segments.forEach(segment => {
-            context.modelHandlers.segment(doc, container, segment, context);
+            context.modelHandlers.segment(doc, container, segment, context, childRef);
         });
     });
 };
+
+function createParagraphElement(
+    doc: Document,
+    parent: Node,
+    paragraph: ContentModelParagraph,
+    tagName: string,
+    refNode: Node | null
+) {
+    const element = doc.createElement(tagName);
+    parent.insertBefore(element, refNode);
+    paragraph.element = element;
+
+    return element;
+}

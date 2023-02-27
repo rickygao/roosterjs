@@ -9,23 +9,24 @@ export const handleBlock: ContentModelHandler<ContentModelBlock> = (
     doc: Document,
     parent: Node,
     block: ContentModelBlock,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     switch (block.blockType) {
         case 'Table':
-            context.modelHandlers.table(doc, parent, block, context);
+            context.modelHandlers.table(doc, parent, block, context, refNode);
             break;
         case 'BlockGroup':
-            context.modelHandlers.blockGroup(doc, parent, block, context);
+            context.modelHandlers.blockGroup(doc, parent, block, context, refNode);
             break;
         case 'Paragraph':
-            context.modelHandlers.paragraph(doc, parent, block, context);
+            context.modelHandlers.paragraph(doc, parent, block, context, refNode);
             break;
         case 'Entity':
-            context.modelHandlers.entity(doc, parent, block, context);
+            context.modelHandlers.entity(doc, parent, block, context, refNode);
             break;
         case 'Divider':
-            context.modelHandlers.divider(doc, parent, block, context);
+            context.modelHandlers.divider(doc, parent, block, context, refNode);
             break;
     }
 };

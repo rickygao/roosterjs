@@ -10,12 +10,13 @@ export const handleBr: ContentModelHandler<ContentModelBr> = (
     doc: Document,
     parent: Node,
     segment: ContentModelBr,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const br = doc.createElement('br');
     const element = doc.createElement('span');
     element.appendChild(br);
-    parent.appendChild(element);
+    parent.insertBefore(element, refNode);
 
     context.regularSelection.current.segment = br;
     applyFormat(element, context.formatAppliers.segment, segment.format, context);

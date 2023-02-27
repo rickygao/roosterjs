@@ -9,7 +9,8 @@ export const handleBlockGroupChildren: ContentModelHandler<ContentModelBlockGrou
     doc: Document,
     parent: Node,
     group: ContentModelBlockGroup,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const { listFormat } = context;
     const nodeStack = listFormat.nodeStack;
@@ -28,9 +29,43 @@ export const handleBlockGroupChildren: ContentModelHandler<ContentModelBlockGrou
                 listFormat.nodeStack = [];
             }
 
-            context.modelHandlers.block(doc, parent, childBlock, context);
+            const element = childBlock.element;
+
+            // Check if there is cached element and if we can reuse it
+            if (element?.parentNode == parent) {
+                refNode = removeUntil(refNode, element);
+
+                if (refNode) {
+                    refNode = refNode.nextSibling;
+                } else {
+                    parent.appendChild(element);
+                }
+
+                if (childBlock.blockType == 'BlockGroup') {
+                    context.modelHandlers.blockGroupChildren(
+                        doc,
+                        element,
+                        childBlock,
+                        context,
+                        element.firstChild
+                    );
+                }
+            } else {
+                context.modelHandlers.block(doc, parent, childBlock, context, refNode);
+            }
         });
+
+        removeUntil(refNode);
     } finally {
         listFormat.nodeStack = nodeStack;
     }
 };
+
+function removeUntil(removeFrom: Node | null, nodeToStop?: Node) {
+    while (removeFrom && (!nodeToStop || removeFrom != nodeToStop)) {
+        const nodeToRemove = removeFrom;
+        removeFrom = removeFrom.nextSibling;
+        nodeToRemove.parentNode?.removeChild(nodeToRemove);
+    }
+    return removeFrom;
+}

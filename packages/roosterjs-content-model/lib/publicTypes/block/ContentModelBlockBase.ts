@@ -13,4 +13,9 @@ export interface ContentModelBlockBase<
      * Type of this block
      */
     blockType: T;
+
+    /**
+     * Cached element that was generated before
+     */
+    element?: HTMLElement;
 }

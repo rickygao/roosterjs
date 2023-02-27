@@ -10,12 +10,13 @@ export const handleText: ContentModelHandler<ContentModelText> = (
     doc: Document,
     parent: Node,
     segment: ContentModelText,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode: Node | null
 ) => {
     const txt = doc.createTextNode(segment.text);
     const element = doc.createElement('span');
 
-    parent.appendChild(element);
+    parent.insertBefore(element, refNode);
     element.appendChild(txt);
 
     context.regularSelection.current.segment = txt;
@@ -23,6 +24,6 @@ export const handleText: ContentModelHandler<ContentModelText> = (
     applyFormat(element, context.formatAppliers.segment, segment.format, context);
 
     if (segment.link) {
-        context.modelHandlers.link(doc, txt, segment.link, context);
+        context.modelHandlers.link(doc, txt, segment.link, context, null);
     }
 };
