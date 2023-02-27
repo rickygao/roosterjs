@@ -63,7 +63,9 @@ describe('ContentModelEditor', () => {
                 getDarkColor: (editor as any).core.lifecycle.getDarkColor,
                 darkColorHandler: null,
             },
-            undefined
+            {
+                existingRootNode: undefined,
+            }
         );
         expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledTimes(1);
         expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledWith(
@@ -100,7 +102,9 @@ describe('ContentModelEditor', () => {
                 getDarkColor: (editor as any).core.lifecycle.getDarkColor,
                 darkColorHandler: null,
             },
-            undefined
+            {
+                existingRootNode: undefined,
+            }
         );
         expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledTimes(1);
         expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledWith(

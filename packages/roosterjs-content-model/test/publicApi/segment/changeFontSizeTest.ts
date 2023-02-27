@@ -355,6 +355,7 @@ describe('changeFontSize', () => {
             addUndoSnapshot,
             focus: jasmine.createSpy(),
             setContentModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
 
         changeFontSize(editor, 'increase');

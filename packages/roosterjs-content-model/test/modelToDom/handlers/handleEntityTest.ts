@@ -24,7 +24,7 @@ describe('handleEntity', () => {
 
         const parent = document.createElement('div');
 
-        handleEntity(document, parent, entityModel, context);
+        handleEntity(document, parent, entityModel, context, null);
 
         expect(parent.innerHTML).toBe('<entity-placeholder id="entity_1"></entity-placeholder>');
         expect(context.entities).toEqual({
@@ -49,7 +49,7 @@ describe('handleEntity', () => {
 
         const parent = document.createElement('div');
 
-        handleEntity(document, parent, entityModel, context);
+        handleEntity(document, parent, entityModel, context, null);
 
         expect(parent.innerHTML).toBe('<div>test</div>');
         expect(context.entities).toEqual({});

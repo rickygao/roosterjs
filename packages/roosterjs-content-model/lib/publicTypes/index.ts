@@ -117,7 +117,6 @@ export {
     ContentModelHandlerTypeMap,
     DefaultImplicitFormatMap,
 } from './context/ModelToDomSettings';
-export { ModelToDomEntityContext } from './context/ModelToDomEntityContext';
 export { ElementProcessor } from './context/ElementProcessor';
 export { ContentModelHandler } from './context/ContentModelHandler';
 

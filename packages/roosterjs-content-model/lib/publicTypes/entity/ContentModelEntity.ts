@@ -12,7 +12,7 @@ export interface ContentModelEntity
     /**
      * The wrapper DOM node of this entity which holds the info CSS classes of this entity
      */
-    wrapper: HTMLElement;
+    element: HTMLElement;
 
     /**
      * Whether this is a readonly entity

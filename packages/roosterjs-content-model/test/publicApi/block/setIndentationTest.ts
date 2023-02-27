@@ -10,6 +10,7 @@ describe('setIndentation', () => {
     beforeEach(() => {
         editor = ({
             createContentModel: () => fakeModel,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
     });
 

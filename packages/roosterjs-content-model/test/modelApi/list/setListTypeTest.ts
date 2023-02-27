@@ -181,7 +181,7 @@ describe('indent', () => {
         expect(para).toEqual({
             blockType: 'Paragraph',
             format: {},
-            isImplicit: false,
+            isImplicit: true,
             segments: [
                 {
                     segmentType: 'Text',
