@@ -23,7 +23,5 @@ export const handleText: ContentModelHandler<ContentModelText> = (
 
     applyFormat(element, context.formatAppliers.segment, segment.format, context);
 
-    if (segment.link) {
-        context.modelHandlers.link(doc, txt, segment.link, context, null);
-    }
+    context.modelHandlers.segmentDecorator(doc, txt, segment, context, null);
 };

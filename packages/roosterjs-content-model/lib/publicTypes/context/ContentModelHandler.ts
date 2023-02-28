@@ -1,6 +1,6 @@
 import { ContentModelBlock } from '../block/ContentModelBlock';
 import { ContentModelBlockGroup } from '../group/ContentModelBlockGroup';
-import { ContentModelLink } from '../decorator/ContentModelLink';
+import { ContentModelDecorator } from '../decorator/ContentModelDecorator';
 import { ContentModelSegment } from '../segment/ContentModelSegment';
 import { ModelToDomContext } from './ModelToDomContext';
 
@@ -14,7 +14,11 @@ import { ModelToDomContext } from './ModelToDomContext';
  * It is used when write DOM tree onto existing DOM true. If there is no reference node, pass null.
  */
 export type ContentModelHandler<
-    T extends ContentModelSegment | ContentModelBlock | ContentModelBlockGroup | ContentModelLink
+    T extends
+        | ContentModelSegment
+        | ContentModelBlock
+        | ContentModelBlockGroup
+        | ContentModelDecorator
 > = (
     doc: Document,
     parent: Node,

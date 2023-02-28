@@ -27,9 +27,7 @@ export const handleGeneralModel: ContentModelHandler<ContentModelGeneralBlock> =
 
         applyFormat(element, context.formatAppliers.segment, group.format, context);
 
-        if (group.link) {
-            context.modelHandlers.link(doc, element, group.link, context, null);
-        }
+        context.modelHandlers.segmentDecorator(doc, element, group, context, null);
     }
 
     context.modelHandlers.blockGroupChildren(doc, element, group, context, null);

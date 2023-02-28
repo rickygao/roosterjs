@@ -47,9 +47,7 @@ export const handleImage: ContentModelHandler<ContentModelImage> = (
         img.height = heightNum;
     }
 
-    if (imageModel.link) {
-        context.modelHandlers.link(doc, img, imageModel.link, context, null);
-    }
+    context.modelHandlers.segmentDecorator(doc, img, imageModel, context, null);
 
     context.regularSelection.current.segment = img;
 
