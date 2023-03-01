@@ -3,7 +3,6 @@ import { ContentModelListItem } from '../../publicTypes/group/ContentModelListIt
 import { createListItem } from '../creators/createListItem';
 import { getOperationalBlocks } from '../selection/collectSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
-import { setParagraphNotImplicit } from '../block/setParagraphNotImplicit';
 
 /**
  * @internal
@@ -27,8 +26,6 @@ export function setListType(model: ContentModelDocument, listType: 'OL' | 'UL') 
             if (!alreadyInExpectedType && level) {
                 level.listType = listType;
                 block.levels.push(level);
-            } else if (block.blocks.length == 1) {
-                setParagraphNotImplicit(block.blocks[0]);
             }
         } else {
             const index = parent.blocks.indexOf(block);

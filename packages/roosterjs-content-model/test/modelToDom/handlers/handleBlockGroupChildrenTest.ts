@@ -1,15 +1,15 @@
 import { ContentModelBlock } from '../../../lib/publicTypes/block/ContentModelBlock';
-import { ContentModelHandler } from '../../../lib/publicTypes/context/ContentModelHandler';
 import { createContentModelDocument } from '../../../lib/modelApi/creators/createContentModelDocument';
 import { createListItem } from '../../../lib/modelApi/creators/createListItem';
 import { createModelToDomContext } from '../../../lib/modelToDom/context/createModelToDomContext';
 import { createParagraph } from '../../../lib/modelApi/creators/createParagraph';
 import { handleBlockGroupChildren } from '../../../lib/modelToDom/handlers/handleBlockGroupChildren';
 import { ModelToDomContext } from '../../../lib/publicTypes/context/ModelToDomContext';
+import { ContentModelBlockHandler } from '../../../lib/publicTypes/context/ContentModelHandler';
 
 describe('handleBlockGroupChildren', () => {
     let context: ModelToDomContext;
-    let handleBlock: jasmine.Spy<ContentModelHandler<ContentModelBlock>>;
+    let handleBlock: jasmine.Spy<ContentModelBlockHandler<ContentModelBlock>>;
     let parent: HTMLDivElement;
 
     beforeEach(() => {
@@ -43,7 +43,7 @@ describe('handleBlockGroupChildren', () => {
         expect(parent.outerHTML).toBe('<div></div>');
         expect(context.listFormat.nodeStack).toEqual([]);
         expect(handleBlock).toHaveBeenCalledTimes(1);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context, null);
     });
 
     it('Multiple child block group', () => {
@@ -59,8 +59,8 @@ describe('handleBlockGroupChildren', () => {
         expect(parent.outerHTML).toBe('<div></div>');
         expect(context.listFormat.nodeStack).toEqual([]);
         expect(handleBlock).toHaveBeenCalledTimes(2);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context, null);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context, null);
     });
 
     it('Multiple child block group with nodeStack and no list', () => {
@@ -81,7 +81,7 @@ describe('handleBlockGroupChildren', () => {
         expect(nodeStack).toEqual([{ a: 'b' } as any]);
         expect(context.listFormat.nodeStack).toBe(nodeStack);
         expect(handleBlock).toHaveBeenCalledTimes(1);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph, context, null);
     });
 
     it('Multiple child block group with nodeStack and no list', () => {
@@ -115,8 +115,8 @@ describe('handleBlockGroupChildren', () => {
         expect(nodeStack).toEqual([{ a: 'b' } as any]);
         expect(context.listFormat.nodeStack).toBe(nodeStack);
         expect(handleBlock).toHaveBeenCalledTimes(3);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context);
-        expect(handleBlock).toHaveBeenCalledWith(document, parent, list, context);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph1, context, null);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, paragraph2, context, null);
+        expect(handleBlock).toHaveBeenCalledWith(document, parent, list, context, null);
     });
 });

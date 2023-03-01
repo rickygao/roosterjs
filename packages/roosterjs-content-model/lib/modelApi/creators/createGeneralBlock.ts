@@ -7,7 +7,7 @@ export function createGeneralBlock(element: HTMLElement): ContentModelGeneralBlo
     return {
         blockType: 'BlockGroup',
         blockGroupType: 'General',
-        element: element,
+        element,
         blocks: [],
         format: {},
     };

@@ -13,11 +13,12 @@ export const handleGeneralModel: ContentModelHandler<ContentModelGeneralBlock> =
     doc: Document,
     parent: Node,
     group: ContentModelGeneralBlock,
-    context: ModelToDomContext
+    context: ModelToDomContext,
+    refNode?: Node | null
 ) => {
     const element = group.element.cloneNode();
 
-    parent.appendChild(element);
+    parent.insertBefore(element, refNode || null);
 
     if (isGeneralSegment(group) && isNodeOfType(element, NodeType.Element)) {
         if (!group.element.firstChild) {

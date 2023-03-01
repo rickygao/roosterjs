@@ -1,7 +1,11 @@
-import { ChangeSource } from 'roosterjs-editor-types';
+import { ChangeSource, ExperimentalFeatures } from 'roosterjs-editor-types';
 import { ContentModelDocument } from '../../publicTypes/group/ContentModelDocument';
 import { DomToModelOption, IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 import { getPendingFormat, setPendingFormat } from '../../modelApi/format/pendingFormat';
+import {
+    cacheContentModel,
+    getCachedContentModel,
+} from '../../editor/extendedApi/cacheContentModel';
 
 /**
  * @internal
@@ -13,7 +17,9 @@ export function formatWithContentModel(
     domToModelOptions?: DomToModelOption,
     preservePendingFormat?: boolean
 ) {
-    const model = editor.createContentModel(domToModelOptions);
+    const reuseContentModel = editor.isFeatureEnabled(ExperimentalFeatures.ReusableContentModel);
+    const cachedModel = reuseContentModel ? getCachedContentModel(editor) : null;
+    const model = cachedModel || editor.createContentModel(domToModelOptions);
 
     if (callback(model)) {
         editor.addUndoSnapshot(
@@ -38,5 +44,9 @@ export function formatWithContentModel(
                 formatApiName: apiName,
             }
         );
+
+        if (reuseContentModel) {
+            cacheContentModel(editor, model);
+        }
     }
 }

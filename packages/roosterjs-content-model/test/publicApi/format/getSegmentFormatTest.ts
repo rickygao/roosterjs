@@ -64,6 +64,7 @@ describe('getSegmentFormat', () => {
 
                 return model;
             },
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
         const result = getSegmentFormat(editor);
 
