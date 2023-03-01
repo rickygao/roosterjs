@@ -1,6 +1,5 @@
 import * as contentModelToDom from '../../lib/modelToDom/contentModelToDom';
 import * as domToContentModel from '../../lib/domToModel/domToContentModel';
-import * as entityPlaceholderUtils from 'roosterjs-editor-dom/lib/entity/entityPlaceholderUtils';
 import ContentModelEditor from '../../lib/editor/ContentModelEditor';
 import { ContentModelDocument } from '../../lib/publicTypes/group/ContentModelDocument';
 import { EditorPlugin, PluginEventType, SelectionRangeTypes } from 'roosterjs-editor-types';
@@ -50,13 +49,12 @@ describe('ContentModelEditor', () => {
         const mockedModel = 'MockedModel' as any;
 
         spyOn(contentModelToDom, 'default').and.returnValue(mockedResult);
-        spyOn(entityPlaceholderUtils, 'restoreContentWithEntityPlaceholder');
 
         editor.setContentModel(mockedModel);
 
         expect(contentModelToDom.default).toHaveBeenCalledTimes(1);
         expect(contentModelToDom.default).toHaveBeenCalledWith(
-            document,
+            div,
             mockedModel,
             {
                 isDarkMode: false,
@@ -64,12 +62,6 @@ describe('ContentModelEditor', () => {
                 darkColorHandler: null,
             },
             undefined
-        );
-        expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledTimes(1);
-        expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledWith(
-            mockedFragment,
-            div,
-            mockedPairs
         );
     });
 
@@ -87,13 +79,12 @@ describe('ContentModelEditor', () => {
         const mockedModel = 'MockedModel' as any;
 
         spyOn(contentModelToDom, 'default').and.returnValue(mockedResult);
-        spyOn(entityPlaceholderUtils, 'restoreContentWithEntityPlaceholder');
 
         editor.setContentModel(mockedModel);
 
         expect(contentModelToDom.default).toHaveBeenCalledTimes(1);
         expect(contentModelToDom.default).toHaveBeenCalledWith(
-            document,
+            div,
             mockedModel,
             {
                 isDarkMode: false,
@@ -101,12 +92,6 @@ describe('ContentModelEditor', () => {
                 darkColorHandler: null,
             },
             undefined
-        );
-        expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledTimes(1);
-        expect(entityPlaceholderUtils.restoreContentWithEntityPlaceholder).toHaveBeenCalledWith(
-            mockedFragment,
-            div,
-            mockedPairs
         );
     });
 

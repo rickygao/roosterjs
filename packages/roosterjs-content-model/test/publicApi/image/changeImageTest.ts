@@ -48,6 +48,7 @@ describe('changeImage', () => {
             getDocument: () => document,
             getSelectionRangeEx,
             triggerPluginEvent,
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
 
         executionCallback(editor);

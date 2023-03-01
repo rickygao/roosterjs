@@ -22,6 +22,7 @@ describe('insertLink', () => {
             addUndoSnapshot: (callback: Function) => callback(),
             setContentModel,
             createContentModel,
+            isFeatureEnabled: () => false,
             getCustomData: () => ({}),
             getFocusedPosition: () => ({}),
         } as any) as IContentModelEditor;

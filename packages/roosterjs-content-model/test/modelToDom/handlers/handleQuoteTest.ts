@@ -25,7 +25,7 @@ describe('handleQuote', () => {
         const parent = document.createElement('div');
         const quote = createQuote();
 
-        handleQuote(document, parent, quote, context);
+        handleQuote(document, parent, quote, context, null);
 
         expect(parent.outerHTML).toBe('<div></div>');
     });
@@ -40,7 +40,7 @@ describe('handleQuote', () => {
 
         handleBlockGroupChildren.and.callFake(originalHandleBlockGroupChildren);
 
-        handleQuote(document, parent, quote, context);
+        handleQuote(document, parent, quote, context, null);
 
         expect(parent.outerHTML).toBe(
             '<div><blockquote style="margin: 0px;"><div><span>test</span></div></blockquote></div>'

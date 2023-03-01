@@ -19,7 +19,7 @@ describe('handleDivider', () => {
 
         const parent = document.createElement('div');
 
-        handleDivider(document, parent, hr, context);
+        handleDivider(document, parent, hr, context, null);
 
         expect(parent.innerHTML).toBe('<hr>');
     });
@@ -33,7 +33,7 @@ describe('handleDivider', () => {
 
         const parent = document.createElement('div');
 
-        handleDivider(document, parent, hr, context);
+        handleDivider(document, parent, hr, context, null);
 
         expect(parent.innerHTML).toBe('<hr style="margin-top: 10px;">');
     });
@@ -47,7 +47,7 @@ describe('handleDivider', () => {
 
         const parent = document.createElement('div');
 
-        handleDivider(document, parent, hr, context);
+        handleDivider(document, parent, hr, context, null);
 
         expect(parent.innerHTML).toBe('<div style="margin-top: 10px;"></div>');
     });
@@ -64,7 +64,7 @@ describe('handleDivider', () => {
 
         const parent = document.createElement('div');
 
-        handleDivider(document, parent, hr, context);
+        handleDivider(document, parent, hr, context, null);
 
         expect(parent.innerHTML).toBe('<hr style="display: inline-block; width: 98%;">');
     });
@@ -81,7 +81,7 @@ describe('handleDivider', () => {
 
         const parent = document.createElement('div');
 
-        handleDivider(document, parent, hr, context);
+        handleDivider(document, parent, hr, context, null);
 
         expect(parent.innerHTML).toBe(
             '<hr style="padding-bottom: 30px; border-top: 1px solid black;">'
