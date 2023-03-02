@@ -27,7 +27,7 @@ describe('handleParagraph', () => {
         expectedInnerHTML: string,
         expectedCreateSegmentFromContentCalledTimes: number
     ) {
-        handleParagraph(document, parent, paragraph, context);
+        handleParagraph(document, parent, paragraph, context, null);
 
         expect(parent.innerHTML).toBe(expectedInnerHTML);
         expect(handleSegment).toHaveBeenCalledTimes(expectedCreateSegmentFromContentCalledTimes);

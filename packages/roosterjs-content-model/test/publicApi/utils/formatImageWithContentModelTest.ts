@@ -224,6 +224,7 @@ function segmentTestForPluginEvent(
         isDisposed: () => false,
         getFocusedPosition: () => null as NodePosition,
         triggerPluginEvent,
+        isFeatureEnabled: () => false,
     } as any) as IContentModelEditor;
 
     executionCallback(editor);

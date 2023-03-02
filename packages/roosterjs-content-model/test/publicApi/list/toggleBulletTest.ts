@@ -24,6 +24,7 @@ describe('toggleBullet', () => {
             addUndoSnapshot,
             createContentModel,
             setContentModel,
+            isFeatureEnabled: () => false,
             getCustomData: () => ({}),
             getFocusedPosition: () => ({}),
         } as any) as IContentModelEditor;

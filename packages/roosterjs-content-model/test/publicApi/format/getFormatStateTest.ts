@@ -54,6 +54,7 @@ describe('getFormatState', () => {
 
                 return model;
             },
+            isFeatureEnabled: () => false,
         } as any) as IContentModelEditor;
 
         spyOn(getPendingFormat, 'getPendingFormat').and.returnValue(pendingFormat);
