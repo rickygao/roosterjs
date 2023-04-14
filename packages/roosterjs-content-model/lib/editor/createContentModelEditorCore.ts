@@ -1,3 +1,5 @@
+import ContentModelEditPlugin from './plugins/ContentModelEditPlugin';
+import ContentModelFormatPlugin from './plugins/ContentModelFormatPlugin';
 import { ContentModelEditorCore } from '../publicTypes/ContentModelEditorCore';
 import { ContentModelEditorOptions } from '../publicTypes/IContentModelEditor';
 import { ContentModelSegmentFormat } from '../publicTypes/format/ContentModelSegmentFormat';
@@ -31,6 +33,7 @@ export function promoteToContentModelEditorCore(
     core: EditorCore,
     options: ContentModelEditorOptions
 ) {
+    // Preparation
     const experimentalFeatures = core.lifecycle.experimentalFeatures;
     const reuseModel = isFeatureEnabled(
         experimentalFeatures,
@@ -38,15 +41,18 @@ export function promoteToContentModelEditorCore(
     );
     const cmCore = core as ContentModelEditorCore;
 
+    // Promote Content Model Editor Core specified properties
     cmCore.defaultDomToModelOptions = options.defaultDomToModelOptions || {};
     cmCore.defaultModelToDomOptions = options.defaultModelToDomOptions || {};
     cmCore.defaultFormat = getDefaultSegmentFormat(core);
     cmCore.reuseModel = reuseModel;
-    (cmCore.addDelimiterForEntity = isFeatureEnabled(
+    cmCore.addDelimiterForEntity = isFeatureEnabled(
         experimentalFeatures,
         ExperimentalFeatures.InlineEntityReadOnlyDelimiters
-    )),
-        (cmCore.api.createEditorContext = createEditorContext);
+    );
+
+    // Promote Core API
+    cmCore.api.createEditorContext = createEditorContext;
     cmCore.api.createContentModel = createContentModel;
     cmCore.api.setContentModel = setContentModel;
 
@@ -58,6 +64,17 @@ export function promoteToContentModelEditorCore(
     cmCore.originalApi.createEditorContext = createEditorContext;
     cmCore.originalApi.createContentModel = createContentModel;
     cmCore.originalApi.setContentModel = setContentModel;
+
+    // Promote Core Plugin
+    const formatPlugin = new ContentModelFormatPlugin();
+    cmCore.plugins.push(formatPlugin);
+
+    if (isFeatureEnabled(experimentalFeatures, ExperimentalFeatures.EditWithContentModel)) {
+        cmCore.plugins.push(new ContentModelEditPlugin());
+    }
+
+    // Promote Core Plugin state
+    //cmCore.cmFormat = formatPlugin.getState();
 }
 
 function getDefaultSegmentFormat(core: EditorCore): ContentModelSegmentFormat {

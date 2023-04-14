@@ -49,4 +49,9 @@ export interface BuildInEditFeature<TEvent extends PluginEvent>
      * Whether this edit feature is disabled by default
      */
     defaultDisabled?: boolean;
+
+    /**
+     * When set to true, this feature will be ignored in Content Model editor
+     */
+    skipForContentModel?: boolean;
 }

@@ -1,8 +1,15 @@
 import { ContentModelDocument } from './group/ContentModelDocument';
 import { ContentModelSegmentFormat } from './format/ContentModelSegmentFormat';
-import { CoreApiMap, EditorCore } from 'roosterjs-editor-types';
 import { DomToModelOption, ModelToDomOption } from './IContentModelEditor';
 import { EditorContext } from './context/EditorContext';
+import {
+    CoreApiMap,
+    EditorCore,
+    EditorPlugin,
+    GenericPluginState,
+    PluginKey,
+    PluginWithState,
+} from 'roosterjs-editor-types';
 
 /**
  * Create a EditorContext object used by ContentModel API
@@ -59,10 +66,21 @@ export interface ContentModelCoreApiMap extends CoreApiMap {
     setContentModel: SetContentModel;
 }
 
+export interface ContentModelFormatPluginState {
+    pendingFormat: ContentModelSegmentFormat | null;
+}
+
+export interface ContentModelCorePlugins {
+    readonly cmEdit: EditorPlugin;
+    readonly cmFormat: PluginWithState<ContentModelFormatPluginState>;
+}
+
 /**
  * Represents the core data structure of a Content Model editor
  */
-export interface ContentModelEditorCore extends EditorCore {
+export interface ContentModelEditorCore
+    extends EditorCore,
+        GenericPluginState<PluginKey<ContentModelCorePlugins>, ContentModelCorePlugins> {
     /**
      * Core API map of this editor
      */

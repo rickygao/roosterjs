@@ -25,6 +25,8 @@ const FeatureNames: Partial<Record<ExperimentalFeatures, string>> = {
         'Delete a table selected with the table selector pressing Backspace key',
     [ExperimentalFeatures.InlineEntityReadOnlyDelimiters]:
         'Add read entities around read only entities to handle browser edge cases.',
+    [ExperimentalFeatures.EditWithContentModel]:
+        'Handle keyboard editing event with Content Model.',
 };
 
 export default class ExperimentalFeaturesPane extends React.Component<

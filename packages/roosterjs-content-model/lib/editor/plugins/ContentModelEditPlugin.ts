@@ -1,7 +1,23 @@
 import handleBackspaceKey from '../../publicApi/editing/handleBackspaceKey';
 import handleDeleteKey from '../../publicApi/editing/handleDeleteKey';
+import { EditPlugin } from 'roosterjs-editor-core';
 import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
-import { EditorPlugin, IEditor, Keys, PluginEvent, PluginEventType } from 'roosterjs-editor-types';
+import {
+    BuildInEditFeature,
+    GenericContentEditFeature,
+    IEditor,
+    Keys,
+    PluginEvent,
+    PluginEventType,
+} from 'roosterjs-editor-types';
+
+// Make sure we add the keys that Content Model can handle here each time we add a new key.
+// Forgetting adding keys here will trigger a build time error in the switch block in function onPluginEvent()
+const HandledKeyMap = {
+    [Keys.DELETE]: true,
+    [Keys.BACKSPACE]: true,
+};
+const HandleKeys = Object.keys(HandledKeyMap).map(x => parseInt(x));
 
 /**
  * ContentModel plugins helps editor to do editing operation on top of content model.
@@ -9,8 +25,8 @@ import { EditorPlugin, IEditor, Keys, PluginEvent, PluginEventType } from 'roost
  * 1. Delete Key
  * 2. Backspace Key
  */
-export default class ContentModelEditPlugin implements EditorPlugin {
-    private editor: IContentModelEditor | null = null;
+export default class ContentModelEditPlugin extends EditPlugin {
+    private cmEditor: IContentModelEditor | null = null;
 
     /**
      * Get name of this plugin
@@ -27,7 +43,7 @@ export default class ContentModelEditPlugin implements EditorPlugin {
      */
     initialize(editor: IEditor) {
         // TODO: Later we may need a different interface for Content Model editor plugin
-        this.editor = editor as IContentModelEditor;
+        this.cmEditor = editor as IContentModelEditor;
     }
 
     /**
@@ -36,27 +52,7 @@ export default class ContentModelEditPlugin implements EditorPlugin {
      * called, plugin should not call to any editor method since it will result in error.
      */
     dispose() {
-        this.editor = null;
-    }
-
-    /**
-     * Check if the plugin should handle the given event exclusively.
-     * Handle an event exclusively means other plugin will not receive this event in
-     * onPluginEvent method.
-     * If two plugins will return true in willHandleEventExclusively() for the same event,
-     * the final result depends on the order of the plugins are added into editor
-     * @param event The event to check:
-     */
-    willHandleEventExclusively(event: PluginEvent) {
-        if (
-            event.eventType == PluginEventType.KeyDown &&
-            (event.rawEvent.which == Keys.DELETE || event.rawEvent.which == Keys.BACKSPACE)
-        ) {
-            // TODO: Consider use ContentEditFeature and need to hide other conflict features that are not based on Content Model
-            return true;
-        }
-
-        return false;
+        this.cmEditor = null;
     }
 
     /**
@@ -66,17 +62,35 @@ export default class ContentModelEditPlugin implements EditorPlugin {
      * @param event The event to handle:
      */
     onPluginEvent(event: PluginEvent) {
-        if (this.editor && event.eventType == PluginEventType.KeyDown) {
+        super.onPluginEvent(event);
+
+        if (
+            this.cmEditor &&
+            event.eventType == PluginEventType.KeyDown &&
+            !event.rawEvent.defaultPrevented
+        ) {
+            const key = event.rawEvent.which as keyof typeof HandledKeyMap;
+
             // TODO: Consider use ContentEditFeature and need to hide other conflict features that are not based on Content Model
-            switch (event.rawEvent.which) {
+            switch (key) {
                 case Keys.BACKSPACE:
-                    handleBackspaceKey(this.editor, event.rawEvent);
+                    handleBackspaceKey(this.cmEditor, event.rawEvent);
                     break;
 
                 case Keys.DELETE:
-                    handleDeleteKey(this.editor, event.rawEvent);
+                    handleDeleteKey(this.cmEditor, event.rawEvent);
                     break;
             }
         }
+    }
+
+    protected shouldSkipFeature(
+        feature: GenericContentEditFeature<PluginEvent>,
+        rawEvent: KeyboardEvent
+    ) {
+        return (
+            HandleKeys.indexOf(rawEvent.which) >= 0 &&
+            !!(<BuildInEditFeature<PluginEvent>>feature).skipForContentModel
+        );
     }
 }

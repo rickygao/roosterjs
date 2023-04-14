@@ -143,6 +143,8 @@ export const enum ExperimentalFeatures {
      */
     ReusableContentModel = 'ReusableContentModel',
 
+    EditWithContentModel = 'EditWithContentModel',
+
     /**
      * Delete table with Backspace key with the whole was selected with table selector
      */

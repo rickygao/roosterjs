@@ -2,6 +2,12 @@ import { ContentModelDocument } from '../publicTypes/group/ContentModelDocument'
 import { ContentModelEditorCore } from '../publicTypes/ContentModelEditorCore';
 import { createContentModelEditorCore } from './createContentModelEditorCore';
 import { EditorBase } from 'roosterjs-editor-core';
+// import {
+//     BuildInEditFeature,
+//     ExperimentalFeatures,
+//     GenericContentEditFeature,
+//     PluginEvent,
+// } from 'roosterjs-editor-types';
 import {
     ContentModelEditorOptions,
     DomToModelOption,
@@ -57,4 +63,17 @@ export default class ContentModelEditor
             core.cachedModel = model || undefined;
         }
     }
+
+    // /**
+    //  * Add a Content Edit feature.
+    //  * @param feature The feature to add
+    //  */
+    // addContentEditFeature(feature: GenericContentEditFeature<PluginEvent>) {
+    //     if (
+    //         !this.isFeatureEnabled(ExperimentalFeatures.EditWithContentModel) ||
+    //         !(<BuildInEditFeature<PluginEvent>>feature).skipForContentModel
+    //     ) {
+    //         super.addContentEditFeature(feature);
+    //     }
+    // }
 }

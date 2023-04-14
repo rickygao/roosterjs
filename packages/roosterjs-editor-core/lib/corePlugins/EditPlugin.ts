@@ -10,11 +10,10 @@ import {
 } from 'roosterjs-editor-types';
 
 /**
- * @internal
  * Edit Component helps handle Content edit features
  */
 export default class EditPlugin implements PluginWithState<EditPluginState> {
-    private editor: IEditor | null = null;
+    protected editor: IEditor | null = null;
     private state: EditPluginState;
 
     /**
@@ -61,18 +60,24 @@ export default class EditPlugin implements PluginWithState<EditPluginState> {
      * @param event PluginEvent object
      */
     onPluginEvent(event: PluginEvent) {
+        if (!this.editor) {
+            return;
+        }
+
         let hasFunctionKey = false;
         let features: GenericContentEditFeature<PluginEvent>[] | null = null;
         let ctrlOrMeta = false;
 
         if (event.eventType == PluginEventType.KeyDown) {
             const rawEvent = event.rawEvent;
-            const range = this.editor?.getSelectionRange();
+            const range = this.editor.getSelectionRange();
 
             ctrlOrMeta = isCtrlOrMetaPressed(rawEvent);
             hasFunctionKey = ctrlOrMeta || rawEvent.altKey;
             features =
-                this.state.features[rawEvent.which] ||
+                this.state.features[rawEvent.which]?.filter(
+                    x => !this.shouldSkipFeature(x, rawEvent)
+                ) ||
                 (range && !range.collapsed && this.state.features[Keys.RANGE]);
         } else if (event.eventType == PluginEventType.ContentChanged) {
             features = this.state.features[Keys.CONTENTCHANGED];
@@ -82,12 +87,18 @@ export default class EditPlugin implements PluginWithState<EditPluginState> {
             const feature = features[i];
             if (
                 (feature.allowFunctionKeys || !hasFunctionKey) &&
-                this.editor &&
                 feature.shouldHandleEvent(event, this.editor, ctrlOrMeta)
             ) {
                 feature.handleEvent(event, this.editor);
                 break;
             }
         }
+    }
+
+    protected shouldSkipFeature(
+        feature: GenericContentEditFeature<PluginEvent>,
+        rawEvent: KeyboardEvent
+    ) {
+        return false;
     }
 }
