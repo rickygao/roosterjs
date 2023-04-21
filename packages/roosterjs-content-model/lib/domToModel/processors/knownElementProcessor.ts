@@ -2,14 +2,14 @@ import { addBlock } from '../../modelApi/common/addBlock';
 import { ContentModelBlockFormat } from '../../publicTypes/format/ContentModelBlockFormat';
 import { ContentModelDivider } from '../../publicTypes/block/ContentModelDivider';
 import { ContentModelParagraphDecorator } from '../../publicTypes/decorator/ContentModelParagraphDecorator';
-import { createDivider } from '../../modelApi/creators/createDivider';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
 import { createParagraphDecorator } from '../../modelApi/creators/createParagraphDecorator';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
-import { extractBorderValues } from '../../domUtils/borderValues';
 import { isBlockElement } from '../utils/isBlockElement';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
+// import { createDivider } from '../../modelApi/creators/createDivider';
+// import { extractBorderValues } from '../../domUtils/borderValues';
 
 /**
  * @internal
@@ -120,39 +120,39 @@ function tryCreateDivider(
     format: ContentModelBlockFormat,
     isTop: boolean
 ): ContentModelDivider | undefined {
-    const marginName: keyof ContentModelBlockFormat = isTop ? 'marginTop' : 'marginBottom';
-    const paddingName: keyof ContentModelBlockFormat = isTop ? 'paddingTop' : 'paddingBottom';
-    const borderName: keyof ContentModelBlockFormat = isTop ? 'borderTop' : 'borderBottom';
+    // const marginName: keyof ContentModelBlockFormat = isTop ? 'marginTop' : 'marginBottom';
+    // const paddingName: keyof ContentModelBlockFormat = isTop ? 'paddingTop' : 'paddingBottom';
+    // const borderName: keyof ContentModelBlockFormat = isTop ? 'borderTop' : 'borderBottom';
 
-    const marginNumber = parseInt(format[marginName] || '');
-    const paddingNumber = parseInt(format[paddingName] || '');
-    const borderString = format[borderName];
+    // const marginNumber = parseInt(format[marginName] || '');
+    // const paddingNumber = parseInt(format[paddingName] || '');
+    // const borderString = format[borderName];
 
     let result: ContentModelDivider | undefined;
 
-    if (marginNumber > 0 || paddingNumber > 0 || borderString) {
-        result = createDivider('div');
+    // if (marginNumber > 0 || paddingNumber > 0 || borderString) {
+    //     result = createDivider('div');
 
-        if (marginNumber > 0) {
-            result.format[marginName] = format[marginName];
-        }
+    //     if (marginNumber > 0) {
+    //         result.format[marginName] = format[marginName];
+    //     }
 
-        if (paddingNumber > 0) {
-            result.format[paddingName] = format[paddingName];
-        }
+    //     if (paddingNumber > 0) {
+    //         result.format[paddingName] = format[paddingName];
+    //     }
 
-        if (borderString) {
-            const border = extractBorderValues(borderString);
+    //     if (borderString) {
+    //         const border = extractBorderValues(borderString);
 
-            if (border.style && border.style != 'none') {
-                result.format[borderName] = borderString;
-            }
-        }
-    }
+    //         if (border.style && border.style != 'none') {
+    //             result.format[borderName] = borderString;
+    //         }
+    //     }
+    // }
 
-    delete format[marginName];
-    delete format[paddingName];
-    delete format[borderName];
+    // delete format[marginName];
+    // delete format[paddingName];
+    // delete format[borderName];
 
     return result;
 }

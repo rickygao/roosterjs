@@ -130,10 +130,10 @@ export const defaultImplicitFormatMap: DefaultImplicitFormatMap = {
         underline: true,
     },
     blockquote: {
-        marginTop: '1em',
-        marginBottom: '1em',
-        marginLeft: '40px',
-        marginRight: '40px',
+        // marginTop: '1em',
+        // marginBottom: '1em',
+        // marginLeft: '40px',
+        // marginRight: '40px',
     },
     code: {
         fontFamily: 'monospace',
@@ -163,13 +163,13 @@ export const defaultImplicitFormatMap: DefaultImplicitFormatMap = {
         fontSize: '0.67em',
     },
     p: {
-        marginTop: '1em',
-        marginBottom: '1em',
+        // marginTop: '1em',
+        // marginBottom: '1em',
     },
     pre: {
         fontFamily: 'monospace',
         whiteSpace: 'pre',
-        marginTop: '1em',
-        marginBottom: '1em',
+        // marginTop: '1em',
+        // marginBottom: '1em',
     },
 };

@@ -37,12 +37,11 @@ export const marginFormatHandler: FormatHandler<MarginFormat> = {
         });
     },
     apply: (format, element, context) => {
-        MarginKeys.forEach(key => {
-            const value = format[key];
-
-            if (value != context.implicitFormat[key]) {
-                element.style[key] = value || '0';
-            }
-        });
+        // MarginKeys.forEach(key => {
+        //     const value = format[key];
+        //     if (value != context.implicitFormat[key]) {
+        //         element.style[key] = value || '0';
+        //     }
+        // });
     },
 };

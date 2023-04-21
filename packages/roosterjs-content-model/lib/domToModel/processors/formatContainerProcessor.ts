@@ -37,7 +37,7 @@ export const formatContainerProcessor: ElementProcessor<HTMLElement> = (
         stackFormat(
             context,
             {
-                paragraph: 'shallowCopyInherit',
+                paragraph: 'shallowClone',
                 segment: 'shallowCloneForBlock',
             },
             () => {

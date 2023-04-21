@@ -81,13 +81,13 @@ const defaultFormatHandlerMap: FormatHandlers = {
 };
 
 const blockFormatHandlers: (keyof FormatHandlerTypeMap)[] = [
-    'backgroundColor',
+    // 'backgroundColor',
     'direction',
-    'margin',
-    'padding',
+    // 'margin',
+    // 'padding',
     'lineHeight',
     'whiteSpace',
-    'border',
+    // 'border',
 ];
 
 const defaultFormatKeysPerCategory: {
