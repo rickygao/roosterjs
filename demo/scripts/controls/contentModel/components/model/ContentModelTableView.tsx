@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { BackgroundColorFormatRenderer } from '../format/formatPart/BackgroundColorFormatRenderer';
 import { BorderBoxFormatRenderer } from '../format/formatPart/BorderBoxFormatRenderer';
 import { BorderFormatRenderers } from '../format/formatPart/BorderFormatRenderers';
 import { ContentModelBlockGroupView } from './ContentModelBlockGroupView';
@@ -14,6 +13,7 @@ import { SpacingFormatRenderer } from '../format/formatPart/SpacingFormatRendere
 import { TableMetadataFormatRenders } from '../format/formatPart/TableMetadataFormatRenders';
 import { updateTableMetadata } from 'roosterjs-content-model';
 import { useProperty } from '../../hooks/useProperty';
+// import { BackgroundColorFormatRenderer } from '../format/formatPart/BackgroundColorFormatRenderer';
 import {
     ContentModelTable,
     ContentModelTableFormat,
@@ -25,7 +25,7 @@ const styles = require('./ContentModelTableView.scss');
 const TableFormatRenderers: FormatRenderer<ContentModelTableFormat>[] = [
     IdFormatRenderer,
     SpacingFormatRenderer,
-    BackgroundColorFormatRenderer,
+    // BackgroundColorFormatRenderer,
     MarginFormatRenderer,
     ...BorderFormatRenderers,
     BorderBoxFormatRenderer,

@@ -1,6 +1,6 @@
 import { createParagraphDecorator } from '../../modelApi/creators/createParagraphDecorator';
-import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 import { formatParagraphWithContentModel } from '../utils/formatParagraphWithContentModel';
+import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 
 /**
  * Toggles the current block(s) margin properties.
@@ -19,16 +19,16 @@ export default function setParagraphMargin(
             para.decorator = createParagraphDecorator('p');
         }
 
-        if (marginTop) {
-            para.format.marginTop = marginTop;
-        } else if (marginTop === null) {
-            delete para.format.marginTop;
-        }
+        // if (marginTop) {
+        //     para.format.marginTop = marginTop;
+        // } else if (marginTop === null) {
+        //     delete para.format.marginTop;
+        // }
 
-        if (marginBottom) {
-            para.format.marginBottom = marginBottom;
-        } else if (marginBottom === null) {
-            delete para.format.marginBottom;
-        }
+        // if (marginBottom) {
+        //     para.format.marginBottom = marginBottom;
+        // } else if (marginBottom === null) {
+        //     delete para.format.marginBottom;
+        // }
     });
 }

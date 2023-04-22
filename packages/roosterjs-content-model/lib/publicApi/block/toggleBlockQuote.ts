@@ -5,15 +5,15 @@ import { IContentModelEditor } from '../../publicTypes/IContentModelEditor';
 import { toggleModelBlockQuote } from '../../modelApi/block/toggleModelBlockQuote';
 
 const DefaultQuoteFormat: ContentModelBlockFormat & ContentModelSegmentFormat = {
-    borderLeft: '3px solid rgb(200, 200, 200)', // TODO: Support RTL
+    // borderLeft: '3px solid rgb(200, 200, 200)', // TODO: Support RTL
     textColor: 'rgb(102, 102, 102)',
 };
 const BuildInQuoteFormat: ContentModelBlockFormat = {
-    marginTop: '1em',
-    marginBottom: '1em',
-    marginLeft: '40px',
-    marginRight: '40px',
-    paddingLeft: '10px',
+    // marginTop: '1em',
+    // marginBottom: '1em',
+    // marginLeft: '40px',
+    // marginRight: '40px',
+    // paddingLeft: '10px',
 };
 
 /**

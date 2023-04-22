@@ -3,7 +3,7 @@ import { ContentModelListItem } from '../../publicTypes/group/ContentModelListIt
 import { ContentModelListItemLevelFormat } from '../../publicTypes/format/ContentModelListItemLevelFormat';
 import { getOperationalBlocks } from '../selection/collectSelections';
 import { isBlockGroupOfType } from '../common/isBlockGroupOfType';
-import { parseValueWithUnit } from '../../formatHandlers/utils/parseValueWithUnit';
+// import { parseValueWithUnit } from '../../formatHandlers/utils/parseValueWithUnit';
 
 const IndentStepInPixel = 40;
 
@@ -39,21 +39,19 @@ export function setModelIndentation(
                 block.levels.pop();
             }
         } else if (block) {
-            const { format } = block;
-            const { marginLeft, marginRight, direction } = format;
-            const isRtl = direction == 'rtl';
-            const originalValue = parseValueWithUnit(isRtl ? marginRight : marginLeft);
-            let newValue = (isIndent ? Math.ceil : Math.floor)(originalValue / length) * length;
-
-            if (newValue == originalValue) {
-                newValue = Math.max(newValue + length * (isIndent ? 1 : -1), 0);
-            }
-
-            if (isRtl) {
-                format.marginRight = newValue + 'px';
-            } else {
-                format.marginLeft = newValue + 'px';
-            }
+            // const { format } = block;
+            // const { marginLeft, marginRight, direction } = format;
+            // const isRtl = direction == 'rtl';
+            // const originalValue = parseValueWithUnit(isRtl ? marginRight : marginLeft);
+            // let newValue = (isIndent ? Math.ceil : Math.floor)(originalValue / length) * length;
+            // if (newValue == originalValue) {
+            //     newValue = Math.max(newValue + length * (isIndent ? 1 : -1), 0);
+            // }
+            // if (isRtl) {
+            //     format.marginRight = newValue + 'px';
+            // } else {
+            //     format.marginLeft = newValue + 'px';
+            // }
         }
     });
 

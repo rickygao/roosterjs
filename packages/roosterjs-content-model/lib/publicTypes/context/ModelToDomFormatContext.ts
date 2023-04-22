@@ -1,6 +1,8 @@
 import { ContentModelBlockFormat } from '../format/ContentModelBlockFormat';
 import { ContentModelListItemLevelFormat } from '../format/ContentModelListItemLevelFormat';
 import { ContentModelSegmentFormat } from '../format/ContentModelSegmentFormat';
+import { MarginFormat } from '../format/formatParts/MarginFormat';
+import { PaddingFormat } from '../format/formatParts/PaddingFormat';
 
 /**
  * Represents a list stack item used by Content Model to DOM conversion
@@ -39,5 +41,8 @@ export interface ModelToDomFormatContext {
     /**
      * Existing format implicitly applied from parent element
      */
-    implicitFormat: ContentModelSegmentFormat & ContentModelBlockFormat;
+    implicitFormat: ContentModelSegmentFormat &
+        ContentModelBlockFormat &
+        MarginFormat &
+        PaddingFormat;
 }

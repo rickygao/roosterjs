@@ -31,6 +31,8 @@ export const handleFormatContainer: ContentModelBlockHandler<ContentModelFormatC
         stackFormat(context, container.tagName, () => {
             applyFormat(element!, context.formatAppliers.block, container.format, context);
             applyFormat(element!, context.formatAppliers.segmentOnBlock, container.format, context);
+
+            applyFormat(element!, context.formatAppliers.container, container.format, context);
         });
 
         context.modelHandlers.blockGroupChildren(doc, element, container, context);

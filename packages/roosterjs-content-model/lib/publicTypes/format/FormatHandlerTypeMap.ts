@@ -129,12 +129,22 @@ export interface FormatHandlerTypeMap {
     /**
      * Format for MarginFormat
      */
-    margin: MarginFormat;
+    marginTopBottom: MarginFormat;
+
+    /**
+     * Format for MarginFormat
+     */
+    marginLeftRight: MarginFormat;
 
     /**
      * Format for PaddingFormat
      */
-    padding: PaddingFormat;
+    paddingTopBottom: PaddingFormat;
+
+    /**
+     * Format for PaddingFormat
+     */
+    paddingLeftRight: PaddingFormat;
 
     /**
      * Format for SizeFormat

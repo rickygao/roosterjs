@@ -21,8 +21,6 @@ import { listItemThreadFormatHandler } from './list/listItemThreadFormatHandler'
 import { listLevelMetadataFormatHandler } from './list/listLevelMetadataFormatHandler';
 import { listLevelThreadFormatHandler } from './list/listLevelThreadFormatHandler';
 import { listTypeFormatHandler } from './list/listTypeFormatHandler';
-import { marginFormatHandler } from './paragraph/marginFormatHandler';
-import { paddingFormatHandler } from './paragraph/paddingFormatHandler';
 import { sizeFormatHandler } from './common/sizeFormatHandler';
 import { strikeFormatHandler } from './segment/strikeFormatHandler';
 import { superOrSubScriptFormatHandler } from './segment/superOrSubScriptFormatHandler';
@@ -32,6 +30,14 @@ import { underlineFormatHandler } from './segment/underlineFormatHandler';
 import { verticalAlignFormatHandler } from './common/verticalAlignFormatHandler';
 import { whiteSpaceFormatHandler } from './block/whiteSpaceFormatHandler';
 import { wordBreakFormatHandler } from './common/wordBreakFormatHandler';
+import {
+    marginLeftRightFormatHandler,
+    marginTopBottomFormatHandler,
+} from './paragraph/marginFormatHandler';
+import {
+    paddingLeftRightFormatHandler,
+    paddingTopBottomFormatHandler,
+} from './paragraph/paddingFormatHandler';
 import {
     FormatApplier,
     FormatAppliers,
@@ -67,8 +73,10 @@ const defaultFormatHandlerMap: FormatHandlers = {
     listLevelMetadata: listLevelMetadataFormatHandler,
     listLevelThread: listLevelThreadFormatHandler,
     listType: listTypeFormatHandler,
-    margin: marginFormatHandler,
-    padding: paddingFormatHandler,
+    marginTopBottom: marginTopBottomFormatHandler,
+    marginLeftRight: marginLeftRightFormatHandler,
+    paddingTopBottom: paddingTopBottomFormatHandler,
+    paddingLeftRight: paddingLeftRightFormatHandler,
     size: sizeFormatHandler,
     strike: strikeFormatHandler,
     superOrSubScript: superOrSubScriptFormatHandler,
@@ -81,13 +89,13 @@ const defaultFormatHandlerMap: FormatHandlers = {
 };
 
 const blockFormatHandlers: (keyof FormatHandlerTypeMap)[] = [
-    'backgroundColor',
+    // 'backgroundColor',
     'direction',
-    'margin',
-    'padding',
+    // 'margin',
+    // 'padding',
     'lineHeight',
     'whiteSpace',
-    'border',
+    // 'border',
 ];
 
 const defaultFormatKeysPerCategory: {
@@ -96,7 +104,14 @@ const defaultFormatKeysPerCategory: {
     block: blockFormatHandlers,
     listItem: ['listItemThread', 'listItemMetadata'],
     listItemElement: ['direction', 'lineHeight'],
-    listLevel: ['listType', 'listLevelThread', 'listLevelMetadata', 'direction', 'margin'],
+    listLevel: [
+        'listType',
+        'listLevelThread',
+        'listLevelMetadata',
+        'direction',
+        'marginLeftRight',
+        'marginTopBottom',
+    ],
     segment: [
         'superOrSubScript',
         'strike',
@@ -114,20 +129,41 @@ const defaultFormatKeysPerCategory: {
     tableCell: [
         'border',
         'backgroundColor',
-        'padding',
+        'paddingLeftRight',
+        'paddingTopBottom',
         'direction',
         'verticalAlign',
         'wordBreak',
         'textColor',
     ],
-    table: ['id', 'border', 'margin', 'backgroundColor', 'display', 'direction'],
+    table: [
+        'id',
+        'border',
+        'marginLeftRight',
+        'marginTopBottom',
+        'backgroundColor',
+        'display',
+        'direction',
+    ],
     tableBorder: ['borderBox', 'tableSpacing'],
     tableCellBorder: ['borderBox'],
-    image: ['id', 'size', 'margin', 'padding', 'borderBox', 'border', 'boxShadow'],
+    image: [
+        'id',
+        'size',
+        'marginLeftRight',
+        'marginTopBottom',
+        'paddingLeftRight',
+        'paddingTopBottom',
+        'borderBox',
+        'border',
+        'boxShadow',
+    ],
     link: ['link', 'textColor', 'underline'],
     code: ['fontFamily'],
     dataset: ['dataset'],
-    divider: [...blockFormatHandlers, 'display', 'size'],
+    divider: ['marginTopBottom', 'paddingTopBottom', 'display', 'size'],
+    container: ['border', 'backgroundColor'],
+    paragraph: ['marginLeftRight', 'paddingLeftRight'],
 };
 
 /**

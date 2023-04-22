@@ -1,4 +1,3 @@
-import { ContentModelBlockFormat } from '../../publicTypes/format/ContentModelBlockFormat';
 import { ContentModelCode } from '../../publicTypes/decorator/ContentModelCode';
 import { ContentModelFormatBase } from '../../publicTypes/format/ContentModelFormatBase';
 import { ContentModelLink } from '../../publicTypes/decorator/ContentModelLink';
@@ -11,7 +10,7 @@ import { getObjectKeys } from 'roosterjs-editor-dom';
  */
 export interface StackFormatOptions {
     segment?: 'shallowClone' | 'shallowCloneForBlock' | 'empty';
-    paragraph?: 'shallowClone' | 'shallowCopyInherit' | 'empty';
+    paragraph?: 'shallowClone' | 'empty';
     link?: 'linkDefault' | 'empty';
     code?: 'codeDefault' | 'empty';
 }
@@ -24,15 +23,6 @@ export interface StackFormatOptions {
 //   <div>line 2</div>  <---------------------- not in red here
 // </span>
 const SkippedStylesForBlock: (keyof ContentModelSegmentFormat)[] = ['backgroundColor'];
-
-const CopiedStylesForBlockInherit: (keyof ContentModelBlockFormat)[] = [
-    'backgroundColor',
-    'direction',
-    'textAlign',
-    'isTextAlignFromAttr',
-    'lineHeight',
-    'whiteSpace',
-];
 
 /**
  * @internal
@@ -100,7 +90,7 @@ function stackCodeInternal(codeFormat: ContentModelCode, code?: 'codeDefault' | 
 
 function stackFormatInternal<T extends ContentModelFormatBase>(
     format: T,
-    processType?: 'shallowClone' | 'shallowCloneForBlock' | 'shallowCopyInherit' | 'empty'
+    processType?: 'shallowClone' | 'shallowCloneForBlock' | 'empty'
 ): T | {} {
     switch (processType) {
         case 'empty':
@@ -114,12 +104,8 @@ function stackFormatInternal<T extends ContentModelFormatBase>(
 
             getObjectKeys(format).forEach(key => {
                 if (
-                    (processType == 'shallowCloneForBlock' &&
-                        SkippedStylesForBlock.indexOf(key as keyof ContentModelSegmentFormat) >=
-                            0) ||
-                    (processType == 'shallowCopyInherit' &&
-                        CopiedStylesForBlockInherit.indexOf(key as keyof ContentModelBlockFormat) <
-                            0)
+                    processType == 'shallowCloneForBlock' &&
+                    SkippedStylesForBlock.indexOf(key as keyof ContentModelSegmentFormat) >= 0
                 ) {
                     delete result[key];
                 }

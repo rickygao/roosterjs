@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { BackgroundColorFormatRenderer } from '../format/formatPart/BackgroundColorFormatRenderer';
-import { BorderFormatRenderers } from '../format/formatPart/BorderFormatRenderers';
 import { ContentModelDivider, ContentModelDividerFormat } from 'roosterjs-content-model';
 import { ContentModelView } from '../ContentModelView';
 import { DirectionFormatRenderers } from '../format/formatPart/DirectionFormatRenderers';
@@ -8,21 +6,23 @@ import { DisplayFormatRenderer } from '../format/formatPart/DisplayFormatRendere
 import { FormatRenderer } from '../format/utils/FormatRenderer';
 import { FormatView } from '../format/FormatView';
 import { LineHeightFormatRenderer } from '../format/formatPart/LineHeightFormatRenderer';
-import { MarginFormatRenderer } from '../format/formatPart/MarginFormatRenderer';
-import { PaddingFormatRenderer } from '../format/formatPart/PaddingFormatRenderer';
 import { SizeFormatRenderers } from '../format/formatPart/SizeFormatRenderers';
 import { useProperty } from '../../hooks/useProperty';
 import { WhiteSpaceFormatRenderer } from '../format/formatPart/WhiteSpaceFormatRenderer';
+// import { BackgroundColorFormatRenderer } from '../format/formatPart/BackgroundColorFormatRenderer';
+// import { BorderFormatRenderers } from '../format/formatPart/BorderFormatRenderers';
+// import { MarginFormatRenderer } from '../format/formatPart/MarginFormatRenderer';
+// import { PaddingFormatRenderer } from '../format/formatPart/PaddingFormatRenderer';
 
 const styles = require('./ContentModelDividerView.scss');
 const DividerFormatRenders: FormatRenderer<ContentModelDividerFormat>[] = [
-    BackgroundColorFormatRenderer,
+    // BackgroundColorFormatRenderer,
     ...DirectionFormatRenderers,
-    MarginFormatRenderer,
-    PaddingFormatRenderer,
+    // MarginFormatRenderer,
+    // PaddingFormatRenderer,
     LineHeightFormatRenderer,
     WhiteSpaceFormatRenderer,
-    ...BorderFormatRenderers,
+    // ...BorderFormatRenderers,
     DisplayFormatRenderer,
     ...SizeFormatRenderers,
 ];

@@ -1,15 +1,19 @@
 import { addBlock } from '../../modelApi/common/addBlock';
-import { ContentModelBlockFormat } from '../../publicTypes/format/ContentModelBlockFormat';
 import { ContentModelDivider } from '../../publicTypes/block/ContentModelDivider';
+import { ContentModelDividerFormat } from '../../publicTypes/format/ContentModelDividerFormat';
+import { ContentModelFormatContainer } from '../../publicTypes/group/ContentModelFormatContainer';
+import { ContentModelFormatContainerFormat } from '../../publicTypes/format/ContentModelFormatContainerFormat';
 import { ContentModelParagraphDecorator } from '../../publicTypes/decorator/ContentModelParagraphDecorator';
+import { ContentModelParagraphFormat } from '../../publicTypes/format/ContentModelParagraphFormat';
 import { createDivider } from '../../modelApi/creators/createDivider';
+import { createFormatContainer } from '../../modelApi/creators/createFormatContainer';
 import { createParagraph } from '../../modelApi/creators/createParagraph';
 import { createParagraphDecorator } from '../../modelApi/creators/createParagraphDecorator';
 import { ElementProcessor } from '../../publicTypes/context/ElementProcessor';
-import { extractBorderValues } from '../../domUtils/borderValues';
 import { isBlockElement } from '../utils/isBlockElement';
 import { parseFormat } from '../utils/parseFormat';
 import { stackFormat } from '../utils/stackFormat';
+// import { extractBorderValues } from '../../domUtils/borderValues';
 
 /**
  * @internal
@@ -28,6 +32,8 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
         () => {
             let topDivider: ContentModelDivider | undefined;
             let bottomDivider: ContentModelDivider | undefined;
+            let formatContainer: ContentModelFormatContainer | undefined;
+            let decorator: ContentModelParagraphDecorator | undefined;
 
             if (isBlock) {
                 parseFormat(element, context.formatParsers.block, context.blockFormat, context);
@@ -37,8 +43,6 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
                     context.segmentFormat,
                     context
                 );
-
-                let decorator: ContentModelParagraphDecorator | undefined;
 
                 switch (element.tagName) {
                     case 'P':
@@ -54,17 +58,21 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
                         );
                         break;
                     default:
-                        topDivider = tryCreateDivider(context.blockFormat, true /*isTop*/);
-                        bottomDivider = tryCreateDivider(context.blockFormat, false /*isBottom*/);
+                        const divider: ContentModelDividerFormat = {};
+                        const container: ContentModelFormatContainerFormat = {};
+
+                        parseFormat(element, context.formatParsers.divider, divider, context);
+                        parseFormat(element, context.formatParsers.container, container, context);
+
+                        topDivider = tryCreateDivider(divider, true /*isTop*/);
+                        bottomDivider = tryCreateDivider(divider, false /*isBottom*/);
+
+                        if (Object.keys(container).length > 0) {
+                            formatContainer = createFormatContainer(element.tagName, container);
+                        }
 
                         break;
                 }
-
-                const paragraph = createParagraph(
-                    false /*isImplicit*/,
-                    context.blockFormat,
-                    decorator
-                );
 
                 if (topDivider) {
                     if (context.isInSelection) {
@@ -73,8 +81,6 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
 
                     addBlock(group, topDivider);
                 }
-
-                addBlock(group, paragraph);
             } else {
                 parseFormat(element, context.formatParsers.segment, context.segmentFormat, context);
             }
@@ -97,7 +103,21 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
 
                     context.elementProcessors.child(group, element, context);
                 });
+            } else if (formatContainer) {
+                addBlock(group, formatContainer);
+
+                context.elementProcessors.child(formatContainer, element, context);
             } else {
+                const paragraphFormat: ContentModelParagraphFormat = {
+                    ...context.blockFormat,
+                };
+
+                parseFormat(element, context.formatParsers.paragraph, paragraphFormat, context);
+
+                const paragraph = createParagraph(false /*isImplicit*/, paragraphFormat, decorator);
+
+                addBlock(group, paragraph);
+
                 context.elementProcessors.child(group, element, context);
             }
 
@@ -117,20 +137,20 @@ export const knownElementProcessor: ElementProcessor<HTMLElement> = (group, elem
 };
 
 function tryCreateDivider(
-    format: ContentModelBlockFormat,
+    format: ContentModelDividerFormat,
     isTop: boolean
 ): ContentModelDivider | undefined {
-    const marginName: keyof ContentModelBlockFormat = isTop ? 'marginTop' : 'marginBottom';
-    const paddingName: keyof ContentModelBlockFormat = isTop ? 'paddingTop' : 'paddingBottom';
-    const borderName: keyof ContentModelBlockFormat = isTop ? 'borderTop' : 'borderBottom';
+    const marginName: keyof ContentModelDividerFormat = isTop ? 'marginTop' : 'marginBottom';
+    const paddingName: keyof ContentModelDividerFormat = isTop ? 'paddingTop' : 'paddingBottom';
+    // const borderName: keyof ContentModelDividerFormat = isTop ? 'borderTop' : 'borderBottom';
 
     const marginNumber = parseInt(format[marginName] || '');
     const paddingNumber = parseInt(format[paddingName] || '');
-    const borderString = format[borderName];
+    // const borderString = format[borderName];
 
     let result: ContentModelDivider | undefined;
 
-    if (marginNumber > 0 || paddingNumber > 0 || borderString) {
+    if (marginNumber > 0 || paddingNumber > 0 /* || borderString*/) {
         result = createDivider('div');
 
         if (marginNumber > 0) {
@@ -141,18 +161,18 @@ function tryCreateDivider(
             result.format[paddingName] = format[paddingName];
         }
 
-        if (borderString) {
-            const border = extractBorderValues(borderString);
+        // if (borderString) {
+        //     const border = extractBorderValues(borderString);
 
-            if (border.style && border.style != 'none') {
-                result.format[borderName] = borderString;
-            }
-        }
+        //     if (border.style && border.style != 'none') {
+        //         result.format[borderName] = borderString;
+        //     }
+        // }
     }
 
     delete format[marginName];
     delete format[paddingName];
-    delete format[borderName];
+    // delete format[borderName];
 
     return result;
 }

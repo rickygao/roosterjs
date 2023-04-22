@@ -1,9 +1,11 @@
 import { ContentModelBlockFormat } from './ContentModelBlockFormat';
 import { ContentModelDividerFormat } from './ContentModelDividerFormat';
+import { ContentModelFormatContainerFormat } from './ContentModelFormatContainerFormat';
 import { ContentModelHyperLinkFormat } from './ContentModelHyperLinkFormat';
 import { ContentModelImageFormat } from './ContentModelImageFormat';
 import { ContentModelListItemFormat } from './ContentModelListItemFormat';
 import { ContentModelListItemLevelFormat } from './ContentModelListItemLevelFormat';
+import { ContentModelParagraphFormat } from './ContentModelParagraphFormat';
 import { ContentModelSegmentFormat } from './ContentModelSegmentFormat';
 import { ContentModelTableCellFormat } from './ContentModelTableCellFormat';
 import { ContentModelTableFormat } from './ContentModelTableFormat';
@@ -98,4 +100,14 @@ export interface ContentModelFormatMap {
      * Format type for divider
      */
     divider: ContentModelDividerFormat;
+
+    /**
+     * Format type for format container
+     */
+    container: ContentModelFormatContainerFormat;
+
+    /**
+     * Format type for paragraph
+     */
+    paragraph: ContentModelParagraphFormat;
 }
